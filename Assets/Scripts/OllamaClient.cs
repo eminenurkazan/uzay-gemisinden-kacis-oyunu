@@ -157,9 +157,21 @@ Yalnızca şu alanları içeren bir JSON nesnesi üret:
 action yalnızca NONE veya OPEN_DOOR olabilir.
 dialogue doğal Türkçe ile en fazla üç kısa cümle olsun.
 Başlık, liste veya JSON dışında metin yazma.
-İzin veriyorsan dialogue içinde geçiş izni verdiğini açıkça belirt.
-İzin vermiyorsan gerekçeni veya eksik bilgiyi belirt.
-dialogue ve action tutarlı olsun.
+Önce karar politikasına göre action değerini seç.
+Sonra dialogue metnini bu karara uygun yaz.
+
+NONE, şu anda geçiş izni verilmediği anlamına gelir.
+action NONE ise dialogue içinde geçişe izin vermediğini
+veya karar için bilgi beklediğini açıkça belirt.
+NONE kararında izin verdiğini, geçişi onayladığını
+veya astronotun geçebileceğini söyleme.
+
+OPEN_DOOR, geçiş izni verildiği anlamına gelir.
+action OPEN_DOOR ise dialogue içinde astronotun
+kendi gemisine geçmesine izin verdiğini açıkça belirt.
+
+Cevabı tamamlamadan önce dialogue ile action değerinin
+aynı kararı ifade ettiğini kontrol et.
 Kapının fiziksel olarak açıldığını söyleme; kapıyı Unity yönetecek."
 },
                 new Message
