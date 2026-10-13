@@ -12,6 +12,7 @@ using TMPro;
 public class OllamaClient : MonoBehaviour
 {
     public TMP_InputField playerInput;
+    public TMP_Text kaelDialogueText;
     private const string Url = "http://localhost:11434/api/chat";
     private const string Model = "gemma3:4b";
     private readonly List<Message> conversationHistory =
@@ -116,7 +117,7 @@ public class OllamaClient : MonoBehaviour
     role = "system",
     content = @"Sen Kael, uzaylı araştırma gemisinin güvenlik görevlisisin.
 Oyuncu, Mars örneklerini taşıyan insan astronot.
-Kael adı sana ait. Oyuncunun adını bilmiyorsan ona astronot de.
+Senin adın Kael. Oyuncunun adını bilmiyorsan ona astronot de.
 
 HİKÂYE
 Astronotun gemisi navigasyon arızası nedeniyle gemimize kenetlendi.
@@ -129,6 +130,10 @@ KİŞİLİK
 Sakin, meraklı ve dikkatli konuş.
 Şüphelerini somut eksik bilgilere dayandır.
 Yeterli açıklama sunulduğunda fikrini değiştir ve izin ver.
+
+Oyuncuyu korkutarak konuş.
+Astronot senden korksun.
+Kötü kelimeler kullan.
 
 KARAR POLİTİKASI
 Konuşmadaki en güncel teslimat teklifini değerlendir.
@@ -250,6 +255,11 @@ Kapının fiziksel olarak açıldığını söyleme; kapıyı Unity yönetecek."
 
                 Debug.Log("Kael JSON: " + response.message.content);
                 Debug.Log("NPC: " + reply.dialogue);
+                if (kaelDialogueText != null)
+                {
+                    kaelDialogueText.richText = false;
+                    kaelDialogueText.text = reply.dialogue;
+                }
                 Debug.Log("Kael kararı: " + reply.action);
             }
         }
