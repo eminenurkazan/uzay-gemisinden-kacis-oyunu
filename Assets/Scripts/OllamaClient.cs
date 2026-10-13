@@ -1,4 +1,4 @@
-
+using System.Collections.Generic;
 using System;
 using System.Collections;
 using System.Text;
@@ -10,6 +10,10 @@ public class OllamaClient : MonoBehaviour
     public TMP_InputField playerInput;
     private const string Url = "http://localhost:11434/api/chat";
     private const string Model = "gemma3:4b";
+    private readonly List<Message> conversationHistory =
+    new List<Message>();
+
+    private bool isRequestInProgress;
 
     [Serializable]
     private class Message
@@ -42,10 +46,37 @@ public class OllamaClient : MonoBehaviour
 
     public void SendMessageToAI(string playerText)
     {
-        StartCoroutine(SendRequest(playerText));
+        if (string.IsNullOrWhiteSpace(playerText))
+            return;
+
+        if (isRequestInProgress)
+        {
+            Debug.Log("Kael düşünüyor. Cevabını bekle.");
+            return;
+        }
+
+        isRequestInProgress = true;
+        StartCoroutine(SendRequestWithGuard(playerText.Trim()));
+    }
+
+    private IEnumerator SendRequestWithGuard(string playerText)
+    {
+        try
+        {
+            yield return SendRequest(playerText);
+        }
+        finally
+        {
+            isRequestInProgress = false;
+        }
     }
     public void SendPlayerMessage()
     {
+        if (isRequestInProgress)
+        {
+            Debug.Log("Kael düşünüyor. Cevabını bekle.");
+            return;
+        }
         if (playerInput == null)
         {
             Debug.LogError("PlayerInput bağlanmamış!");
@@ -112,7 +143,17 @@ Kapının gerçekten açıldığını söyleme."
                 }
             }
         };
+        // Mevcut istekteki system ve user mesajlarını al.
+        Message systemMessage = request.messages[0];
+        Message userMessage = request.messages[1];
 
+        // System prompt, geçmiş konuşmalar ve yeni oyuncu mesajı.
+        List<Message> messagesToSend = new List<Message>();
+        messagesToSend.Add(systemMessage);
+        messagesToSend.AddRange(conversationHistory);
+        messagesToSend.Add(userMessage);
+
+        request.messages = messagesToSend.ToArray();
         string json = JsonUtility.ToJson(request);
 
         using (UnityWebRequest webRequest =
@@ -138,8 +179,24 @@ Kapının gerçekten açıldığını söyleme."
                     JsonUtility.FromJson<ChatResponse>(
                         webRequest.downloadHandler.text);
 
-                if (response != null && response.message != null)
+                if (response != null &&
+                response.message != null &&
+                !string.IsNullOrWhiteSpace(response.message.content))
+                {
+                    conversationHistory.Add(userMessage);
+
+                    conversationHistory.Add(new Message
+                    {
+                        role = "assistant",
+                        content = response.message.content
+                    });
+
                     Debug.Log("NPC: " + response.message.content);
+                }
+                else
+                {
+                    Debug.LogError("Ollama'dan boş veya eksik cevap geldi.");
+                }
             }
         }
     }
