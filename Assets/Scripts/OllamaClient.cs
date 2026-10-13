@@ -1,3 +1,7 @@
+
+using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System;
 using System.Collections;
@@ -259,33 +263,150 @@ Kapının fiziksel olarak açıldığını söyleme; kapıyı Unity yönetecek."
         if (string.IsNullOrWhiteSpace(content))
             return false;
 
-        string json = content.Trim();
-
-        if (!json.StartsWith("{") || !json.EndsWith("}"))
-            return false;
-
         try
         {
-            KaelReply parsed = JsonUtility.FromJson<KaelReply>(json);
-
-            if (parsed == null ||
-                string.IsNullOrWhiteSpace(parsed.dialogue))
+            using (StringReader textReader = new StringReader(content))
+            using (JsonTextReader jsonReader = new JsonTextReader(textReader))
             {
-                return false;
-            }
+                jsonReader.DateParseHandling = DateParseHandling.None;
+                jsonReader.MaxDepth = 8;
 
-            if (parsed.action != "NONE" &&
-                parsed.action != "OPEN_DOOR")
-            {
-                return false;
-            }
+                JsonLoadSettings settings = new JsonLoadSettings
+                {
+                    DuplicatePropertyNameHandling =
+                        DuplicatePropertyNameHandling.Error
+                };
 
-            reply = parsed;
-            return true;
+                JToken root = JToken.Load(jsonReader, settings);
+
+                // JSON nesnesinden sonra başka içerik olmamalı.
+                if (jsonReader.Read())
+                    return false;
+
+                JObject jsonObject = root as JObject;
+
+                // Tam olarak iki alan bekliyoruz.
+                if (jsonObject == null || jsonObject.Count != 2)
+                    return false;
+
+                JToken dialogueToken = jsonObject["dialogue"];
+                JToken actionToken = jsonObject["action"];
+
+                // İki alan da bulunmalı ve metin türünde olmalı.
+                if (dialogueToken == null ||
+                    actionToken == null ||
+                    dialogueToken.Type != JTokenType.String ||
+                    actionToken.Type != JTokenType.String)
+                {
+                    return false;
+                }
+
+                string dialogue = dialogueToken.Value<string>();
+                string action = actionToken.Value<string>();
+
+                if (string.IsNullOrWhiteSpace(dialogue))
+                    return false;
+
+                // Yalnızca izin verilen kararları kabul et.
+                if (action != "NONE" && action != "OPEN_DOOR")
+                    return false;
+
+                reply = new KaelReply
+                {
+                    dialogue = dialogue.Trim(),
+                    action = action
+                };
+
+                return true;
+            }
         }
-        catch (ArgumentException)
+        catch (JsonException)
         {
             return false;
+        }
+    }
+    [ContextMenu("JSON Dogrulama Testlerini Calistir")]
+    private void RunJsonValidationTests()
+    {
+        CheckJsonCase(
+            "Geçerli NONE",
+            "{\"dialogue\":\"İzin vermiyorum.\",\"action\":\"NONE\"}",
+            true);
+
+        CheckJsonCase(
+            "Geçerli OPEN_DOOR",
+            "{\"dialogue\":\"Geçiş iznin var.\",\"action\":\"OPEN_DOOR\"}",
+            true);
+
+        CheckJsonCase(
+            "Eksik action",
+            "{\"dialogue\":\"Merhaba.\"}",
+            false);
+
+        CheckJsonCase(
+            "Yanlış veri türü",
+            "{\"dialogue\":\"Merhaba.\",\"action\":123}",
+            false);
+
+        CheckJsonCase(
+            "Bilinmeyen karar",
+            "{\"dialogue\":\"Merhaba.\",\"action\":\"OPEN_WINDOW\"}",
+            false);
+
+        CheckJsonCase(
+            "Boş konuşma",
+            "{\"dialogue\":\"   \",\"action\":\"NONE\"}",
+            false);
+
+        CheckJsonCase(
+            "Fazladan alan",
+            "{\"dialogue\":\"Merhaba.\",\"action\":\"NONE\",\"extra\":true}",
+            false);
+
+        CheckJsonCase(
+            "Tekrarlanan alan",
+            "{\"dialogue\":\"Merhaba.\",\"action\":\"NONE\",\"action\":\"OPEN_DOOR\"}",
+            false);
+
+        CheckJsonCase(
+            "Bozuk JSON",
+            "{\"dialogue\":\"Merhaba.\",\"action\":\"NONE\"",
+            false);
+
+        CheckJsonCase(
+            "Nesne yerine liste",
+            "[{\"dialogue\":\"Merhaba.\",\"action\":\"NONE\"}]",
+            false);
+
+        CheckJsonCase(
+            "JSON sonrasında ek içerik",
+            "{\"dialogue\":\"Merhaba.\",\"action\":\"NONE\"} ek metin",
+            false);
+
+        CheckJsonCase(
+            "Null konuşma",
+            "{\"dialogue\":null,\"action\":\"NONE\"}",
+            false);
+    }
+
+    private void CheckJsonCase(
+        string testName,
+        string json,
+        bool expected)
+    {
+        KaelReply reply;
+        bool actual = TryParseKaelReply(json, out reply);
+
+        if (actual == expected)
+        {
+            Debug.Log("JSON TEST BAŞARILI: " + testName);
+        }
+        else
+        {
+            Debug.LogError(
+                "JSON TEST BAŞARISIZ: " + testName +
+                " | Beklenen kabul: " + expected +
+                " | Gerçek kabul: " + actual);
         }
     }
     private void Start()
