@@ -13,6 +13,7 @@ public class OllamaClient : MonoBehaviour
 {
     public TMP_InputField playerInput;
     public TMP_Text kaelDialogueText;
+    public TMP_Text kaelStatusText;
     private const string Url = "http://localhost:11434/api/chat";
     private const string Model = "gemma3:4b";
     private readonly List<Message> conversationHistory =
@@ -56,7 +57,15 @@ public class OllamaClient : MonoBehaviour
         public string dialogue;
         public string action;
     }
+    private void SetRequestState(bool isBusy)
+    {
+        isRequestInProgress = isBusy;
 
+        if (kaelStatusText != null)
+        {
+            kaelStatusText.text = isBusy ? "Kael düşünüyor..." : "";
+        }
+    }
     public void SendMessageToAI(string playerText)
     {
         if (string.IsNullOrWhiteSpace(playerText))
@@ -68,7 +77,7 @@ public class OllamaClient : MonoBehaviour
             return;
         }
 
-        isRequestInProgress = true;
+        SetRequestState(true);
         StartCoroutine(SendRequestWithGuard(playerText.Trim()));
     }
 
@@ -80,7 +89,7 @@ public class OllamaClient : MonoBehaviour
         }
         finally
         {
-            isRequestInProgress = false;
+            SetRequestState(false);
         }
     }
     public void SendPlayerMessage()
