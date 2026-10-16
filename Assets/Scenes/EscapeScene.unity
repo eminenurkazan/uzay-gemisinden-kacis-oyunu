@@ -1118,6 +1118,8 @@ GameObject:
   - component: {fileID: 910000032}
   - component: {fileID: 910000036}
   - component: {fileID: 910000037}
+  - component: {fileID: 950000001}
+  - component: {fileID: 950000002}
   m_Layer: 0
   m_Name: Astronot
   m_TagString: Player
@@ -3031,6 +3033,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &950000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910000031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c715b445803c4b70955588d718495f66, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::CompanionCommandInput
+  companion: {fileID: 940000003}
+  commandRange: 3
+--- !u!114 &950000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910000031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c570a36e74d73b6db675348cac7f8, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::CompanionHUD
+  commandInput: {fileID: 950000001}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
