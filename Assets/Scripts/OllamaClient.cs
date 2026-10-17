@@ -15,6 +15,7 @@ public class OllamaClient : MonoBehaviour
     public TMP_Text kaelDialogueText;
     public TMP_Text kaelStatusText;
     public GameObject kaelThinkingImage;
+    public GameObject kaelIdleImage;
     private const string Url = "http://localhost:11434/api/chat";
     private const string Model = "gemma3:4b";
     private readonly List<Message> conversationHistory =
@@ -70,6 +71,11 @@ public class OllamaClient : MonoBehaviour
         if (kaelThinkingImage != null)
         {
             kaelThinkingImage.SetActive(isBusy);
+        }
+
+        if (kaelIdleImage != null)
+        {
+            kaelIdleImage.SetActive(!isBusy);
         }
     }
     public void SendMessageToAI(string playerText)
