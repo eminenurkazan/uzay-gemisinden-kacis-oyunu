@@ -17,6 +17,7 @@ public sealed class AX7Brain : MonoBehaviour
     [SerializeField] private string failureReason = string.Empty;
 
     public AX7State CurrentState => currentState;
+    public string FailureReason => failureReason;
     public event Action<AX7State> StateChanged;
 
     private INavigationMotor motor;
@@ -34,7 +35,7 @@ public sealed class AX7Brain : MonoBehaviour
         failureReason = string.Empty;
     }
 
-    // Bu adımın editör testi. Oyuncunun komutu sonraki adımda bu metodu çağıracak.
+    // Oyuncu komutu ve editör testi aynı görev girişini kullanır.
     [ContextMenu("Panele Git (Play Modunda)")]
     public void MoveToPanel()
     {
