@@ -32,7 +32,7 @@ Bu raporda AX-7'nin uygulanan fiziksel kapı görevi, bileşenleri ve manuel tes
 
 `Assets/Scenes/EscapeScene.unity` içinde giriş koridoru, kilitli fiziksel kapı, alçak bakım yolu, kontrol paneli, astronot ve AX-7 bulunmaktadır. Astronotun hareketi, kamerası ve çarpışması çalışmaktadır. AX-7 komutla bakım yolundan panele gitmekte, paneli kullanmakta ve kapıyı açmaktadır.
 
-Kael alanı ve hava kilidinin ana sahnedeki taslağı henüz oluşturulmamıştır. Mevcut blok modeller oynanış prototipidir; uzay gemisi görünümüne yönelik görsel çalışma daha sonra yapılacaktır.
+Ana sahnede panel alanının devamına Kael güvenlik alanı, geçici Kael kapsülü ve kapalı biyometrik kapı taslağı eklenmiştir. Astronotun bu alana ulaşması manuel olarak doğrulanmıştır. Kael diyalogu henüz bu kapsüle bağlanmamıştır. Hava kilidinin taslağı henüz oluşturulmamıştır. Mevcut blok modeller oynanış prototipidir; uzay gemisi görünümüne yönelik görsel çalışma daha sonra yapılacaktır.
 
 ## AX-7 Görevini Çalıştırma
 
@@ -124,7 +124,7 @@ Diyagram, bağlantıları doğru kurulmuş oyunun görev akışını gösterir. 
 
 ## Gerçek Yol Bulma ve Raycast Algısı
 
-`AX7NavigationSetup` yalnızca editörde NavMesh hazırlamak ve rota bağlantısını kontrol etmek için kullanılan araçtır. Üst menüdeki **Uzay Oyunu > AX-7 NavMesh Hazırla** komutuyla çalıştırılır. Hazırlık sırasında karakter gövdeleri sabit çevre engeli olarak hesaba katılmaz. Kayıtlı NavMesh verisi `Assets/Navigation/AX7NavMesh.asset` dosyasındadır.
+`AX7NavigationSetup` yalnızca editörde NavMesh hazırlamak ve rota bağlantısını kontrol etmek için kullanılan araçtır. Üst menüdeki **Uzay Oyunu > AX-7 NavMesh Hazırla** komutuyla çalıştırılır. Hazırlık sırasında karakter gövdeleri sabit çevre engeli olarak hesaba katılmaz. Kayıtlı NavMesh verisi `Assets/Navigation/AX7NavMesh.asset` dosyasındadır. Hesaplama hacmi Z ekseninde -15 ile +15 arasını kapsar. Kael alanı sahnede mevcutsa hazırlık aracı, panelden bu alandaki iki kontrol noktasına kesintisiz rota bulunmasını da doğrular. Bu editör kontrolü, AX-7’nin Kael alanına fiilen yürütüldüğü bir test değildir. Geometri değişikliğinden sonra yalnızca Reload yeterli değildir; NavMesh hazırlama menüsü yeniden çalıştırılmalıdır.
 
 Oyun sırasında `NavMeshMovement`, hedefe tam rota bulunmasını kontrol eder ve `NavMeshAgent` ile hareket eder. Hazırlık aracındaki sabit kontrol noktaları doğrulama içindir; robot bu noktalarda önceden yazılmış hareketlerle yürütülmez.
 
@@ -166,6 +166,8 @@ Aşağıdaki kayıtlar Unity editöründe birlikte yürütülen ve oyuncu taraf�
 | T04 | Test engeli, robot durduktan sonra 20 saniyeden uzun süre etkin bırakıldı. | Görev başarısız oldu; engelin uzun süre kalkmadığını belirten mesaj gösterildi. |
 | T05 | Play sırasında `FizikselKapi` üzerindeki yalnızca `DoorController` devre dışı bırakıldı; collider açık kaldı. | Robot panelde başarıya geçmedi. Görevin tamamlanamadığı ve panelin veya bağlı kapının kullanılamadığı bildirildi. |
 | T06 | Astronotla kapalı fiziksel kapı, yan duvarlar ve alçak bakım girişi zorlandı. | Geçiş engellendi. Bakım yolu robot için kullanılabilir kaldı. |
+| T07 | Fiziksel kapı açıldıktan sonra astronotla yeni güvenlik alanına ilerleme. | Oyuncu Kael kapsülünün yanına ulaşabildi. |
+| T08 | Kael alanını kapsayacak şekilde genişletilen NavMesh’in editörde yeniden hazırlanması. | Panelden Kael alanına kesintisiz rota doğrulandı; mavi NavMesh gösterimi alana yayıldı. Bu sonuç fiziksel robot takip testi değildir. |
 
 Başlangıç koordinatları canlı `NavMeshAgent` tarafından değiştirilmiş olan önceki deneme, doğrulanmış alternatif başlangıç sonucu olarak sayılmamıştır. Başarılı varış konumu, başlangıç konumu yerine kullanılmamıştır.
 
@@ -190,8 +192,8 @@ Başlangıç koordinatları canlı `NavMeshAgent` tarafından değiştirilmiş o
 
 - Bakım yolunun tavanı hareketi izleyebilmek için görünmezdir; collider'ı etkindir. Yeniden göstermek için `BakimYoluTavan` nesnesinin Mesh Renderer bileşeni açılır.
 - AX-7'nin görev sonrasında oyuncuya dönmesi ve takip etmesi henüz uygulanmamıştır.
-- Açılan ana kapıdan sonraki robot takip rotası henüz test edilmemiştir; mevcut doğrulama astronotun fiziksel geçişi içindir.
-- Kael alanı, biyometrik kapı, hava kilidi ve kaçış sonu ana sahnede tamamlanacaktır.
+- Panelden Kael alanına NavMesh bağlantısı editörde doğrulanmıştır; AX-7’nin görev sonrası oyuncuyu takip ederek bu alana yürümesi henüz uygulanmamış ve test edilmemiştir.
+- Kael alanı ve kapalı biyometrik kapının blok taslağı hazırdır. Kael diyalogunun ana sahneye bağlanması, biyometrik kapının karar sonucu açılması, hava kilidi ve kaçış sonu tamamlanacaktır.
 - Kael'in yerel model seçiminin gerekçesi, sistem promptu, istek/yanıt sequence diyagramı, hata yönetimi ve en az beş gerçek model diyalog testi ayrıca belgelenecektir.
 - Uygulamanın tamamının OOP incelemesi, görsel düzenlemeler ve teslim build'i henüz tamamlanmamıştır.
 
