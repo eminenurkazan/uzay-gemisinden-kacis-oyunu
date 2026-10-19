@@ -1004,6 +1004,7 @@ GameObject:
   - component: {fileID: 910000024}
   - component: {fileID: 910000023}
   - component: {fileID: 910000022}
+  - component: {fileID: 970000001}
   m_Layer: 0
   m_Name: FizikselKapi
   m_TagString: Untagged
@@ -2752,6 +2753,7 @@ GameObject:
   - component: {fileID: 930000014}
   - component: {fileID: 930000013}
   - component: {fileID: 930000012}
+  - component: {fileID: 970000002}
   m_Layer: 0
   m_Name: KontrolPaneli
   m_TagString: Untagged
@@ -2967,6 +2969,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AX7Brain
   navigationMotor: {fileID: 940000002}
   panelTarget: {fileID: 940000007}
+  panelInteraction: {fileID: 970000002}
   obstacleSensor: {fileID: 960000001}
   obstacleWaitTimeout: 20
   currentState: 0
@@ -3193,6 +3196,39 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &970000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910000021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e673bd45cb6c47428a27aefc6ec0aecb, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::DoorController
+  openingHeight: 3.2
+  openingSpeed: 2.5
+  currentState: 0
+--- !u!114 &970000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930000011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 849111556c944811a9907662e66cad5f, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::ControlPanel
+  doorController: {fileID: 970000001}
+  authorizedInteractor: {fileID: 930000005}
+  interactionRange: 1.2
+  activationDuration: 1
+  doorWaitTimeout: 8
+  currentStatus: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

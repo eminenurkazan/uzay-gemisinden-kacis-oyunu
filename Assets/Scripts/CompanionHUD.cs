@@ -44,7 +44,13 @@ public sealed class CompanionHUD : MonoBehaviour
                 objective = "AX-7 önünde engel algıladı; yolun açılmasını bekliyor.\nEngel kalkınca rotasına devam edecek.";
                 break;
             case AX7State.AtPanel:
-                objective = "AX-7 kontrol paneline ulaştı.\nPanel etkileşimi henüz eklenmedi; kapı şimdilik kapalı.";
+                objective = "AX-7 kontrol paneline ulaştı.";
+                break;
+            case AX7State.InteractingWithPanel:
+                objective = "AX-7 kontrol panelini kullanıyor…\nKapının açılmasını bekle.";
+                break;
+            case AX7State.Succeeded:
+                objective = "Kapı açıldı, ilerleyebilirsin.\nAX-7 fiziksel kapı görevini tamamladı.";
                 break;
             case AX7State.Failed:
                 objective = "AX-7 görevi tamamlayamadı.\n" + companion.FailureReason;
