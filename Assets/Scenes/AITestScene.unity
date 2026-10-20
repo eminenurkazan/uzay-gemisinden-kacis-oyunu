@@ -1596,6 +1596,7 @@ GameObject:
   - component: {fileID: 1141783160}
   - component: {fileID: 1141783159}
   - component: {fileID: 1141783158}
+  - component: {fileID: 1141783161}
   m_Layer: 5
   m_Name: KaelDialogueScroll
   m_TagString: Untagged
@@ -1693,6 +1694,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1141783156}
   m_CullTransparentMesh: 1
+--- !u!114 &1141783161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1141783156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b99a9bd3fe908a042a13d3ba9d2ea23b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KaelDialogueSizer
+  dialogueText: {fileID: 0}
+  minimumHeight: 70
+  maximumHeight: 180
+  extraSpace: 20
 --- !u!1 &1172540862
 GameObject:
   m_ObjectHideFlags: 0
@@ -2576,7 +2593,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1556674983}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.9222728
+  m_Size: 0.9222729
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
