@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public enum DoorState
 {
@@ -16,6 +17,7 @@ public sealed class DoorController : MonoBehaviour, IOpenableDoor
 
     private Vector3 closedPosition;
     private BoxCollider doorCollider;
+    private NavMeshObstacle navigationObstacle;
 
     public bool IsOpen => currentState == DoorState.Open;
     public bool IsAvailable => isActiveAndEnabled && doorCollider != null
@@ -26,6 +28,11 @@ public sealed class DoorController : MonoBehaviour, IOpenableDoor
         closedPosition = transform.localPosition;
         doorCollider = GetComponent<BoxCollider>();
         currentState = DoorState.Closed;
+        navigationObstacle = GetComponent<NavMeshObstacle>();
+        if (navigationObstacle != null)
+            navigationObstacle.enabled = true;
+        else
+            Debug.LogWarning("Kapının NavMesh engeli eksik. Play dışında AX-7 NavMesh Hazırla menüsünü çalıştır.", this);
     }
 
     public bool TryOpen(out string failureReason)
@@ -56,6 +63,9 @@ public sealed class DoorController : MonoBehaviour, IOpenableDoor
         {
             transform.localPosition = target;
             currentState = DoorState.Open;
+            // Collider yerinde kalır; yalnızca NavMesh üzerindeki kapalı geçiş kaldırılır.
+            if (navigationObstacle != null)
+                navigationObstacle.enabled = false;
             Debug.Log("Fiziksel kapı tamamen açıldı.", this);
         }
     }

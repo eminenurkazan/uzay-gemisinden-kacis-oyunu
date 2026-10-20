@@ -1005,6 +1005,8 @@ GameObject:
   - component: {fileID: 910000023}
   - component: {fileID: 910000022}
   - component: {fileID: 970000001}
+  - component: {fileID: 970000004}
+  - component: {fileID: 970000003}
   m_Layer: 0
   m_Name: FizikselKapi
   m_TagString: Untagged
@@ -2621,6 +2623,7 @@ GameObject:
   - component: {fileID: 940000002}
   - component: {fileID: 940000003}
   - component: {fileID: 960000001}
+  - component: {fileID: 1030000001}
   m_Layer: 0
   m_Name: AX-7
   m_TagString: Untagged
@@ -3004,6 +3007,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CompanionHUD
   commandInput: {fileID: 950000001}
   kaelInteraction: {fileID: 1010000002}
+  followPlayer: {fileID: 1030000001}
 --- !u!114 &960000001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3171,6 +3175,42 @@ MonoBehaviour:
   activationDuration: 1
   doorWaitTimeout: 8
   currentStatus: 0
+--- !u!208 &970000003
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910000021}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.01
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!114 &970000004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910000021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 1
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1 &980000001
 GameObject:
   m_ObjectHideFlags: 0
@@ -3633,6 +3673,8 @@ GameObject:
   - component: {fileID: 980000042}
   - component: {fileID: 1000000001}
   - component: {fileID: 1000000002}
+  - component: {fileID: 1000000005}
+  - component: {fileID: 1000000004}
   m_Layer: 0
   m_Name: BiyometrikKapi
   m_TagString: Untagged
@@ -4609,9 +4651,51 @@ MonoBehaviour:
   kaelStatusText: {fileID: 1020000061}
   kaelThinkingImage: {fileID: 1020000078}
   kaelIdleImage: {fileID: 1020000011}
+<<<<<<< HEAD
   serverAddress: http://localhost:11434
   modelName: gemma3:4b
   requestTimeoutSeconds: 120
+=======
+  serverAddress: 
+  modelName: gemma3:4b
+  requestTimeoutSeconds: 120
+--- !u!208 &1000000004
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980000041}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.01
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!114 &1000000005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980000041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 1
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
+>>>>>>> 22ad00c2ca2fd4e7305f08aea9d02b17538d79b3
 --- !u!114 &1010000001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6878,6 +6962,31 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1020000087}
   m_CullTransparentMesh: 1
+<<<<<<< HEAD
+=======
+--- !u!114 &1030000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b160e0e6c9244ba84a77bc4ce1c373d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AX7FollowPlayer
+  taskBrain: {fileID: 940000003}
+  navigationMotor: {fileID: 940000002}
+  obstacleSensor: {fileID: 960000001}
+  player: {fileID: 910000035}
+  stopDistance: 1.6
+  resumeDistance: 2.3
+  repathInterval: 0.5
+  targetMovementThreshold: 0.6
+  retryInterval: 1
+  currentState: 0
+>>>>>>> 22ad00c2ca2fd4e7305f08aea9d02b17538d79b3
 --- !u!1 &1843400017
 GameObject:
   m_ObjectHideFlags: 0

@@ -45,11 +45,11 @@ public sealed class NavMeshMovement : MonoBehaviour, INavigationMotor
                 return Fail("Robot yürünebilir NavMesh alanında değil.");
         }
         if (!NavMesh.SamplePosition(destination, out var goal, destinationTolerance, filter))
-            return Fail("Panelin önünde yürünebilir hedef bulunamadı.");
+            return Fail("Hedefin yakınında yürünebilir alan bulunamadı.");
 
         var path = new NavMeshPath();
         if (!agent.CalculatePath(goal.position, path) || path.status != NavMeshPathStatus.PathComplete)
-            return Fail("Panele ulaşan kesintisiz rota bulunamadı.");
+            return Fail("Hedefe ulaşan kesintisiz rota bulunamadı.");
         agent.isStopped = false;
         if (!agent.SetPath(path))
             return Fail("Hesaplanan rota robota atanamadı.");
@@ -73,14 +73,14 @@ public sealed class NavMeshMovement : MonoBehaviour, INavigationMotor
             return;
         if (Time.time - movementStarted >= travelTimeout)
         {
-            Fail("Robot ayrılan sürede panele ulaşamadı.");
+            Fail("Robot ayrılan sürede hedefe ulaşamadı.");
             return;
         }
         if (agent.pathPending)
             return;
         if (agent.pathStatus != NavMeshPathStatus.PathComplete)
         {
-            Fail("Panel rotası artık tamamlanabilir durumda değil.");
+            Fail("Hedef rotası artık tamamlanabilir durumda değil.");
             return;
         }
         if (!float.IsInfinity(agent.remainingDistance)

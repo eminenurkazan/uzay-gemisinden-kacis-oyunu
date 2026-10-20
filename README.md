@@ -170,6 +170,11 @@ Aşağıdaki kayıtlar Unity editöründe birlikte yürütülen ve oyuncu taraf�
 | T08 | Kael alanını kapsayacak şekilde genişletilen NavMesh’in editörde yeniden hazırlanması. | Panelden Kael alanına kesintisiz rota doğrulandı; mavi NavMesh gösterimi alana yayıldı. Bu sonuç fiziksel robot takip testi değildir. |
 | T09 | Hava kilidi taslağının kuş bakışı Scene görünümünde incelenmesi ve NavMesh’in yeni geometriyle yeniden hazırlanması. | Biyometrik kapı arkasındaki yerleşim oyuncu tarafından görsel olarak uygun bulundu. Bu kontrol panel/kapak işlevlerini veya kapalı biyometrik kapıdan robot geçişini doğrulamaz. |
 
+| T10 | Kael'e yaklaşınca E ile konuşmayı açma, sunucu adresi boşken Gönder'e basma ve pencereyi kapatma. | Eksik sunucu adresi mesajı gösterildi; pencere kapanınca oyuncu yürümeye devam edebildi. Gerçek model yanıtı ve biyometrik kapı açılması test edilmedi. |
+| T11 | İlk kapı görevinden sonra oyuncunun uzaklaşması, durması ve yeniden yürümesi. | AX-7 takip etti, oyuncu durunca mesafesini korudu, oyuncu uzaklaşınca yeniden takip etti. |
+| T12 | Dinamik kapı ayarlarından sonra NavMesh'i yeniden hazırlama ve açılan ilk kapıdan oyuncuyu takip etme. | AX-7 açık fiziksel kapının altından geçip oyuncunun yanına gelebildi. |
+| T13 | Görev sonrası oyuncuyla Kael alanına ilerleme. | Oyuncu AX-7'nin Kael'in yanına kadar gelebildiğini doğruladı. |
+
 Başlangıç koordinatları canlı `NavMeshAgent` tarafından değiştirilmiş olan önceki deneme, doğrulanmış alternatif başlangıç sonucu olarak sayılmamıştır. Başarılı varış konumu, başlangıç konumu yerine kullanılmamıştır.
 
 ### Testleri Tekrarlama
@@ -192,10 +197,71 @@ Başlangıç koordinatları canlı `NavMeshAgent` tarafından değiştirilmiş o
 ## Sınırlılıklar ve Sonraki Çalışmalar
 
 - Bakım yolunun tavanı hareketi izleyebilmek için görünmezdir; collider'ı etkindir. Yeniden göstermek için `BakimYoluTavan` nesnesinin Mesh Renderer bileşeni açılır.
-- AX-7'nin görev sonrasında oyuncuya dönmesi ve takip etmesi henüz uygulanmamıştır.
-- Panelden Kael alanına NavMesh bağlantısı editörde doğrulanmıştır; AX-7’nin görev sonrası oyuncuyu takip ederek bu alana yürümesi henüz uygulanmamış ve test edilmemiştir.
-- Kael alanı, kapalı biyometrik kapı ve hava kilidinin blok taslağı hazırdır. Kael diyalogunun ana sahneye bağlanması, biyometrik kapının karar sonucu açılması, atmosfer paneli/gemi geçiş kapağının işlevleri ve kaçış sonu henüz tamamlanmamıştır.
+- Görev sonrası temel takip, mesafede durma ve uzaklaşınca devam etme oyuncuyla test edildi. Takipteki engel ve rota kaybı senaryoları ayrıca doğrulanacaktır.
+- Panelden Kael alanına NavMesh bağlantısı ve oyuncuyu takip ederek bu alana fiilî geçiş doğrulandı.
+- Kael konuşma arayüzü ana sahneye bağlandı; açılıp kapanması ve eksik sunucu adresi davranışı test edildi. Biyometrik kapının doğrulanmış kararla açılma bağlantısı hazırdır; gerçek Ollama yanıtıyla testi sunucu adresi beklemektedir. Atmosfer paneli, gemi geçiş kapağı ve kaçış sonu henüz tamamlanmamıştır.
 - Kael'in yerel model seçiminin gerekçesi, sistem promptu, istek/yanıt sequence diyagramı, hata yönetimi ve en az beş gerçek model diyalog testi ayrıca belgelenecektir.
 - Uygulamanın tamamının OOP incelemesi, görsel düzenlemeler ve teslim build'i henüz tamamlanmamıştır.
 
 Anlamlı geliştirme adımları Türkçe commit mesajlarıyla ortak GitHub deposuna gönderilmektedir.
+
+
+## AX-7 Görev Sonrası Takip
+
+`AX7FollowPlayer`, fiziksel kapı görevi `Succeeded` olduktan sonra aynı
+`INavigationMotor` ve `IObstacleSensor` arayüzleriyle oyuncuyu takip eder.
+Panel görevinin başarı durumu korunur; takipte rota bulunamaması Kael
+konuşmasını veya biyometrik kapının ön koşulunu geri almaz. Panel görevi
+sürerken takip bileşeni hareket motoruna komut vermez.
+
+Robot yatay mesafe 1,6 birime inince durur, oyuncu 2,3 birimden uzağa
+gidince yeniden yürür. Bu iki ayrı eşik sınırda sürekli durup başlamayı
+önler. Hedef oyuncunun ayak konumudur. Hedef en az 0,6 birim değişirse
+rota en sık 0,5 saniyede bir yenilenir. Rota bulunamazsa veya hareket
+başarısızsa robot 1 saniye arayla yeniden dener. Raycast engelinde duraklar;
+engel kalkınca devam eder. Takipteki engel bekleyişi panel görevinin
+20 saniyelik başarısızlık kuralından ayrıdır ve görev başarısını silmez.
+
+```mermaid
+stateDiagram-v2
+    [*] --> GorevBekleniyor
+    GorevBekleniyor --> Takip: Panel görevi başarılı ve oyuncu uzakta
+    GorevBekleniyor --> YakindaBekle: Panel görevi başarılı ve oyuncu yakında
+    Takip --> YakindaBekle: Mesafe en fazla 1,6
+    YakindaBekle --> Takip: Mesafe en az 2,3 ve tam rota var
+    Takip --> EngelBekle: Raycast engel algıladı
+    EngelBekle --> Takip: Engel kalktı veya yeni hedefe açık rota var
+    Takip --> RotaBekle: Rota veya hareket başarısız
+    RotaBekle --> Takip: Yeniden denemede tam rota var
+    EngelBekle --> YakindaBekle: Oyuncu yaklaştı
+    RotaBekle --> YakindaBekle: Oyuncu yaklaştı
+```
+
+20 Ekim 2026 tarihinde oyuncu, görev sonrası takibi, durduğunda robotun
+mesafeyi korumasını, uzaklaşınca yeniden takibi, açık fiziksel kapıdan geçişi
+ve Kael alanına ulaşmayı doğruladı (T11–T13). Önceki sürümde konuşma
+penceresinden çıkınca oyuncu kontrolünün geri gelmesi ayrıca doğrulandı (T10).
+
+Takip için bekleyen ek kontroller:
+- Takip sırasında geçici/kalıcı fiziksel engelde durma ve engel kalkınca devam etme.
+- Takipte rota kaybından sonra yeniden deneme ve panel görevi başarısının korunması.
+- Takip etkin durumdayken Kael konuşma penceresinin açılıp kapanmasını tekrar deneme.
+
+Tekrar sayıları ve süreler ölçülmediğinden başarı oranı hesaplanmamıştır.
+
+
+### Açılan Kapılardan NavMesh Geçişi
+
+Kapı collider'ının kapalı hâlini sabit NavMesh geometrisine pişirmek,
+kapı fiziksel olarak açıldığında geçişin kapalı görünmesine yol açar.
+`AX7NavigationSetup`, fiziksel ve biyometrik kapıyı `NavMeshModifier`
+ile sabit hesaptan çıkarır ve her birine carving açık bir `NavMeshObstacle`
+ekler. Böylece kapalı kapı çalışma zamanında rotayı keser; `DoorController`
+kapı tamamen açıldığında engel bileşenini kapatır. Fiziksel collider kaldırılmaz.
+Takip, ilk kapı açıldıktan sonra NavMesh güncellemesine iki kare ayırarak başlar.
+
+Bu değişiklikten sonra Play dışında **Uzay Oyunu > AX-7 NavMesh Hazırla**
+bir kez çalıştırılmalıdır; yalnızca sahneyi yeniden açmak eski NavMesh verisini
+düzeltmez. Güncellenmiş NavMesh ile AX-7'nin açılan fiziksel kapıdan oyuncuya
+gelebildiği doğrulandı. Kapalı kapının dinamik NavMesh engelinin yalıtılmış
+kontrolü ve gerçek Kael izniyle biyometrik geçiş ayrıca beklemektedir.
