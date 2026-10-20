@@ -34,6 +34,8 @@ public static class AX7NavigationSetup
         // Hareketli karakter gövdeleri zemindeki sabit engeller olarak pişirilmez.
         IgnoreCharacter(robot);
         IgnoreCharacter(player);
+        ConfigureDoor(FindRoot("FizikselKapi"));
+        ConfigureDoor(FindRoot("BiyometrikKapi"));
 
         GameObject surfaceObject = FindRoot("AX7Navigation");
         if (surfaceObject == null)
@@ -122,6 +124,37 @@ public static class AX7NavigationSetup
         modifier.ignoreFromBuild = true;
         modifier.applyToChildren = true;
         EditorUtility.SetDirty(modifier);
+    }
+
+    private static void ConfigureDoor(GameObject door)
+    {
+        if (door == null)
+            return;
+        var box = door.GetComponent<BoxCollider>();
+        if (box == null)
+            throw new InvalidOperationException("Kapının BoxCollider bileşeni eksik: " + door.name);
+
+        // Kapalı kapı sabit geometriye pişirilmez; geçişi çalışma zamanı engeli keser.
+        var modifier = door.GetComponent<NavMeshModifier>();
+        if (modifier == null)
+            modifier = Undo.AddComponent<NavMeshModifier>(door);
+        Undo.RecordObject(modifier, "Hareketli kapıyı sabit NavMesh geometrisinden çıkar");
+        modifier.ignoreFromBuild = true;
+        modifier.applyToChildren = true;
+        EditorUtility.SetDirty(modifier);
+
+        var obstacle = door.GetComponent<NavMeshObstacle>();
+        if (obstacle == null)
+            obstacle = Undo.AddComponent<NavMeshObstacle>(door);
+        Undo.RecordObject(obstacle, "Kapının dinamik NavMesh engelini hazırla");
+        obstacle.shape = NavMeshObstacleShape.Box;
+        obstacle.center = box.center;
+        obstacle.size = box.size;
+        obstacle.carving = true;
+        obstacle.carveOnlyStationary = false;
+        obstacle.carvingMoveThreshold = 0.01f;
+        obstacle.enabled = true;
+        EditorUtility.SetDirty(obstacle);
     }
 
     private static int ConfigureAgentType()

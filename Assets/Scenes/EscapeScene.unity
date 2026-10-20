@@ -1005,6 +1005,8 @@ GameObject:
   - component: {fileID: 910000023}
   - component: {fileID: 910000022}
   - component: {fileID: 970000001}
+  - component: {fileID: 970000004}
+  - component: {fileID: 970000003}
   m_Layer: 0
   m_Name: FizikselKapi
   m_TagString: Untagged
@@ -2621,6 +2623,7 @@ GameObject:
   - component: {fileID: 940000002}
   - component: {fileID: 940000003}
   - component: {fileID: 960000001}
+  - component: {fileID: 1030000001}
   m_Layer: 0
   m_Name: AX-7
   m_TagString: Untagged
@@ -3004,6 +3007,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CompanionHUD
   commandInput: {fileID: 950000001}
   kaelInteraction: {fileID: 1010000002}
+  followPlayer: {fileID: 1030000001}
 --- !u!114 &960000001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3171,6 +3175,42 @@ MonoBehaviour:
   activationDuration: 1
   doorWaitTimeout: 8
   currentStatus: 0
+--- !u!208 &970000003
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910000021}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.01
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!114 &970000004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910000021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 1
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1 &980000001
 GameObject:
   m_ObjectHideFlags: 0
@@ -3633,6 +3673,8 @@ GameObject:
   - component: {fileID: 980000042}
   - component: {fileID: 1000000001}
   - component: {fileID: 1000000002}
+  - component: {fileID: 1000000005}
+  - component: {fileID: 1000000004}
   m_Layer: 0
   m_Name: BiyometrikKapi
   m_TagString: Untagged
@@ -4558,70 +4600,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 990000002}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1843400017
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1843400019}
-  - component: {fileID: 1843400018}
-  m_Layer: 0
-  m_Name: AX7Navigation
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1843400018
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1843400017}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshSurface
-  m_SerializedVersion: 0
-  m_AgentTypeID: -1372625422
-  m_CollectObjects: 1
-  m_Size: {x: 10, y: 4, z: 30}
-  m_Center: {x: 1.5, y: 1, z: 0}
-  m_LayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_UseGeometry: 1
-  m_DefaultArea: 0
-  m_GenerateLinks: 0
-  m_IgnoreNavMeshAgent: 1
-  m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 0
-  m_TileSize: 256
-  m_OverrideVoxelSize: 1
-  m_VoxelSize: 0.05
-  m_MinRegionArea: 0.05
-  m_NavMeshData: {fileID: 23800000, guid: 0bfe82ce88fae4948bc20d4cd5e76e2b, type: 2}
-  m_BuildHeightMesh: 0
---- !u!4 &1843400019
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1843400017}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1000000001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4632,7 +4610,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e673bd45cb6c47428a27aefc6ec0aecb, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorController
   openingHeight: 3.2
   openingSpeed: 2.5
@@ -4647,13 +4625,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d551785568ba4bd0b108e4b2ca5d88d2, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BiometricDoorLink
   decisionSource: {fileID: 1000000003}
   doorController: {fileID: 1000000001}
   physicalDoorTask: {fileID: 940000003}
   openingTimeout: 8
   currentState: 0
+  lastMessage: "Kael'in ge\xE7i\u015F izni bekleniyor."
 --- !u!114 &1000000003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4664,17 +4643,53 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 202265b54fd5ed34c857578ee9badea3, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OllamaClient
   greetOnStart: 0
-  serverAddress:
-  modelName: gemma3:4b
-  requestTimeoutSeconds: 120
   playerInput: {fileID: 1020000033}
   kaelDialogueText: {fileID: 1020000043}
   kaelStatusText: {fileID: 1020000061}
   kaelThinkingImage: {fileID: 1020000078}
   kaelIdleImage: {fileID: 1020000011}
+  serverAddress: 
+  modelName: gemma3:4b
+  requestTimeoutSeconds: 120
+--- !u!208 &1000000004
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980000041}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.01
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!114 &1000000005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980000041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 1
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!114 &1010000001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4685,7 +4700,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 83a6e8c84acb4a1095c91bf3aaeb73d3, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KaelDialogueView
   dialogueRoot: {fileID: 1020000082}
   client: {fileID: 1000000003}
@@ -4699,7 +4714,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b44bb47ff5134ab493698d9ae3786ce8, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KaelInteraction
   kael: {fileID: 980000055}
   physicalDoorTask: {fileID: 940000003}
@@ -5762,7 +5777,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text:
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
@@ -6941,6 +6956,92 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1020000087}
   m_CullTransparentMesh: 1
+--- !u!114 &1030000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b160e0e6c9244ba84a77bc4ce1c373d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AX7FollowPlayer
+  taskBrain: {fileID: 940000003}
+  navigationMotor: {fileID: 940000002}
+  obstacleSensor: {fileID: 960000001}
+  player: {fileID: 910000035}
+  stopDistance: 1.6
+  resumeDistance: 2.3
+  repathInterval: 0.5
+  targetMovementThreshold: 0.6
+  retryInterval: 1
+  currentState: 0
+--- !u!1 &1843400017
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1843400019}
+  - component: {fileID: 1843400018}
+  m_Layer: 0
+  m_Name: AX7Navigation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1843400018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1843400017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshSurface
+  m_SerializedVersion: 0
+  m_AgentTypeID: -1372625422
+  m_CollectObjects: 1
+  m_Size: {x: 10, y: 4, z: 30}
+  m_Center: {x: 1.5, y: 1, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 1
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 1
+  m_VoxelSize: 0.05
+  m_MinRegionArea: 0.05
+  m_NavMeshData: {fileID: 23800000, guid: 0bfe82ce88fae4948bc20d4cd5e76e2b, type: 2}
+  m_BuildHeightMesh: 0
+--- !u!4 &1843400019
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1843400017}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

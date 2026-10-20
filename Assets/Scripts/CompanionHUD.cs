@@ -7,6 +7,7 @@ public sealed class CompanionHUD : MonoBehaviour
 {
     [SerializeField] private CompanionCommandInput commandInput;
     [SerializeField] private KaelInteraction kaelInteraction;
+    [SerializeField] private AX7FollowPlayer followPlayer;
 
     private GameObject canvasObject;
     private TMP_Text objectiveText;
@@ -62,6 +63,9 @@ public sealed class CompanionHUD : MonoBehaviour
                     else if (gate.CurrentState == BiometricDoorState.Failed)
                         objective = gate.LastMessage;
                 }
+                if (followPlayer != null && followPlayer.isActiveAndEnabled
+                    && !string.IsNullOrEmpty(followPlayer.StatusMessage))
+                    objective += "\n" + followPlayer.StatusMessage;
                 break;
             case AX7State.Failed:
                 objective = "AX-7 görevi tamamlayamadı.\n" + companion.FailureReason;
