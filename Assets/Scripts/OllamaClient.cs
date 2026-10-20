@@ -9,15 +9,19 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 using TMPro;
-public class OllamaClient : MonoBehaviour
+public class OllamaClient : MonoBehaviour, IKaelDecisionSource
 {
+    public event Action<KaelDecision> DecisionValidated;
+    [SerializeField] private bool greetOnStart = true;
+
     public TMP_InputField playerInput;
     public TMP_Text kaelDialogueText;
     public TMP_Text kaelStatusText;
     public GameObject kaelThinkingImage;
     public GameObject kaelIdleImage;
-    private const string Url = "http://localhost:11434/api/chat";
-    private const string Model = "gemma3:4b";
+    [SerializeField] private string serverAddress = "http://localhost:11434";
+    [SerializeField] private string modelName = "gemma3:4b";
+    [SerializeField, Min(1)] private int requestTimeoutSeconds = 120;
     private readonly List<Message> conversationHistory =
     new List<Message>();
 
@@ -59,6 +63,55 @@ public class OllamaClient : MonoBehaviour
         public string dialogue;
         public string action;
     }
+    private bool TryGetEndpoint(out string endpoint)
+    {
+        endpoint = null;
+        if (string.IsNullOrWhiteSpace(serverAddress))
+        {
+            ShowRequestError("Kael bağlantısı için sunucu adresi henüz ayarlanmamış.");
+            return false;
+        }
+        string address = serverAddress.Trim().TrimEnd('/');
+        if (!Uri.TryCreate(address, UriKind.Absolute, out var uri)
+            || (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps))
+        {
+            ShowRequestError("Kael sunucu adresi geçersiz. Geçerli bir HTTP veya HTTPS adresi gerekli.");
+            return false;
+        }
+        if (string.IsNullOrWhiteSpace(modelName))
+        {
+            ShowRequestError("Kael için kullanılacak yerel model henüz ayarlanmamış.");
+            return false;
+        }
+        endpoint = address.EndsWith("/api/chat", StringComparison.OrdinalIgnoreCase)
+            ? address : address + "/api/chat";
+        return true;
+    }
+
+    private void ShowRequestError(string message)
+    {
+        if (kaelDialogueText != null)
+        {
+            kaelDialogueText.richText = false;
+            kaelDialogueText.text = message;
+        }
+        Debug.LogWarning(message, this);
+    }
+
+    private bool TryReadChatResponse(string json, out ChatResponse response)
+    {
+        response = null;
+        try
+        {
+            response = JsonUtility.FromJson<ChatResponse>(json);
+            return response != null;
+        }
+        catch (ArgumentException)
+        {
+            return false;
+        }
+    }
+
     private void SetRequestState(bool isBusy)
     {
         isRequestInProgress = isBusy;
@@ -89,15 +142,17 @@ public class OllamaClient : MonoBehaviour
             return;
         }
 
+        if (!TryGetEndpoint(out string endpoint))
+            return;
         SetRequestState(true);
-        StartCoroutine(SendRequestWithGuard(playerText.Trim()));
+        StartCoroutine(SendRequestWithGuard(playerText.Trim(), endpoint));
     }
 
-    private IEnumerator SendRequestWithGuard(string playerText)
+    private IEnumerator SendRequestWithGuard(string playerText, string endpoint)
     {
         try
         {
-            yield return SendRequest(playerText);
+            yield return SendRequest(playerText, endpoint);
         }
         finally
         {
@@ -123,14 +178,15 @@ public class OllamaClient : MonoBehaviour
             return;
 
         SendMessageToAI(text);
-        playerInput.text = "";
+        if (isRequestInProgress)
+            playerInput.text = "";
     }
 
-    private IEnumerator SendRequest(string playerText)
+    private IEnumerator SendRequest(string playerText, string endpoint)
     {
         ChatRequest request = new ChatRequest
         {
-            model = Model,
+            model = modelName.Trim(),
             messages = new Message[]
             {
                 new Message
@@ -250,7 +306,7 @@ Kapının fiziksel olarak açıldığını söyleme; bunu Unity yönetecek."
         string json = JsonUtility.ToJson(request);
 
         using (UnityWebRequest webRequest =
-            new UnityWebRequest(Url, "POST"))
+            new UnityWebRequest(endpoint, "POST"))
         {
             webRequest.uploadHandler =
                 new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
@@ -260,23 +316,27 @@ Kapının fiziksel olarak açıldığını söyleme; bunu Unity yönetecek."
             webRequest.SetRequestHeader(
                 "Content-Type", "application/json");
 
+            webRequest.timeout = Mathf.Max(1, requestTimeoutSeconds);
             yield return webRequest.SendWebRequest();
 
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError("Ollama hatası: " + webRequest.error);
+                ShowRequestError("Kael yanıt veremedi. Sunucu bağlantısını ve yerel modelin çalıştığını kontrol et.");
+                Debug.LogWarning("Ollama bağlantı ayrıntısı: " + webRequest.error, this);
             }
             else
             {
-                ChatResponse response =
-                    JsonUtility.FromJson<ChatResponse>(
-                        webRequest.downloadHandler.text);
+                if (!TryReadChatResponse(webRequest.downloadHandler.text, out ChatResponse response))
+                {
+                    ShowRequestError("Kael sunucusundan geçersiz bir yanıt geldi. Yeniden deneyebilirsin.");
+                    yield break;
+                }
 
                 if (response == null ||
     response.message == null ||
     string.IsNullOrWhiteSpace(response.message.content))
                 {
-                    Debug.LogError("Ollama'dan boş veya eksik cevap geldi.");
+                    ShowRequestError("Kael sunucusundan boş veya eksik yanıt geldi. Yeniden deneyebilirsin.");
                     yield break;
                 }
 
@@ -284,8 +344,7 @@ Kapının fiziksel olarak açıldığını söyleme; bunu Unity yönetecek."
 
                 if (!TryParseKaelReply(response.message.content, out reply))
                 {
-                    Debug.LogError(
-                        "Kael cevabı kabul edilmedi: JSON veya alanlar geçersiz.");
+                    ShowRequestError("Kael yanıtı doğrulanamadı; kapı kararı uygulanmadı. Yeniden deneyebilirsin.");
 
                     Debug.Log("Ham cevap: " + response.message.content);
                     yield break;
@@ -307,6 +366,9 @@ Kapının fiziksel olarak açıldığını söyleme; bunu Unity yönetecek."
                     kaelDialogueText.text = reply.dialogue;
                 }
                 Debug.Log("Kael kararı: " + reply.action);
+                // Buraya yalnızca JSON ve alan doğrulamasını geçen yanıt ulaşır.
+                var decision = reply.action == "OPEN_DOOR" ? KaelDecision.OpenDoor : KaelDecision.None;
+                DecisionValidated?.Invoke(decision);
             }
         }
     }
@@ -467,7 +529,8 @@ Kapının fiziksel olarak açıldığını söyleme; bunu Unity yönetecek."
     }
     private void Start()
     {
-        SendMessageToAI("Merhaba! Bana Türkçe kısa bir selam ver.");
+        if (greetOnStart)
+            SendMessageToAI("Merhaba! Bana Türkçe kısa bir selam ver.");
     }
 }
  

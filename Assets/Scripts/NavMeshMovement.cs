@@ -15,6 +15,10 @@ public sealed class NavMeshMovement : MonoBehaviour, INavigationMotor
     private Vector3 lastProgressPosition;
     private float lastProgressTime;
     private float movementStarted;
+    private float pauseStarted;
+
+    public Vector3 SteeringTarget => agent != null && agent.isActiveAndEnabled
+        && agent.isOnNavMesh && agent.hasPath ? agent.steeringTarget : transform.position;
 
     private void Awake()
     {
@@ -58,13 +62,15 @@ public sealed class NavMeshMovement : MonoBehaviour, INavigationMotor
 
     public void Tick()
     {
-        if (Status != NavigationStatus.Moving)
+        if (Status != NavigationStatus.Moving && Status != NavigationStatus.Paused)
             return;
         if (!isActiveAndEnabled || agent == null || !agent.isActiveAndEnabled || !agent.isOnNavMesh)
         {
             Fail("Robot hareket sırasında NavMesh bağlantısını kaybetti.");
             return;
         }
+        if (Status == NavigationStatus.Paused)
+            return;
         if (Time.time - movementStarted >= travelTimeout)
         {
             Fail("Robot ayrılan sürede panele ulaşamadı.");
@@ -92,6 +98,34 @@ public sealed class NavMeshMovement : MonoBehaviour, INavigationMotor
         }
         else if (Time.time - lastProgressTime >= stuckTimeout)
             Fail("Robot ilerleyemedi; yol veya fiziksel engeller kontrol edilmeli.");
+    }
+
+    public bool Pause()
+    {
+        if (Status == NavigationStatus.Paused)
+            return true;
+        if (Status != NavigationStatus.Moving || agent == null
+            || !agent.isActiveAndEnabled || !agent.isOnNavMesh)
+            return Fail("Robot güvenli biçimde duraklatılamadı.");
+        // ResetPath çağrılmaz: mevcut rota korunur.
+        agent.isStopped = true;
+        pauseStarted = Time.time;
+        Status = NavigationStatus.Paused;
+        return true;
+    }
+
+    public bool Resume()
+    {
+        if (Status != NavigationStatus.Paused || agent == null
+            || !agent.isActiveAndEnabled || !agent.isOnNavMesh
+            || !agent.hasPath || agent.pathStatus != NavMeshPathStatus.PathComplete)
+            return Fail("Engel sonrasında devam edilebilecek geçerli rota bulunamadı.");
+        movementStarted += Time.time - pauseStarted;
+        lastProgressTime = Time.time;
+        lastProgressPosition = transform.position;
+        agent.isStopped = false;
+        Status = NavigationStatus.Moving;
+        return true;
     }
 
     public void Stop()

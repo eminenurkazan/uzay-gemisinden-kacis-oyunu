@@ -47,8 +47,8 @@ public static class AX7NavigationSetup
         Undo.RecordObject(surface, "AX-7 NavMesh ayarlarını düzenle");
         surface.agentTypeID = agentType;
         surface.collectObjects = CollectObjects.Volume;
-        surface.center = new Vector3(1.5f, 1f, -6f);
-        surface.size = new Vector3(10f, 4f, 20f);
+        surface.center = new Vector3(1.5f, 1f, 0f);
+        surface.size = new Vector3(10f, 4f, 30f);
         surface.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
         surface.layerMask = ~0;
         surface.overrideVoxelSize = true;
@@ -87,6 +87,8 @@ public static class AX7NavigationSetup
         EditorSceneManager.MarkSceneDirty(scene);
         AssetDatabase.SaveAssets();
         bool routeValid = ValidateRoute(agentType);
+        bool hasKaelArea = FindRoot("Kael") != null;
+        bool kaelRouteValid = !hasKaelArea || ValidateKaelArea(agentType);
         Selection.activeGameObject = surfaceObject;
         SceneView.RepaintAll();
         if (!EditorSceneManager.SaveScene(scene))
@@ -94,8 +96,13 @@ public static class AX7NavigationSetup
             Debug.LogError("NavMesh hesaplandı ancak sahne kaydedilemedi.");
             return;
         }
-        if (routeValid)
-            Debug.Log("AX-7 NavMesh hazır: bakım yolu üzerinden panele tam rota bulundu. Robot henüz hareket etmiyor.", surface);
+        if (routeValid && kaelRouteValid)
+        {
+            string message = "AX-7 NavMesh hazır: bakım yolu üzerinden panele tam rota bulundu.";
+            if (hasKaelArea)
+                message += " Panelden Kael alanına kesintisiz rota da doğrulandı.";
+            Debug.Log(message, surface);
+        }
     }
 
     private static GameObject FindRoot(string name)
@@ -149,6 +156,34 @@ public static class AX7NavigationSetup
             return id;
         }
         throw new InvalidOperationException("AX-7 ajan ayarları kaydedilemedi.");
+    }
+
+    private static bool ValidateKaelArea(int agentType)
+    {
+        var filter = new NavMeshQueryFilter { agentTypeID = agentType, areaMask = NavMesh.AllAreas };
+        Vector3[] points =
+        {
+            new Vector3(1.8f, 0f, -1.9f),
+            new Vector3(0f, 0f, 3f),
+            new Vector3(0f, 0f, 6f)
+        };
+        var path = new NavMeshPath();
+        for (int i = 0; i < points.Length; i++)
+        {
+            if (!NavMesh.SamplePosition(points[i], out var hit, 0.4f, filter))
+            {
+                Debug.LogError("Kael alanında yürünebilir zemin bulunamadı: " + points[i]);
+                return false;
+            }
+            points[i] = hit.position;
+            if (i > 0 && (!NavMesh.CalculatePath(points[i - 1], points[i], filter, path)
+                          || path.status != NavMeshPathStatus.PathComplete))
+            {
+                Debug.LogError("Panel ile Kael alanı arasında kesintisiz rota oluşmadı.");
+                return false;
+            }
+        }
+        return true;
     }
 
     private static bool ValidateRoute(int agentType)

@@ -6,13 +6,19 @@ public enum AX7State
     Waiting,
     MovingToPanel,
     AtPanel,
-    Failed
+    Failed,
+    WaitingForObstacle,
+    InteractingWithPanel,
+    Succeeded
 }
 
 public sealed class AX7Brain : MonoBehaviour
 {
     [SerializeField] private MonoBehaviour navigationMotor;
     [SerializeField] private Transform panelTarget;
+    [SerializeField] private MonoBehaviour panelInteraction;
+    [SerializeField] private MonoBehaviour obstacleSensor;
+    [SerializeField, Min(1f)] private float obstacleWaitTimeout = 20f;
     [SerializeField] private AX7State currentState = AX7State.Waiting;
     [SerializeField] private string failureReason = string.Empty;
 
@@ -21,13 +27,18 @@ public sealed class AX7Brain : MonoBehaviour
     public event Action<AX7State> StateChanged;
 
     private INavigationMotor motor;
+    private IObstacleSensor sensor;
+    private IInteractable interactable;
+    private float obstacleWaitStarted;
 
     private void Awake()
     {
         motor = navigationMotor as INavigationMotor;
-        if (motor == null || panelTarget == null)
+        sensor = obstacleSensor as IObstacleSensor;
+        interactable = panelInteraction as IInteractable;
+        if (motor == null || sensor == null || interactable == null || panelTarget == null)
         {
-            SetFailure("Robotun hareket arayüzü veya panel hedefi bağlanmamış.");
+            SetFailure("Robotun hareket arayüzü, sensörü, panel hedefi veya etkileşimi bağlanmamış.");
             enabled = false;
             return;
         }
@@ -44,7 +55,8 @@ public sealed class AX7Brain : MonoBehaviour
             Debug.LogWarning("AX-7 hareketini denemek için önce Play'e bas.", this);
             return;
         }
-        if (!isActiveAndEnabled || motor == null || currentState == AX7State.MovingToPanel)
+        if (!isActiveAndEnabled || motor == null
+            || (currentState != AX7State.Waiting && currentState != AX7State.Failed))
             return;
         if (panelTarget == null)
         {
@@ -63,14 +75,62 @@ public sealed class AX7Brain : MonoBehaviour
 
     private void Update()
     {
-        if (currentState != AX7State.MovingToPanel)
+        if (currentState == AX7State.InteractingWithPanel)
+        {
+            UpdatePanelInteraction();
+            return;
+        }
+        if (currentState != AX7State.MovingToPanel && currentState != AX7State.WaitingForObstacle)
             return;
         motor.Tick();
+        if (motor.Status == NavigationStatus.Failed)
+        {
+            SetFailure(motor.FailureReason);
+            return;
+        }
+
+        if (motor.Status == NavigationStatus.Moving || motor.Status == NavigationStatus.Paused)
+        {
+            Vector3 direction = motor.SteeringTarget - transform.position;
+            direction.y = 0f;
+            bool blocked = sensor.Scan(direction, direction.magnitude);
+            if (currentState == AX7State.WaitingForObstacle)
+            {
+                if (!blocked)
+                {
+                    if (!motor.Resume())
+                        SetFailure(motor.FailureReason);
+                    else
+                    {
+                        ChangeState(AX7State.MovingToPanel);
+                        Debug.Log("AX-7: Engel kalktı, panel rotasına devam ediyorum.", this);
+                    }
+                }
+                else if (Time.time - obstacleWaitStarted >= obstacleWaitTimeout)
+                {
+                    motor.Stop();
+                    SetFailure("Önümdeki engel uzun süre kalkmadığı için görevi durdurdum.");
+                }
+                return;
+            }
+            if (blocked)
+            {
+                if (!motor.Pause())
+                    SetFailure(motor.FailureReason);
+                else
+                {
+                    obstacleWaitStarted = Time.time;
+                    ChangeState(AX7State.WaitingForObstacle);
+                    Debug.Log("AX-7: Raycast sensörüm engel algıladı; yolun açılmasını bekliyorum.", this);
+                }
+                return;
+            }
+        }
         switch (motor.Status)
         {
             case NavigationStatus.Arrived:
                 ChangeState(AX7State.AtPanel);
-                Debug.Log("AX-7: Panelin önüne ulaştım. Panel etkileşimi henüz eklenmedi.", this);
+                BeginPanelInteraction();
                 break;
             case NavigationStatus.Failed:
                 SetFailure(motor.FailureReason);
@@ -81,8 +141,43 @@ public sealed class AX7Brain : MonoBehaviour
         }
     }
 
+    private void BeginPanelInteraction()
+    {
+        if (panelInteraction == null || !panelInteraction.isActiveAndEnabled
+            || interactable == null)
+        {
+            SetFailure("Kontrol paneli etkileşime hazır değil.");
+            return;
+        }
+        if (!interactable.TryInteract(transform))
+        {
+            SetFailure(interactable.FailureReason);
+            return;
+        }
+        ChangeState(AX7State.InteractingWithPanel);
+        Debug.Log("AX-7: Panele ulaştım; kontrol panelini kullanıyorum.", this);
+    }
+
+    private void UpdatePanelInteraction()
+    {
+        if (panelInteraction == null || !panelInteraction.isActiveAndEnabled)
+        {
+            SetFailure("Kontrol paneli etkileşim sırasında devre dışı kaldı.");
+            return;
+        }
+        interactable.Tick(transform);
+        if (interactable.Status == InteractionStatus.Succeeded)
+        {
+            ChangeState(AX7State.Succeeded);
+            Debug.Log("AX-7: Paneli etkinleştirdim. Kapı açıldı; görev başarılı.", this);
+        }
+        else if (interactable.Status == InteractionStatus.Failed)
+            SetFailure(interactable.FailureReason);
+    }
+
     private void SetFailure(string reason)
     {
+        motor?.Stop();
         failureReason = reason;
         ChangeState(AX7State.Failed);
         Debug.LogWarning("AX-7: " + reason, this);
@@ -99,7 +194,8 @@ public sealed class AX7Brain : MonoBehaviour
     private void OnDisable()
     {
         motor?.Stop();
-        if (currentState == AX7State.MovingToPanel)
+        if (currentState == AX7State.MovingToPanel || currentState == AX7State.WaitingForObstacle
+            || currentState == AX7State.InteractingWithPanel)
             ChangeState(AX7State.Waiting);
     }
 }
