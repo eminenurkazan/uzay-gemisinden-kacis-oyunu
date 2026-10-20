@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public sealed class CompanionHUD : MonoBehaviour
 {
     [SerializeField] private CompanionCommandInput commandInput;
+    [SerializeField] private KaelInteraction kaelInteraction;
 
     private GameObject canvasObject;
     private TMP_Text objectiveText;
@@ -50,7 +51,17 @@ public sealed class CompanionHUD : MonoBehaviour
                 objective = "AX-7 kontrol panelini kullanıyor…\nKapının açılmasını bekle.";
                 break;
             case AX7State.Succeeded:
-                objective = "Kapı açıldı, ilerleyebilirsin.\nAX-7 fiziksel kapı görevini tamamladı.";
+                objective = "İlk kapı açıldı. Kael’in güvenlik alanına ilerle.\nKael’e yaklaşınca E ile konuşabilirsin.";
+                if (kaelInteraction != null && kaelInteraction.BiometricDoor != null)
+                {
+                    var gate = kaelInteraction.BiometricDoor;
+                    if (gate.CurrentState == BiometricDoorState.Open)
+                        objective = "Biyometrik kapı açıldı.\nHava kilidine ilerleyebilirsin.";
+                    else if (gate.CurrentState == BiometricDoorState.Opening)
+                        objective = "Kael geçiş izni verdi.\nBiyometrik kapı açılıyor.";
+                    else if (gate.CurrentState == BiometricDoorState.Failed)
+                        objective = gate.LastMessage;
+                }
                 break;
             case AX7State.Failed:
                 objective = "AX-7 görevi tamamlayamadı.\n" + companion.FailureReason;
@@ -64,6 +75,8 @@ public sealed class CompanionHUD : MonoBehaviour
         string prompt;
         if (Cursor.lockState != CursorLockMode.Locked)
             prompt = "Devam etmek için oyun alanına tıkla.";
+        else if (kaelInteraction != null && kaelInteraction.CanInteract)
+            prompt = "E — Kael ile konuş";
         else if (commandInput.CanIssueCommand)
             prompt = companion.CurrentState == AX7State.Failed
                 ? "E — AX-7’ye yeniden panele gitme komutu ver"
