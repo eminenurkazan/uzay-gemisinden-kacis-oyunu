@@ -10,6 +10,7 @@ public sealed class CompanionHUD : MonoBehaviour
     [SerializeField] private AX7FollowPlayer followPlayer;
     [SerializeField] private AtmospherePanelInput atmospherePanel;
     [SerializeField] private KaelFollowPlayer kaelFollower;
+    [SerializeField] private KaelAtmosphereResponse kaelAtmosphere;
 
     private GameObject canvasObject;
     private TMP_Text objectiveText;
@@ -83,6 +84,9 @@ public sealed class CompanionHUD : MonoBehaviour
             && (atmospherePanel.CurrentState == AtmosphereControlState.Processing
                 || atmospherePanel.CurrentState == AtmosphereControlState.Completed))
             objective = atmospherePanel.StatusMessage;
+        if (kaelAtmosphere != null && kaelAtmosphere.isActiveAndEnabled
+            && kaelAtmosphere.CurrentState != KaelAtmosphereState.Active)
+            objective = kaelAtmosphere.StatusMessage;
         SetTextIfChanged(objectiveText, objective);
 
         string prompt;

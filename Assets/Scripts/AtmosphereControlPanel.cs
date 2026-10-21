@@ -5,6 +5,7 @@ public sealed class AtmosphereControlPanel : MonoBehaviour, IAtmosphereControl
 {
     [SerializeField] private BiometricDoorLink biometricDoor;
     [SerializeField] private MonoBehaviour doorController;
+    [SerializeField] private MonoBehaviour atmosphereTarget;
     [SerializeField] private Transform authorizedPlayer;
     [SerializeField] private Transform airlockOrigin;
     [SerializeField] private Vector3 interactionAreaCenter = new Vector3(0f, 1f, 0f);
@@ -17,28 +18,37 @@ public sealed class AtmosphereControlPanel : MonoBehaviour, IAtmosphereControl
     public AtmosphereControlState CurrentState => currentState;
     public string StatusMessage => currentState == AtmosphereControlState.Processing
         ? "Atmosfer kontrolü sürüyor… %" + Mathf.FloorToInt(100f * Mathf.Clamp01(elapsed / activationDuration))
+            + "\nGiysinin bağımsız oksijen sistemi seni koruyor."
         : lastMessage;
     public event Action AtmosphereControlCompleted;
 
     private IOpenableDoor gate;
+    private IAtmosphereTarget target;
     private float elapsed;
     private bool completionRaised;
 
-    private bool AccessGranted => biometricDoor != null && biometricDoor.isActiveAndEnabled
+    private bool DoorAccessGranted => biometricDoor != null && biometricDoor.isActiveAndEnabled
         && biometricDoor.CurrentState == BiometricDoorState.Open
         && doorController != null && doorController.isActiveAndEnabled
         && gate != null && gate.IsAvailable && gate.IsOpen;
+    private bool TargetReady => atmosphereTarget != null && atmosphereTarget.isActiveAndEnabled
+        && target != null && target.CanBeAffected && target.IsFullyInsideAirlock;
+    private bool AccessGranted => DoorAccessGranted && TargetReady;
+    private string LockedReason => !DoorAccessGranted
+        ? "Önce biyometrik kapının açılması gerekiyor."
+        : "Atmosfer kontrolü için Kael'in tamamen hava kilidine girmesini bekle.";
 
     private void Awake()
     {
         gate = doorController as IOpenableDoor;
+        target = atmosphereTarget as IAtmosphereTarget;
         currentState = AtmosphereControlState.Locked;
         elapsed = 0f;
         completionRaised = false;
         lastMessage = "Önce biyometrik kapının açılması gerekiyor.";
-        if (biometricDoor == null || gate == null || authorizedPlayer == null || airlockOrigin == null)
+        if (biometricDoor == null || gate == null || target == null || authorizedPlayer == null || airlockOrigin == null)
         {
-            Debug.LogError("Atmosfer panelinin kapı, oyuncu veya hava kilidi bağlantısı eksik.", this);
+            Debug.LogError("Atmosfer panelinin kapı, Kael, oyuncu veya hava kilidi bağlantısı eksik.", this);
             enabled = false;
         }
     }
@@ -54,6 +64,25 @@ public sealed class AtmosphereControlPanel : MonoBehaviour, IAtmosphereControl
         Vector3 offset = actor.position - transform.position;
         offset.y = 0f;
         return offset.sqrMagnitude <= interactionRange * interactionRange;
+    }
+
+    public bool ContainsEffectBounds(Bounds worldBounds)
+    {
+        if (!isActiveAndEnabled || airlockOrigin == null)
+            return false;
+        var area = new Bounds(interactionAreaCenter, interactionAreaSize);
+        Vector3 min = worldBounds.min;
+        Vector3 max = worldBounds.max;
+        // Yalnızca kök noktası değil, gövdenin tamamı içeride olmalı.
+        for (int corner = 0; corner < 8; corner++)
+        {
+            var point = new Vector3((corner & 1) == 0 ? min.x : max.x,
+                (corner & 2) == 0 ? min.y : max.y,
+                (corner & 4) == 0 ? min.z : max.z);
+            if (!area.Contains(airlockOrigin.InverseTransformPoint(point)))
+                return false;
+        }
+        return true;
     }
 
     public bool CanActivate(Transform actor) => IsInInteractionArea(actor) && AccessGranted
@@ -95,11 +124,14 @@ public sealed class AtmosphereControlPanel : MonoBehaviour, IAtmosphereControl
         }
         var next = AccessGranted ? AtmosphereControlState.Ready : AtmosphereControlState.Locked;
         if (next == currentState)
+        {
+            if (next == AtmosphereControlState.Locked)
+                lastMessage = LockedReason;
             return;
+        }
         currentState = next;
         lastMessage = next == AtmosphereControlState.Ready
-            ? "Atmosfer kontrol paneli hazır."
-            : "Önce biyometrik kapının açılması gerekiyor.";
+            ? "Atmosfer kontrol paneli hazır." : LockedReason;
     }
 
     private void CancelOperation()

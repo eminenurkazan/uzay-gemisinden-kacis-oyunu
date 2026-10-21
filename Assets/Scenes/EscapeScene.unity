@@ -3124,6 +3124,7 @@ MonoBehaviour:
   followPlayer: {fileID: 1030000001}
   atmospherePanel: {fileID: 1040000002}
   kaelFollower: {fileID: 106000003}
+  kaelAtmosphere: {fileID: 107000001}
 --- !u!114 &960000001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3906,6 +3907,7 @@ GameObject:
   - component: {fileID: 106000002}
   - component: {fileID: 106000003}
   - component: {fileID: 106000006}
+  - component: {fileID: 107000001}
   m_Layer: 0
   m_Name: Kael
   m_TagString: Untagged
@@ -7113,6 +7115,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtmosphereControlPanel
   biometricDoor: {fileID: 1000000002}
   doorController: {fileID: 1000000001}
+  atmosphereTarget: {fileID: 107000001}
   authorizedPlayer: {fileID: 910000035}
   airlockOrigin: {fileID: 990000002}
   interactionAreaCenter: {x: 0, y: 1, z: 0}
@@ -7313,6 +7316,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &107000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980000051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11a553d47d974951b44c57d3b0efdfef, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::KaelAtmosphereResponse
+  atmosphereControl: {fileID: 1040000001}
+  visualBody: {fileID: 106000005}
+  bodyCollider: {fileID: 980000052}
+  airlockOrigin: {fileID: 990000002}
+  follower: {fileID: 106000003}
+  navigationMotor: {fileID: 106000002}
+  navigationAgent: {fileID: 106000001}
+  dialogueInteraction: {fileID: 1010000002}
+  dialogueClient: {fileID: 1000000003}
+  collapseDuration: 0.9
+  currentState: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

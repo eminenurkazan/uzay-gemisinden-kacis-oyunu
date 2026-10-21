@@ -16,6 +16,7 @@ public interface IAtmosphereControl
     string StatusMessage { get; }
     event Action AtmosphereControlCompleted;
     bool IsInInteractionArea(Transform actor);
+    bool ContainsEffectBounds(Bounds worldBounds);
     bool CanActivate(Transform actor);
     bool TryActivate(Transform actor);
 }

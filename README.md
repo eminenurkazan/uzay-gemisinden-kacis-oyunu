@@ -179,6 +179,8 @@ Aşağıdaki kayıtlar Unity editöründe birlikte yürütülen ve oyuncu taraf�
 | T16 | Panel tamamlandıktan sonra yeniden E'ye basma. | İşlem yeniden başlamadı ve Console tamamlanma kaydı çoğalmadı. |
 | T17 | Geçici editör test düğmesine sol tıklama. | Biyometrik kapı açıldı; bu deneme gerçek model kararı testi sayılmadı. |
 | T18 | Geçici düğmeyle kapı açıldıktan sonra Kael ile hava kilidine gitme, önceki odaya dönme ve yeniden hava kilidine girme. | Kael her iki yönde de oyuncuyu takip etti; AX-7 takibi de sürdürdü. |
+| T19 | Kael hava kilidinde değilken atmosfer panelini kullanma. | Panel Kael'in gelmesini bekledi; işlem başlamadı. |
+| T20 | Kael içerideyken atmosfer işlemini tamamlayıp uzaklaşma. | Kael etkisizleşip yerde kaldı; konuşma ipucu kayboldu, oyuncuyu takip etmedi. |
 
 Başlangıç koordinatları canlı `NavMeshAgent` tarafından değiştirilmiş olan önceki deneme, doğrulanmış alternatif başlangıç sonucu olarak sayılmamıştır. Başarılı varış konumu, başlangıç konumu yerine kullanılmamıştır.
 
@@ -204,7 +206,7 @@ Başlangıç koordinatları canlı `NavMeshAgent` tarafından değiştirilmiş o
 - Bakım yolunun tavanı hareketi izleyebilmek için görünmezdir; collider'ı etkindir. Yeniden göstermek için `BakimYoluTavan` nesnesinin Mesh Renderer bileşeni açılır.
 - Görev sonrası temel takip, mesafede durma ve uzaklaşınca devam etme oyuncuyla test edildi. Takipteki engel ve rota kaybı senaryoları ayrıca doğrulanacaktır.
 - Panelden Kael alanına NavMesh bağlantısı ve oyuncuyu takip ederek bu alana fiilî geçiş doğrulandı.
-- Kael konuşma arayüzü ana sahneye bağlandı; açılıp kapanması ve eksik sunucu adresi davranışı test edildi. Yerel Gemma ile konuşma ve biyometrik kapı olayı test edildi; modelin oyuncu parmak izi koşulu uydurması nedeniyle karar kurallarının uygunluğu henüz doğrulanmadı. Atmosfer paneli etkileşimi, işlem iptali ve tek seferlik tamamlanma kaydı test edildi. Kael'in etkisizleşme tepkisi, gemi geçiş kapağı ve kaçış sonu henüz tamamlanmamıştır.
+- Kael konuşma arayüzü ana sahneye bağlandı; açılıp kapanması ve eksik sunucu adresi davranışı test edildi. Yerel Gemma ile konuşma ve biyometrik kapı olayı test edildi; modelin oyuncu parmak izi koşulu uydurması nedeniyle karar kurallarının uygunluğu henüz doğrulanmadı. Atmosfer paneli etkileşimi, işlem iptali ve tek seferlik tamamlanma kaydı test edildi. Kael'in atmosfer olayına etkisizleşme tepkisi Play modunda test edildi; dışarıdayken bekleme, içeride etkisizleşme, konuşmanın kapanması ve yerde kalması doğrulandı. Gemi geçiş kapağı ve kaçış sonu henüz tamamlanmamıştır.
 - Kael'in yerel model seçiminin gerekçesi, sistem promptu, istek/yanıt sequence diyagramı, hata yönetimi ve en az beş gerçek model diyalog testi ayrıca belgelenecektir.
 - Uygulamanın tamamının OOP incelemesi, görsel düzenlemeler ve teslim build'i henüz tamamlanmamıştır.
 
@@ -281,6 +283,7 @@ HUD tuş okumadan durum ve etkileşim ipucunu gösterir.
 
 Panel yalnızca biyometrik kapının olay bağlantısı `Open` durumundayken ve
 fiziksel kapı bileşeni de açık ve kullanılabilirken başlatılabilir.
+Kael'in gövdesi de tamamen hava kilidinin iç alanında bulunmalıdır.
 Oyuncu hava kilidinin tanımlı iç alanında ve panelden yatay en fazla
 1,8 birim uzakta olmalıdır. Kael konuşması açıkken veya fare kilitli
 değilken E paneli başlatmaz. Panel bölgesinde E önceliği paneldedir;
@@ -297,8 +300,9 @@ tekrarlamaz. Yeni oyun/Play başlangıcında işlem sıfırlanır.
 Durumlar: `Locked → Ready → Processing → Completed`; işlem iptali
 koşullara göre `Ready` veya `Locked` durumuna döner.
 
-Bu adım olay kaynağını hazırlar. Kael'in bu olayı dinleyerek gerçekten
-etkisizleşmesi, gemi kapağı ve kaçış finali bu adımda uygulanmamıştır.
+Panelin olayı artık Kael'in atmosfer tepkisine bağlandı. Etkisizleşme
+bağlantısı için yeni Play testi bekleniyor; gemi kapağı ve kaçış finali
+henüz uygulanmadı.
 21 Ekim 2026 tarihinde oyuncuyla doğrulanan çalışma zamanı sonuçları:
 
 - Panelin yanında E ile işlem başlatıldı ve tamamlandı.
@@ -315,9 +319,8 @@ Ayrıca bekleyen kontroller:
 - Kael konuşma alanına yazılan E'nin paneli çalıştırmaması.
 - Panel/kapı bileşeninin işlem sırasında devre dışı kalması.
 
-Bu sonuçlar panelin olay kaynağı ve Console kaydı içindir; Kael'in
-gerçek etkisizleşme tepkisinin çalıştığı anlamına gelmez. Bu tepki henüz
-bağlanmadı. Süre ve tekrar sayısı ölçülmediği için başarı oranı hesaplanmadı.
+Bu sonuçlar etkisizleşme bağlantısından önceki panel testlerine aittir;
+Kael'in yeni etkisizleşme tepkisini doğrulamaz. Yeni bağlantının ayrıca yapılan testleri aşağıdaki etkisizleşme bölümünde belirtilmiştir. Süre ve tekrar sayısı ölçülmediği için başarı oranı hesaplanmadı.
 
 ### Gerçek Kael Bağlantısının İlk Denemesi
 
@@ -379,10 +382,50 @@ Hazırlık aracı Kael başlangıcı ve hava kilidinde zemin bulunmasını, alç
 bakım geçidinin Kael haritasında dışlanmasını kontrol eder. Kapı açıkken
 fiilî takip ve varış ancak Play testinde doğrulanabilir.
 
-Bu adımda sadece takip eklendi. Panelin Kael hava kilidine girmeden
-kullanılamaması, solunum etkisi ve yana devrilme sonraki adımda bağlanacak.
+Takip testinden sonra panelin Kael hava kilidine girmeden kullanılamaması,
+solunum etkisi ve yana devrilme bağlantısı eklendi; aşağıdaki Play sonuçlarıyla doğrulandı.
 21 Ekim 2026 tarihinde oyuncu, Kael'in hava kilidine gelmesini,
 önceki odaya geri dönüşte ve yeniden hava kilidine girişte takibe devam
 etmesini doğruladı. Aynı denemede AX-7 de takip etmeyi sürdürdü. Kael'in
 yakında bekleme durumu Console'da gözlendi. Geçici düğmeyle yapılan bu
 deneme gerçek Kael konuşma kararı testi olarak sayılmadı.
+
+
+## Kael'in Atmosferden Etkilenmesi
+
+Panel, `IAtmosphereTarget` arayüzünden Kael'in uygun durumda ve gövdesinin
+tamamıyla hava kilidinde olduğunu kontrol eder. Gövde collider'ının dünya
+sınır kutusundaki sekiz köşe panelin hava kilidi alanında bulunmalıdır;
+yalnızca Kael'in kök noktasının kapıdan geçmiş olması yeterli değildir.
+İşlem sırasında Kael alanı terk ederse veya hedef bileşeni kullanılamazsa
+panel tamamlanmadan iptal olur. Oyuncunun uzaklaşma kuralı korunmuştur.
+
+`KaelAtmosphereResponse`, `IAtmosphereControl.AtmosphereControlCompleted`
+olayını dinler. Durumlar `Active → Collapsing → Incapacitated` şeklindedir.
+Olay geldiğinde takip/motor/ajan durdurulur, Kael konuşması devre dışı
+kalır ve bekleyen istemci coroutine'leri sonlandırılır. Görsel kapsül
+0,9 saniyede hava kilidinin merkezine doğru yana yatırılır; collider
+korunur. Kapsül yüksekliği açıya göre azaltılarak alt yüzey zeminde
+tutulur. Bu geçici görsel hareket bir ragdoll veya karakter animasyonu değildir.
+
+Astronotun uzay giysisi bağımsız oksijen sağladığı için oyuncu kontrolü
+kapatılmaz; işlem sırasında HUD bu korunmayı açıklar. Yeni bir hasar veya
+oksijen simülasyonu eklenmemiştir. Devrilme bitince `IsIncapacitated` true
+olur ve `Incapacitated` olayı bir kez yayınlanır. Gemiye geçiş mekaniği
+sonraki adımda bu durumu ön koşul olarak kullanabilir.
+
+21 Ekim 2026 tarihinde oyuncuyla doğrulanan Play sonuçları:
+
+- Kael hava kilidinde değilken panel, Kael'in gelmesinin beklendiğini gösterdi.
+- Kael içeri geldikten sonra E ile başlatılan işlem tamamlandı ve Kael etkisizleşti.
+- Konuşmak için E ipucu artık görünmedi.
+- Oyuncu uzaklaşabildi; Kael yattığı yerde kaldı ve takibe dönmedi.
+
+Ayrıca bekleyen kontroller:
+
+- Gövdesi kapıda kısmen dururken paneli başlatamama.
+- İşlem sürerken Kael'in alan dışına çıkmasıyla etkinin iptal edilmesi.
+- Yeni bağlantıyla oyuncunun uzaklaşması ve tekrar E'nin ikinci etki oluşturmaması.
+- Yeni Play'de başlangıç durumuna dönüş.
+
+Bu sonuçlar görsel ve mekanik etkisizleşmeyi doğrular; gerçek Kael konuşma kararının yeni promptla uygunluğunu doğrulamaz.
