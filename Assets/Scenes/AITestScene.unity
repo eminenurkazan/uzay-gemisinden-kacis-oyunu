@@ -2105,11 +2105,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 202265b54fd5ed34c857578ee9badea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OllamaClient
+  greetOnStart: 0
   playerInput: {fileID: 984338032}
   kaelDialogueText: {fileID: 1025491620}
   kaelStatusText: {fileID: 1231910915}
   kaelThinkingImage: {fileID: 1747185448}
   kaelIdleImage: {fileID: 0}
+  serverAddress: http://localhost:11434
+  modelName: gemma3:4b
+  requestTimeoutSeconds: 120
+  logOutgoingRequests: 1
 --- !u!4 &1295520137
 Transform:
   m_ObjectHideFlags: 0
@@ -2593,7 +2598,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1556674983}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.9222729
+  m_Size: 0.922273
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
