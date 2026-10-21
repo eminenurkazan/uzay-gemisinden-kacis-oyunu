@@ -1124,6 +1124,7 @@ GameObject:
   - component: {fileID: 950000001}
   - component: {fileID: 950000002}
   - component: {fileID: 1010000002}
+  - component: {fileID: 1040000002}
   m_Layer: 0
   m_Name: Astronot
   m_TagString: Player
@@ -3008,6 +3009,7 @@ MonoBehaviour:
   commandInput: {fileID: 950000001}
   kaelInteraction: {fileID: 1010000002}
   followPlayer: {fileID: 1030000001}
+  atmospherePanel: {fileID: 1040000002}
 --- !u!114 &960000001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4500,6 +4502,7 @@ GameObject:
   - component: {fileID: 990000064}
   - component: {fileID: 990000063}
   - component: {fileID: 990000062}
+  - component: {fileID: 1040000001}
   m_Layer: 0
   m_Name: AtmosferKontrolPaneli
   m_TagString: Untagged
@@ -4723,6 +4726,7 @@ MonoBehaviour:
   playerController: {fileID: 910000036}
   companionInput: {fileID: 950000001}
   companionHUD: {fileID: 950000002}
+  atmospherePanel: {fileID: 1040000002}
   interactionRange: 3
 --- !u!1 &1020000001
 GameObject:
@@ -7042,6 +7046,92 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1040000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990000061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07db132c639f4d13b106b1e63ec659bd, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::AtmosphereControlPanel
+  biometricDoor: {fileID: 1000000002}
+  doorController: {fileID: 1000000001}
+  authorizedPlayer: {fileID: 910000035}
+  airlockOrigin: {fileID: 990000002}
+  interactionAreaCenter: {x: 0, y: 1, z: 0}
+  interactionAreaSize: {x: 5.5, y: 3, z: 4.5}
+  interactionRange: 1.8
+  activationDuration: 3
+  currentState: 0
+  lastMessage:
+--- !u!114 &1040000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910000031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43642157f99b433ea76066911c1e806d, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::AtmospherePanelInput
+  atmosphereControl: {fileID: 1040000001}
+  kaelInteraction: {fileID: 1010000002}
+  playerController: {fileID: 910000036}
+--- !u!1 &1050000001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1050000002}
+  - component: {fileID: 1050000003}
+  m_Layer: 0
+  m_Name: GeciciBiyometrikKapiTestDugmesi
+  m_TagString: EditorOnly
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1050000002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1050000001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2, y: 1.25, z: 7.62}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1050000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1050000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bea22b03dd3344fdbd71dcaa4f7e1929, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::EditorDoorTestButton
+  doorLink: {fileID: 1000000002}
+  playerView: {fileID: 330585546}
+  playerController: {fileID: 910000036}
+  kaelInteraction: {fileID: 1010000002}
+  interactionRange: 3
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -7070,6 +7160,7 @@ SceneRoots:
   - {fileID: 930000005}
   - {fileID: 930000015}
   - {fileID: 1843400019}
+  - {fileID: 1050000002}
   - {fileID: 940000007}
   - {fileID: 960000015}
   - {fileID: 980000005}

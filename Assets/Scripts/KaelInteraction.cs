@@ -11,6 +11,7 @@ public sealed class KaelInteraction : MonoBehaviour
     [SerializeField] private AstronautController playerController;
     [SerializeField] private CompanionCommandInput companionInput;
     [SerializeField] private CompanionHUD companionHUD;
+    [SerializeField] private AtmospherePanelInput atmospherePanel;
     [SerializeField, Min(0.1f)] private float interactionRange = 3f;
 
     public bool IsDialogueOpen => dialogueView != null && dialogueView.IsOpen;
@@ -21,6 +22,9 @@ public sealed class KaelInteraction : MonoBehaviour
         {
             if (!isActiveAndEnabled || restoring || kael == null || dialogueView == null
                 || physicalDoorTask == null || physicalDoorTask.CurrentState != AX7State.Succeeded)
+                return false;
+            // Aynı E basışında hava kilidi paneli ve konuşma birlikte açılmaz.
+            if (atmospherePanel != null && atmospherePanel.CanShowPrompt)
                 return false;
             Vector3 offset = kael.position - transform.position;
             offset.y = 0f;

@@ -8,6 +8,7 @@ public sealed class CompanionHUD : MonoBehaviour
     [SerializeField] private CompanionCommandInput commandInput;
     [SerializeField] private KaelInteraction kaelInteraction;
     [SerializeField] private AX7FollowPlayer followPlayer;
+    [SerializeField] private AtmospherePanelInput atmospherePanel;
 
     private GameObject canvasObject;
     private TMP_Text objectiveText;
@@ -57,7 +58,7 @@ public sealed class CompanionHUD : MonoBehaviour
                 {
                     var gate = kaelInteraction.BiometricDoor;
                     if (gate.CurrentState == BiometricDoorState.Open)
-                        objective = "Biyometrik kapı açıldı.\nHava kilidine ilerleyebilirsin.";
+                        objective = "Biyometrik kapı açıldı.\nHava kilidindeki atmosfer paneline ilerle.";
                     else if (gate.CurrentState == BiometricDoorState.Opening)
                         objective = "Kael geçiş izni verdi.\nBiyometrik kapı açılıyor.";
                     else if (gate.CurrentState == BiometricDoorState.Failed)
@@ -74,11 +75,17 @@ public sealed class CompanionHUD : MonoBehaviour
                 objective = "Kapı kilitli. AX-7 bakım geçidinden kontrol paneline ulaşabilir.\nKomut vermek için AX-7’ye yaklaş.";
                 break;
         }
+        if (atmospherePanel != null && atmospherePanel.isActiveAndEnabled
+            && (atmospherePanel.CurrentState == AtmosphereControlState.Processing
+                || atmospherePanel.CurrentState == AtmosphereControlState.Completed))
+            objective = atmospherePanel.StatusMessage;
         SetTextIfChanged(objectiveText, objective);
 
         string prompt;
         if (Cursor.lockState != CursorLockMode.Locked)
             prompt = "Devam etmek için oyun alanına tıkla.";
+        else if (atmospherePanel != null && atmospherePanel.CanShowPrompt)
+            prompt = atmospherePanel.Prompt;
         else if (kaelInteraction != null && kaelInteraction.CanInteract)
             prompt = "E — Kael ile konuş";
         else if (commandInput.CanIssueCommand)
