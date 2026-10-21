@@ -178,6 +178,7 @@ Aşağıdaki kayıtlar Unity editöründe birlikte yürütülen ve oyuncu taraf�
 | T15 | Panel işlemi bitmeden uzaklaşma; geri dönüp E ile yeniden başlatma. | İlk işlem iptal edildi; ikinci işlem baştan başlayıp tamamlandı. |
 | T16 | Panel tamamlandıktan sonra yeniden E'ye basma. | İşlem yeniden başlamadı ve Console tamamlanma kaydı çoğalmadı. |
 | T17 | Geçici editör test düğmesine sol tıklama. | Biyometrik kapı açıldı; bu deneme gerçek model kararı testi sayılmadı. |
+| T18 | Geçici düğmeyle kapı açıldıktan sonra Kael ile hava kilidine gitme, önceki odaya dönme ve yeniden hava kilidine girme. | Kael her iki yönde de oyuncuyu takip etti; AX-7 takibi de sürdürdü. |
 
 Başlangıç koordinatları canlı `NavMeshAgent` tarafından değiştirilmiş olan önceki deneme, doğrulanmış alternatif başlangıç sonucu olarak sayılmamıştır. Başarılı varış konumu, başlangıç konumu yerine kullanılmamıştır.
 
@@ -351,3 +352,37 @@ Kael için ekip üyesinin `1ad6973` prompt güncellemesi birleştirme sırasınd
 alınmaktadır. Yukarıdaki parmak izi sapması önceki promptla yapılan ilk
 denemeye aittir; yeni promptun davranışı bu panel testleriyle doğrulanmış
 sayılmaz ve ayrı gerçek konuşma testi gerektirir.
+
+
+## Kael'in Kapı Sonrası Takibi
+
+`KaelFollowPlayer`, biyometrik kapı tamamen açılıp konuşma penceresi
+kapatıldıktan sonra oyuncuyu takip eder. Kendi açık durum makinesi
+`WaitingForPermission`, `Following`, `WaitingNearPlayer`, `WaitingForRoute`
+durumlarından oluşur. Hareket için AX-7 ile ortak `INavigationMotor` /
+`NavMeshMovement` kullanılır; Kael kararı hareket motorundan ayrıdır.
+Kael 1,7 birim yakınlıkta durur, oyuncu 2,4 birimden uzağa gidince yeniden
+yürür. Oyuncu 0,6 birim yer değiştirince en sık 0,5 saniyede bir rota
+yenilenir; bulunamayan rota 1 saniye aralıkla yeniden denenir.
+
+Kael'in görsel kapsülü `KaelGorseli` alt nesnesine taşındı; başlangıçtaki
+dünya konumu ve boyutu korundu. Ajanın kökü ayak seviyesindedir. Böylece
+ileride görsel devrilme ile hareket kökü ayrı yönetilebilir.
+
+**Hazırlık:** Güncel EscapeScene yeniden açıldıktan sonra Play dışında
+**Uzay Oyunu > AX-7 NavMesh Hazırla** çalıştırılır. Aynı araç artık iki
+ayrı harita hazırlar: AX-7 (yarıçap 0,35 / yükseklik 0,8) ve Kael
+(yarıçap 0,5 / yükseklik 2,2). Kael verisi `Assets/Navigation/KaelNavMesh.asset`
+olarak kaydedilir. Hareketli Kael gövdesi her iki sabit geometri hesabından
+çıkarılır. Kapıların dinamik engelleri iki ajan türüne de uygulanır.
+Hazırlık aracı Kael başlangıcı ve hava kilidinde zemin bulunmasını, alçak
+bakım geçidinin Kael haritasında dışlanmasını kontrol eder. Kapı açıkken
+fiilî takip ve varış ancak Play testinde doğrulanabilir.
+
+Bu adımda sadece takip eklendi. Panelin Kael hava kilidine girmeden
+kullanılamaması, solunum etkisi ve yana devrilme sonraki adımda bağlanacak.
+21 Ekim 2026 tarihinde oyuncu, Kael'in hava kilidine gelmesini,
+önceki odaya geri dönüşte ve yeniden hava kilidine girişte takibe devam
+etmesini doğruladı. Aynı denemede AX-7 de takip etmeyi sürdürdü. Kael'in
+yakında bekleme durumu Console'da gözlendi. Geçici düğmeyle yapılan bu
+deneme gerçek Kael konuşma kararı testi olarak sayılmadı.

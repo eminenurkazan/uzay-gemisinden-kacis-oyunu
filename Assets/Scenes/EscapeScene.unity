@@ -343,6 +343,119 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!195 &106000001
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980000051}
+  m_Enabled: 1
+  m_AgentTypeID: -334000983
+  m_Radius: 0.5
+  m_Speed: 2.5
+  m_Acceleration: 8
+  avoidancePriority: 40
+  m_AngularSpeed: 180
+  m_StoppingDistance: 0.1
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2.2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &106000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980000051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21564d50853b44c59fe2d39046dbce22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NavMeshMovement
+  destinationTolerance: 0.35
+  stuckTimeout: 6
+  travelTimeout: 45
+--- !u!114 &106000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980000051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c0e22d1ae034a06813237bc85082833, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KaelFollowPlayer
+  biometricDoor: {fileID: 1000000002}
+  dialogueView: {fileID: 1010000001}
+  navigationMotor: {fileID: 106000002}
+  player: {fileID: 910000035}
+  stopDistance: 1.7
+  resumeDistance: 2.4
+  repathInterval: 0.5
+  targetMovementThreshold: 0.6
+  retryInterval: 1
+  currentState: 0
+--- !u!1 &106000004
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 106000005}
+  - component: {fileID: 980000054}
+  - component: {fileID: 980000053}
+  - component: {fileID: 980000052}
+  m_Layer: 0
+  m_Name: KaelGorseli
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &106000005
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 106000004}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.075, z: 0}
+  m_LocalScale: {x: 1, y: 1.1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 980000055}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &106000006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980000051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 1
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -3010,6 +3123,7 @@ MonoBehaviour:
   kaelInteraction: {fileID: 1010000002}
   followPlayer: {fileID: 1030000001}
   atmospherePanel: {fileID: 1040000002}
+  kaelFollower: {fileID: 106000003}
 --- !u!114 &960000001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3786,11 +3900,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 980000055}
-  - component: {fileID: 980000054}
-  - component: {fileID: 980000053}
-  - component: {fileID: 980000052}
   - component: {fileID: 1000000003}
   - component: {fileID: 1010000001}
+  - component: {fileID: 106000001}
+  - component: {fileID: 106000002}
+  - component: {fileID: 106000003}
+  - component: {fileID: 106000006}
   m_Layer: 0
   m_Name: Kael
   m_TagString: Untagged
@@ -3804,7 +3919,7 @@ CapsuleCollider:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 980000051}
+  m_GameObject: {fileID: 106000004}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -3827,7 +3942,7 @@ MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 980000051}
+  m_GameObject: {fileID: 106000004}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -3876,7 +3991,7 @@ MeshFilter:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 980000051}
+  m_GameObject: {fileID: 106000004}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!4 &980000055
 Transform:
@@ -3887,10 +4002,11 @@ Transform:
   m_GameObject: {fileID: 980000051}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 1.4, y: 1.1, z: 6.3}
-  m_LocalScale: {x: 1, y: 1.1, z: 1}
+  m_LocalPosition: {x: 1.4, y: 0.025, z: 6.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 106000005}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &990000001
@@ -4657,6 +4773,7 @@ MonoBehaviour:
   serverAddress: http://localhost:11434
   modelName: gemma3:4b
   requestTimeoutSeconds: 120
+  logOutgoingRequests: 0
 --- !u!208 &1000000004
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -6982,6 +7099,92 @@ MonoBehaviour:
   targetMovementThreshold: 0.6
   retryInterval: 1
   currentState: 0
+--- !u!114 &1040000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990000061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07db132c639f4d13b106b1e63ec659bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtmosphereControlPanel
+  biometricDoor: {fileID: 1000000002}
+  doorController: {fileID: 1000000001}
+  authorizedPlayer: {fileID: 910000035}
+  airlockOrigin: {fileID: 990000002}
+  interactionAreaCenter: {x: 0, y: 1, z: 0}
+  interactionAreaSize: {x: 5.5, y: 3, z: 4.5}
+  interactionRange: 1.8
+  activationDuration: 3
+  currentState: 0
+  lastMessage: 
+--- !u!114 &1040000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910000031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43642157f99b433ea76066911c1e806d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtmospherePanelInput
+  atmosphereControl: {fileID: 1040000001}
+  kaelInteraction: {fileID: 1010000002}
+  playerController: {fileID: 910000036}
+--- !u!1 &1050000001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1050000002}
+  - component: {fileID: 1050000003}
+  m_Layer: 0
+  m_Name: GeciciBiyometrikKapiTestDugmesi
+  m_TagString: EditorOnly
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1050000002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1050000001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2, y: 1.25, z: 7.62}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1050000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1050000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bea22b03dd3344fdbd71dcaa4f7e1929, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EditorDoorTestButton
+  doorLink: {fileID: 1000000002}
+  playerView: {fileID: 330585546}
+  playerController: {fileID: 910000036}
+  kaelInteraction: {fileID: 1010000002}
+  interactionRange: 3
 --- !u!1 &1843400017
 GameObject:
   m_ObjectHideFlags: 0
@@ -7046,44 +7249,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1040000001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 990000061}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07db132c639f4d13b106b1e63ec659bd, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::AtmosphereControlPanel
-  biometricDoor: {fileID: 1000000002}
-  doorController: {fileID: 1000000001}
-  authorizedPlayer: {fileID: 910000035}
-  airlockOrigin: {fileID: 990000002}
-  interactionAreaCenter: {x: 0, y: 1, z: 0}
-  interactionAreaSize: {x: 5.5, y: 3, z: 4.5}
-  interactionRange: 1.8
-  activationDuration: 3
-  currentState: 0
-  lastMessage:
---- !u!114 &1040000002
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 910000031}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43642157f99b433ea76066911c1e806d, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::AtmospherePanelInput
-  atmosphereControl: {fileID: 1040000001}
-  kaelInteraction: {fileID: 1010000002}
-  playerController: {fileID: 910000036}
---- !u!1 &1050000001
+--- !u!1 &1979131079
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7091,47 +7257,62 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1050000002}
-  - component: {fileID: 1050000003}
+  - component: {fileID: 1979131081}
+  - component: {fileID: 1979131080}
   m_Layer: 0
-  m_Name: GeciciBiyometrikKapiTestDugmesi
-  m_TagString: EditorOnly
+  m_Name: KaelNavigation
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1050000002
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1050000001}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 1.25, z: 7.62}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1050000003
+--- !u!114 &1979131080
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1050000001}
+  m_GameObject: {fileID: 1979131079}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bea22b03dd3344fdbd71dcaa4f7e1929, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::EditorDoorTestButton
-  doorLink: {fileID: 1000000002}
-  playerView: {fileID: 330585546}
-  playerController: {fileID: 910000036}
-  kaelInteraction: {fileID: 1010000002}
-  interactionRange: 3
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshSurface
+  m_SerializedVersion: 0
+  m_AgentTypeID: -334000983
+  m_CollectObjects: 1
+  m_Size: {x: 10, y: 4, z: 30}
+  m_Center: {x: 1.5, y: 1, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 1
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 1
+  m_VoxelSize: 0.05
+  m_MinRegionArea: 0.05
+  m_NavMeshData: {fileID: 23800000, guid: 19e7f1eb8e1155743ba0331fb814268b, type: 2}
+  m_BuildHeightMesh: 0
+--- !u!4 &1979131081
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1979131079}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -7172,3 +7353,4 @@ SceneRoots:
   - {fileID: 990000002}
   - {fileID: 1020000086}
   - {fileID: 1020000053}
+  - {fileID: 1979131081}

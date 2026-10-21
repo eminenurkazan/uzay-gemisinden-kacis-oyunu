@@ -9,6 +9,7 @@ public sealed class CompanionHUD : MonoBehaviour
     [SerializeField] private KaelInteraction kaelInteraction;
     [SerializeField] private AX7FollowPlayer followPlayer;
     [SerializeField] private AtmospherePanelInput atmospherePanel;
+    [SerializeField] private KaelFollowPlayer kaelFollower;
 
     private GameObject canvasObject;
     private TMP_Text objectiveText;
@@ -64,7 +65,10 @@ public sealed class CompanionHUD : MonoBehaviour
                     else if (gate.CurrentState == BiometricDoorState.Failed)
                         objective = gate.LastMessage;
                 }
-                if (followPlayer != null && followPlayer.isActiveAndEnabled
+                if (kaelFollower != null && kaelFollower.isActiveAndEnabled
+                    && !string.IsNullOrEmpty(kaelFollower.StatusMessage))
+                    objective += "\n" + kaelFollower.StatusMessage;
+                else if (followPlayer != null && followPlayer.isActiveAndEnabled
                     && !string.IsNullOrEmpty(followPlayer.StatusMessage))
                     objective += "\n" + followPlayer.StatusMessage;
                 break;
