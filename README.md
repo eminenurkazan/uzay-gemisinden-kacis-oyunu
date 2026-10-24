@@ -5,7 +5,7 @@
 - Eminenur Kazan
 - Zülal Şahin
 
-**Rapor güncelleme tarihi:** 19 Ekim 2026
+**Rapor güncelleme tarihi:** 21 Ekim 2026
 
 ## Proje Hakkında
 
@@ -16,7 +16,7 @@ Oyunda birbirinden ayrı iki yapay zekâ bileşeni planlanmıştır:
 1. **AX-7:** Oyuncudan emir alan, bakım yolunu NavMesh ile kullanarak kontrol paneline ulaşan ve fiziksel kapıyı açan otonom yardımcı robot.
 2. **Kael:** Oyuncuyla serbest metin üzerinden konuşan ve yerel Ollama modelinin yapılandırılmış yanıtıyla biyometrik geçiş kararını veren güvenlik görevlisi.
 
-Bu raporda AX-7'nin uygulanan fiziksel kapı görevi, bileşenleri ve manuel testleri belgelenmiştir. Kael'in geliştirilmekte olan diyalog denemesi `AITestScene` sahnesindedir; ana oyun sahnesine entegrasyonu ve ayrıntılı LLM raporu henüz tamamlanmamıştır.
+Bu raporda AX-7'nin fiziksel kapı ve takip görevleri, ana sahneye bağlanan Kael konuşması ve manuel testler belgelenmiştir. `AITestScene` bağımsız diyalog denemeleri için korunmuştur. Kael'in ayrıntılı LLM raporu henüz tamamlanmamıştır.
 
 ## Kullanılan Teknolojiler
 
@@ -32,7 +32,7 @@ Bu raporda AX-7'nin uygulanan fiziksel kapı görevi, bileşenleri ve manuel tes
 
 `Assets/Scenes/EscapeScene.unity` içinde giriş koridoru, kilitli fiziksel kapı, alçak bakım yolu, kontrol paneli, astronot ve AX-7 bulunmaktadır. Astronotun hareketi, kamerası ve çarpışması çalışmaktadır. AX-7 komutla bakım yolundan panele gitmekte, paneli kullanmakta ve kapıyı açmaktadır.
 
-Ana sahnede panel alanının devamına Kael güvenlik alanı, geçici Kael kapsülü ve kapalı biyometrik kapı taslağı eklenmiştir. Astronotun bu alana ulaşması manuel olarak doğrulanmıştır. Kael diyalogu henüz bu kapsüle bağlanmamıştır. Biyometrik kapının arkasında `HavaKilidi` grubu altında yan duvarlar, atmosfer kontrol paneli ve gemiye geçiş kapağının blok taslağı da oluşturulmuştur. Bu panel ve kapakta henüz çalışma mekanizması yoktur. Mevcut blok modeller oynanış prototipidir; uzay gemisi görünümüne yönelik görsel çalışma daha sonra yapılacaktır.
+Ana sahnede panel alanının devamına Kael güvenlik alanı, geçici Kael kapsülü ve kapalı biyometrik kapı taslağı eklenmiştir. Astronotun bu alana ulaşması manuel olarak doğrulanmıştır. Kael konuşması bu kapsüle bağlandı; gerçek model kararıyla biyometrik kapının açıldığı doğrulandı. Konuşma kuralına uyum sapması ayrıca kaydedildi. Biyometrik kapının arkasında `HavaKilidi` grubu altında yan duvarlar, atmosfer kontrol paneli ve gemiye geçiş kapağının blok taslağı da oluşturulmuştur. Atmosfer panelinin E etkileşimi, süreli tamamlanması, uzaklaşınca iptali ve tek seferlik tamamlanma kaydı oyuncuyla test edildi. Gemiye geçiş kapağında henüz çalışma mekanizması yoktur. Mevcut blok modeller oynanış prototipidir; uzay gemisi görünümüne yönelik görsel çalışma daha sonra yapılacaktır.
 
 ## AX-7 Görevini Çalıştırma
 
@@ -174,6 +174,13 @@ Aşağıdaki kayıtlar Unity editöründe birlikte yürütülen ve oyuncu taraf�
 | T11 | İlk kapı görevinden sonra oyuncunun uzaklaşması, durması ve yeniden yürümesi. | AX-7 takip etti, oyuncu durunca mesafesini korudu, oyuncu uzaklaşınca yeniden takip etti. |
 | T12 | Dinamik kapı ayarlarından sonra NavMesh'i yeniden hazırlama ve açılan ilk kapıdan oyuncuyu takip etme. | AX-7 açık fiziksel kapının altından geçip oyuncunun yanına gelebildi. |
 | T13 | Görev sonrası oyuncuyla Kael alanına ilerleme. | Oyuncu AX-7'nin Kael'in yanına kadar gelebildiğini doğruladı. |
+| T14 | Biyometrik kapı açıkken hava kilidi panelinin yanında E ile işlem başlatma. | Atmosfer kontrolü tamamlandı. |
+| T15 | Panel işlemi bitmeden uzaklaşma; geri dönüp E ile yeniden başlatma. | İlk işlem iptal edildi; ikinci işlem baştan başlayıp tamamlandı. |
+| T16 | Panel tamamlandıktan sonra yeniden E'ye basma. | İşlem yeniden başlamadı ve Console tamamlanma kaydı çoğalmadı. |
+| T17 | Geçici editör test düğmesine sol tıklama. | Biyometrik kapı açıldı; bu deneme gerçek model kararı testi sayılmadı. |
+| T18 | Geçici düğmeyle kapı açıldıktan sonra Kael ile hava kilidine gitme, önceki odaya dönme ve yeniden hava kilidine girme. | Kael her iki yönde de oyuncuyu takip etti; AX-7 takibi de sürdürdü. |
+| T19 | Kael hava kilidinde değilken atmosfer panelini kullanma. | Panel Kael'in gelmesini bekledi; işlem başlamadı. |
+| T20 | Kael içerideyken atmosfer işlemini tamamlayıp uzaklaşma. | Kael etkisizleşip yerde kaldı; konuşma ipucu kayboldu, oyuncuyu takip etmedi. |
 
 Başlangıç koordinatları canlı `NavMeshAgent` tarafından değiştirilmiş olan önceki deneme, doğrulanmış alternatif başlangıç sonucu olarak sayılmamıştır. Başarılı varış konumu, başlangıç konumu yerine kullanılmamıştır.
 
@@ -199,7 +206,7 @@ Başlangıç koordinatları canlı `NavMeshAgent` tarafından değiştirilmiş o
 - Bakım yolunun tavanı hareketi izleyebilmek için görünmezdir; collider'ı etkindir. Yeniden göstermek için `BakimYoluTavan` nesnesinin Mesh Renderer bileşeni açılır.
 - Görev sonrası temel takip, mesafede durma ve uzaklaşınca devam etme oyuncuyla test edildi. Takipteki engel ve rota kaybı senaryoları ayrıca doğrulanacaktır.
 - Panelden Kael alanına NavMesh bağlantısı ve oyuncuyu takip ederek bu alana fiilî geçiş doğrulandı.
-- Kael konuşma arayüzü ana sahneye bağlandı; açılıp kapanması ve eksik sunucu adresi davranışı test edildi. Biyometrik kapının doğrulanmış kararla açılma bağlantısı hazırdır; gerçek Ollama yanıtıyla testi sunucu adresi beklemektedir. Atmosfer paneli, gemi geçiş kapağı ve kaçış sonu henüz tamamlanmamıştır.
+- Kael konuşma arayüzü ana sahneye bağlandı; açılıp kapanması ve eksik sunucu adresi davranışı test edildi. Yerel Gemma ile konuşma ve biyometrik kapı olayı test edildi; modelin oyuncu parmak izi koşulu uydurması nedeniyle karar kurallarının uygunluğu henüz doğrulanmadı. Atmosfer paneli etkileşimi, işlem iptali ve tek seferlik tamamlanma kaydı test edildi. Kael'in atmosfer olayına etkisizleşme tepkisi Play modunda test edildi; dışarıdayken bekleme, içeride etkisizleşme, konuşmanın kapanması ve yerde kalması doğrulandı. Gemi geçiş kapağı ve kaçış sonu henüz tamamlanmamıştır.
 - Kael'in yerel model seçiminin gerekçesi, sistem promptu, istek/yanıt sequence diyagramı, hata yönetimi ve en az beş gerçek model diyalog testi ayrıca belgelenecektir.
 - Uygulamanın tamamının OOP incelemesi, görsel düzenlemeler ve teslim build'i henüz tamamlanmamıştır.
 
@@ -265,3 +272,160 @@ bir kez çalıştırılmalıdır; yalnızca sahneyi yeniden açmak eski NavMesh 
 düzeltmez. Güncellenmiş NavMesh ile AX-7'nin açılan fiziksel kapıdan oyuncuya
 gelebildiği doğrulandı. Kapalı kapının dinamik NavMesh engelinin yalıtılmış
 kontrolü ve gerçek Kael izniyle biyometrik geçiş ayrıca beklemektedir.
+
+
+## Hava Kilidi Atmosfer Paneli
+
+Ana sahnede `HavaKilidi/AtmosferKontrolPaneli` nesnesine
+`AtmosphereControlPanel`, astronota `AtmospherePanelInput` eklendi.
+Girdi bileşeni paneli `IAtmosphereControl` arayüzünden kullanır;
+HUD tuş okumadan durum ve etkileşim ipucunu gösterir.
+
+Panel yalnızca biyometrik kapının olay bağlantısı `Open` durumundayken ve
+fiziksel kapı bileşeni de açık ve kullanılabilirken başlatılabilir.
+Kael'in gövdesi de tamamen hava kilidinin iç alanında bulunmalıdır.
+Oyuncu hava kilidinin tanımlı iç alanında ve panelden yatay en fazla
+1,8 birim uzakta olmalıdır. Kael konuşması açıkken veya fare kilitli
+değilken E paneli başlatmaz. Panel bölgesinde E önceliği paneldedir;
+aynı basışla Kael konuşması da açılmaz.
+
+E'ye bir kez basılınca 3 saniyelik işlem başlar. İşlem sırasında tekrar E
+süreyi sıfırlamaz. Oyuncu uzaklaşırsa, hava kilidinden çıkarsa, gerekli kapı
+bağlantısı kaybolursa veya panel kapatılırsa tamamlanmadan iptal edilir.
+Oyuncu geçerli koşullara döndüğünde E ile yeniden başlatabilir.
+Tamamlanınca `AtmosphereControlCompleted` C# olayı Play oturumu boyunca
+yalnızca bir kez yayınlanır; tekrar E veya bileşenin yeniden açılması olayı
+tekrarlamaz. Yeni oyun/Play başlangıcında işlem sıfırlanır.
+
+Durumlar: `Locked → Ready → Processing → Completed`; işlem iptali
+koşullara göre `Ready` veya `Locked` durumuna döner.
+
+Panelin olayı artık Kael'in atmosfer tepkisine bağlandı. Etkisizleşme
+bağlantısı için yeni Play testi bekleniyor; gemi kapağı ve kaçış finali
+henüz uygulanmadı.
+21 Ekim 2026 tarihinde oyuncuyla doğrulanan çalışma zamanı sonuçları:
+
+- Panelin yanında E ile işlem başlatıldı ve tamamlandı.
+- İşlem tamamlanmadan uzaklaşınca iptal edildi; geri dönüp E'ye basınca
+  işlem baştan başlayıp tamamlandı.
+- Tamamlandıktan sonra tekrar E'ye basılması işlemi yeniden başlatmadı;
+  Console'daki tamamlanma kaydı çoğalmadı.
+- Geçici test düğmesiyle biyometrik kapının açıldığı ayrıca doğrulandı.
+
+Ayrıca bekleyen kontroller:
+
+- Biyometrik kapı açılmadan panelin çalışmaması için yalıtılmış test.
+- İşlem sürerken art arda E basışının süreyi sıfırlamaması.
+- Kael konuşma alanına yazılan E'nin paneli çalıştırmaması.
+- Panel/kapı bileşeninin işlem sırasında devre dışı kalması.
+
+Bu sonuçlar etkisizleşme bağlantısından önceki panel testlerine aittir;
+Kael'in yeni etkisizleşme tepkisini doğrulamaz. Yeni bağlantının ayrıca yapılan testleri aşağıdaki etkisizleşme bölümünde belirtilmiştir. Süre ve tekrar sayısı ölçülmediği için başarı oranı hesaplanmadı.
+
+### Gerçek Kael Bağlantısının İlk Denemesi
+
+Yerel `gemma3:4b` modelinden konuşma yanıtları alındığı ve karar sonucunda
+biyometrik kapının açıldığı oyuncu tarafından bildirildi. Aynı denemede
+Kael, mevcut kurallarda bulunmayan oyuncu parmak izi okutma koşulu üretti;
+oyuncunun 'okuttum' mesajından sonra kapıya izin verdi. Bu sonuç bağlantı
+ve kapı olayını doğrular; konuşmanın hikâye/karar kurallarına uyduğunu
+doğrulamaz. Bu sapma Kael'i geliştiren ekip üyesine iletildi; prompt bu
+panel adımında değiştirilmedi.
+
+
+### Geçici Biyometrik Kapı Test Düğmesi
+
+Oyuncunun isteğiyle Kael konuşmasını her panel testinde tekrarlamamak için
+kapının soluna `GeciciBiyometrikKapiTestDugmesi` eklendi. Yalnızca editörde
+Play sırasında turuncu düğme ve TEST etiketi oluşturur. Oyuncu 3 birimden
+yakında düğmeye bakıp sol tıklayınca `BiometricDoorLink.OpenForEditorTest`
+çağrılır. AX-7'nin fiziksel kapı görevinin tamamlanmış olması hâlâ zorunludur.
+Kapı aynı fiziksel açılma ve tamamlanma kontrolünden geçer; atmosfer paneli
+kapının gerçekten açık olmasını beklemeye devam eder.
+
+Bu yol `DecisionValidated` olayı üretmez ve gerçek Kael kararı olarak
+raporlanmaz; Console'da TEST kaydı gösterilir. Konuşma penceresi açıkken
+düğme tıklamaları işlenmez. Nesne `EditorOnly` etiketlidir; düğme kodu ve
+köprünün test metodu `UNITY_EDITOR` koşuluyla oyuncu derlemesinden dışlanır.
+Test dönemi bittiğinde bu sahne kökü ve test bileşeni kaldırılacaktır.
+21 Ekim 2026 tarihinde oyuncu, düğmeyle kapının açıldığını doğruladı. Bu sonuç gerçek Kael karar testi olarak sayılmadı.
+
+
+Kael için ekip üyesinin `1ad6973` prompt güncellemesi birleştirme sırasında
+alınmaktadır. Yukarıdaki parmak izi sapması önceki promptla yapılan ilk
+denemeye aittir; yeni promptun davranışı bu panel testleriyle doğrulanmış
+sayılmaz ve ayrı gerçek konuşma testi gerektirir.
+
+
+## Kael'in Kapı Sonrası Takibi
+
+`KaelFollowPlayer`, biyometrik kapı tamamen açılıp konuşma penceresi
+kapatıldıktan sonra oyuncuyu takip eder. Kendi açık durum makinesi
+`WaitingForPermission`, `Following`, `WaitingNearPlayer`, `WaitingForRoute`
+durumlarından oluşur. Hareket için AX-7 ile ortak `INavigationMotor` /
+`NavMeshMovement` kullanılır; Kael kararı hareket motorundan ayrıdır.
+Kael 1,7 birim yakınlıkta durur, oyuncu 2,4 birimden uzağa gidince yeniden
+yürür. Oyuncu 0,6 birim yer değiştirince en sık 0,5 saniyede bir rota
+yenilenir; bulunamayan rota 1 saniye aralıkla yeniden denenir.
+
+Kael'in görsel kapsülü `KaelGorseli` alt nesnesine taşındı; başlangıçtaki
+dünya konumu ve boyutu korundu. Ajanın kökü ayak seviyesindedir. Böylece
+ileride görsel devrilme ile hareket kökü ayrı yönetilebilir.
+
+**Hazırlık:** Güncel EscapeScene yeniden açıldıktan sonra Play dışında
+**Uzay Oyunu > AX-7 NavMesh Hazırla** çalıştırılır. Aynı araç artık iki
+ayrı harita hazırlar: AX-7 (yarıçap 0,35 / yükseklik 0,8) ve Kael
+(yarıçap 0,5 / yükseklik 2,2). Kael verisi `Assets/Navigation/KaelNavMesh.asset`
+olarak kaydedilir. Hareketli Kael gövdesi her iki sabit geometri hesabından
+çıkarılır. Kapıların dinamik engelleri iki ajan türüne de uygulanır.
+Hazırlık aracı Kael başlangıcı ve hava kilidinde zemin bulunmasını, alçak
+bakım geçidinin Kael haritasında dışlanmasını kontrol eder. Kapı açıkken
+fiilî takip ve varış ancak Play testinde doğrulanabilir.
+
+Takip testinden sonra panelin Kael hava kilidine girmeden kullanılamaması,
+solunum etkisi ve yana devrilme bağlantısı eklendi; aşağıdaki Play sonuçlarıyla doğrulandı.
+21 Ekim 2026 tarihinde oyuncu, Kael'in hava kilidine gelmesini,
+önceki odaya geri dönüşte ve yeniden hava kilidine girişte takibe devam
+etmesini doğruladı. Aynı denemede AX-7 de takip etmeyi sürdürdü. Kael'in
+yakında bekleme durumu Console'da gözlendi. Geçici düğmeyle yapılan bu
+deneme gerçek Kael konuşma kararı testi olarak sayılmadı.
+
+
+## Kael'in Atmosferden Etkilenmesi
+
+Panel, `IAtmosphereTarget` arayüzünden Kael'in uygun durumda ve gövdesinin
+tamamıyla hava kilidinde olduğunu kontrol eder. Gövde collider'ının dünya
+sınır kutusundaki sekiz köşe panelin hava kilidi alanında bulunmalıdır;
+yalnızca Kael'in kök noktasının kapıdan geçmiş olması yeterli değildir.
+İşlem sırasında Kael alanı terk ederse veya hedef bileşeni kullanılamazsa
+panel tamamlanmadan iptal olur. Oyuncunun uzaklaşma kuralı korunmuştur.
+
+`KaelAtmosphereResponse`, `IAtmosphereControl.AtmosphereControlCompleted`
+olayını dinler. Durumlar `Active → Collapsing → Incapacitated` şeklindedir.
+Olay geldiğinde takip/motor/ajan durdurulur, Kael konuşması devre dışı
+kalır ve bekleyen istemci coroutine'leri sonlandırılır. Görsel kapsül
+0,9 saniyede hava kilidinin merkezine doğru yana yatırılır; collider
+korunur. Kapsül yüksekliği açıya göre azaltılarak alt yüzey zeminde
+tutulur. Bu geçici görsel hareket bir ragdoll veya karakter animasyonu değildir.
+
+Astronotun uzay giysisi bağımsız oksijen sağladığı için oyuncu kontrolü
+kapatılmaz; işlem sırasında HUD bu korunmayı açıklar. Yeni bir hasar veya
+oksijen simülasyonu eklenmemiştir. Devrilme bitince `IsIncapacitated` true
+olur ve `Incapacitated` olayı bir kez yayınlanır. Gemiye geçiş mekaniği
+sonraki adımda bu durumu ön koşul olarak kullanabilir.
+
+21 Ekim 2026 tarihinde oyuncuyla doğrulanan Play sonuçları:
+
+- Kael hava kilidinde değilken panel, Kael'in gelmesinin beklendiğini gösterdi.
+- Kael içeri geldikten sonra E ile başlatılan işlem tamamlandı ve Kael etkisizleşti.
+- Konuşmak için E ipucu artık görünmedi.
+- Oyuncu uzaklaşabildi; Kael yattığı yerde kaldı ve takibe dönmedi.
+
+Ayrıca bekleyen kontroller:
+
+- Gövdesi kapıda kısmen dururken paneli başlatamama.
+- İşlem sürerken Kael'in alan dışına çıkmasıyla etkinin iptal edilmesi.
+- Yeni bağlantıyla oyuncunun uzaklaşması ve tekrar E'nin ikinci etki oluşturmaması.
+- Yeni Play'de başlangıç durumuna dönüş.
+
+Bu sonuçlar görsel ve mekanik etkisizleşmeyi doğrular; gerçek Kael konuşma kararının yeni promptla uygunluğunu doğrulamaz.

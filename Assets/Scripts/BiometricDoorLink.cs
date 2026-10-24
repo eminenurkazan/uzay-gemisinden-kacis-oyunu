@@ -59,6 +59,23 @@ public sealed class BiometricDoorLink : MonoBehaviour
             }
             return;
         }
+        OpenDoor(false);
+    }
+
+#if UNITY_EDITOR
+    // Yalnızca geçici editör düğmesi kullanır; doğrulanmış LLM yanıtı taklit edilmez.
+    public void OpenForEditorTest()
+    {
+        if (!Application.isPlaying || !isActiveAndEnabled)
+            return;
+        OpenDoor(true);
+    }
+#endif
+
+    private void OpenDoor(bool editorTest)
+    {
+        if (!isActiveAndEnabled)
+            return;
         if (currentState == BiometricDoorState.Opening || currentState == BiometricDoorState.Open)
             return;
         if (physicalDoorTask == null || physicalDoorTask.CurrentState != AX7State.Succeeded)
@@ -80,8 +97,14 @@ public sealed class BiometricDoorLink : MonoBehaviour
 
         openingStarted = Time.time;
         currentState = door.IsOpen ? BiometricDoorState.Open : BiometricDoorState.Opening;
-        lastMessage = door.IsOpen ? "Biyometrik kapı açık." : "Kael'in geçiş izni doğrulandı; biyometrik kapı açılıyor.";
+        lastMessage = door.IsOpen ? "Biyometrik kapı açık."
+            : editorTest ? "Geçici editör test düğmesiyle biyometrik kapı açılıyor."
+            : "Kael'in geçiş izni doğrulandı; biyometrik kapı açılıyor.";
         Debug.Log(lastMessage, this);
+#if UNITY_EDITOR
+        if (editorTest)
+            Debug.Log("TEST: Kael konuşması atlandı. Bu açılış gerçek model kararı testi değildir.", this);
+#endif
     }
 
     private void Update()

@@ -10,6 +10,7 @@ public static class AX7NavigationSetup
 {
     private const string MenuPath = "Uzay Oyunu/AX-7 NavMesh Hazırla";
     private const string DataPath = "Assets/Navigation/AX7NavMesh.asset";
+    private const string KaelDataPath = "Assets/Navigation/KaelNavMesh.asset";
 
     [MenuItem(MenuPath)]
     private static void Prepare()
@@ -30,10 +31,13 @@ public static class AX7NavigationSetup
             return;
         }
 
-        int agentType = ConfigureAgentType();
+        int agentType = ConfigureAgentType("AX-7", 0.35f, 0.8f);
         // Hareketli karakter gövdeleri zemindeki sabit engeller olarak pişirilmez.
         IgnoreCharacter(robot);
         IgnoreCharacter(player);
+        GameObject kael = FindRoot("Kael");
+        if (kael != null)
+            IgnoreCharacter(kael);
         ConfigureDoor(FindRoot("FizikselKapi"));
         ConfigureDoor(FindRoot("BiyometrikKapi"));
 
@@ -59,33 +63,9 @@ public static class AX7NavigationSetup
 
         if (!AssetDatabase.IsValidFolder("Assets/Navigation"))
             AssetDatabase.CreateFolder("Assets", "Navigation");
-        NavMeshData existing = AssetDatabase.LoadAssetAtPath<NavMeshData>(DataPath);
-        if (existing == null && AssetDatabase.LoadMainAssetAtPath(DataPath) != null)
-        {
-            Debug.LogError("NavMesh kayıt yolunda farklı türde bir dosya var.");
+        if (!BuildAndSaveSurface(surface, DataPath))
             return;
-        }
-
-        surface.BuildNavMesh();
-        NavMeshData generated = surface.navMeshData;
-        if (generated == null)
-        {
-            Debug.LogError("NavMesh oluşturulamadı; Console mesajlarını kontrol et.");
-            return;
-        }
-        if (existing == null)
-            AssetDatabase.CreateAsset(generated, DataPath);
-        else
-        {
-            surface.RemoveData();
-            EditorUtility.CopySerialized(generated, existing);
-            EditorUtility.SetDirty(existing);
-            surface.navMeshData = existing;
-            surface.AddData();
-            UnityEngine.Object.DestroyImmediate(generated);
-        }
-
-        EditorUtility.SetDirty(surface);
+        bool kaelNavigationValid = kael == null || PrepareKaelNavigation(kael);
         EditorSceneManager.MarkSceneDirty(scene);
         AssetDatabase.SaveAssets();
         bool routeValid = ValidateRoute(agentType);
@@ -98,13 +78,99 @@ public static class AX7NavigationSetup
             Debug.LogError("NavMesh hesaplandı ancak sahne kaydedilemedi.");
             return;
         }
-        if (routeValid && kaelRouteValid)
+        if (routeValid && kaelRouteValid && kaelNavigationValid)
         {
             string message = "AX-7 NavMesh hazır: bakım yolu üzerinden panele tam rota bulundu.";
             if (hasKaelArea)
                 message += " Panelden Kael alanına kesintisiz rota da doğrulandı.";
             Debug.Log(message, surface);
         }
+    }
+
+    private static bool BuildAndSaveSurface(NavMeshSurface surface, string dataPath)
+    {
+        NavMeshData existing = AssetDatabase.LoadAssetAtPath<NavMeshData>(dataPath);
+        if (existing == null && AssetDatabase.LoadMainAssetAtPath(dataPath) != null)
+        {
+            Debug.LogError("NavMesh kayıt yolunda farklı türde bir dosya var.");
+            return false;
+        }
+
+        surface.BuildNavMesh();
+        NavMeshData generated = surface.navMeshData;
+        if (generated == null)
+        {
+            Debug.LogError("NavMesh oluşturulamadı; Console mesajlarını kontrol et.");
+            return false;
+        }
+        if (existing == null)
+            AssetDatabase.CreateAsset(generated, dataPath);
+        else
+        {
+            surface.RemoveData();
+            EditorUtility.CopySerialized(generated, existing);
+            EditorUtility.SetDirty(existing);
+            surface.navMeshData = existing;
+            surface.AddData();
+            UnityEngine.Object.DestroyImmediate(generated);
+        }
+
+        EditorUtility.SetDirty(surface);
+        return true;
+    }
+
+    private static bool PrepareKaelNavigation(GameObject kael)
+    {
+        var agent = kael.GetComponent<NavMeshAgent>();
+        if (agent == null)
+        {
+            Debug.LogError("Kael takip ajanı yok. Güncel EscapeScene dosyasını yeniden açıp menüyü tekrar çalıştır.");
+            return false;
+        }
+        int agentType = ConfigureAgentType("Kael", 0.5f, 2.2f);
+        Undo.RecordObject(agent, "Kael ajan boyutlarını hazırla");
+        agent.agentTypeID = agentType;
+        agent.radius = 0.5f;
+        agent.height = 2.2f;
+        agent.baseOffset = 0f;
+        EditorUtility.SetDirty(agent);
+
+        GameObject surfaceObject = FindRoot("KaelNavigation");
+        if (surfaceObject == null)
+        {
+            surfaceObject = new GameObject("KaelNavigation");
+            Undo.RegisterCreatedObjectUndo(surfaceObject, "Kael gezinme yüzeyini oluştur");
+        }
+        var surface = surfaceObject.GetComponent<NavMeshSurface>();
+        if (surface == null)
+            surface = Undo.AddComponent<NavMeshSurface>(surfaceObject);
+        Undo.RecordObject(surface, "Kael NavMesh ayarlarını hazırla");
+        surface.agentTypeID = agentType;
+        surface.collectObjects = CollectObjects.Volume;
+        surface.center = new Vector3(1.5f, 1f, 0f);
+        surface.size = new Vector3(10f, 4f, 30f);
+        surface.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
+        surface.layerMask = ~0;
+        surface.overrideVoxelSize = true;
+        surface.voxelSize = 0.05f;
+        surface.minRegionArea = 0.05f;
+        if (!BuildAndSaveSurface(surface, KaelDataPath))
+            return false;
+
+        var filter = new NavMeshQueryFilter { agentTypeID = agentType, areaMask = NavMesh.AllAreas };
+        if (!NavMesh.SamplePosition(kael.transform.position, out _, 0.4f, filter)
+            || !NavMesh.SamplePosition(new Vector3(0f, 0.025f, 10.5f), out _, 0.4f, filter))
+        {
+            Debug.LogError("Kael başlangıcında veya hava kilidinde Kael'e uygun zemin bulunamadı.");
+            return false;
+        }
+        if (NavMesh.SamplePosition(new Vector3(4.5f, 0.025f, -6f), out _, 0.2f, filter))
+        {
+            Debug.LogError("Kael alçak bakım geçidini kullanabiliyor; geçit ve ajan yüksekliğini kontrol et.");
+            return false;
+        }
+        Debug.Log("Kael NavMesh hazır: güvenlik alanı ve hava kilidi zemini doğrulandı; alçak bakım geçidi dışlandı.", surface);
+        return true;
     }
 
     private static GameObject FindRoot(string name)
@@ -157,13 +223,13 @@ public static class AX7NavigationSetup
         EditorUtility.SetDirty(obstacle);
     }
 
-    private static int ConfigureAgentType()
+    private static int ConfigureAgentType(string agentName, float radius, float height)
     {
         int id = -1;
         for (int i = 0; i < NavMesh.GetSettingsCount(); i++)
         {
             var settings = NavMesh.GetSettingsByIndex(i);
-            if (NavMesh.GetSettingsNameFromID(settings.agentTypeID) == "AX-7")
+            if (NavMesh.GetSettingsNameFromID(settings.agentTypeID) == agentName)
                 id = settings.agentTypeID;
         }
         if (id == -1)
@@ -180,15 +246,15 @@ public static class AX7NavigationSetup
             var entry = entries.GetArrayElementAtIndex(i);
             if (entry.FindPropertyRelative("agentTypeID").intValue != id)
                 continue;
-            entry.FindPropertyRelative("agentRadius").floatValue = 0.35f;
-            entry.FindPropertyRelative("agentHeight").floatValue = 0.8f;
+            entry.FindPropertyRelative("agentRadius").floatValue = radius;
+            entry.FindPropertyRelative("agentHeight").floatValue = height;
             entry.FindPropertyRelative("agentClimb").floatValue = 0.1f;
             entry.FindPropertyRelative("agentSlope").floatValue = 45f;
-            names.GetArrayElementAtIndex(i).stringValue = "AX-7";
+            names.GetArrayElementAtIndex(i).stringValue = agentName;
             settingsObject.ApplyModifiedProperties();
             return id;
         }
-        throw new InvalidOperationException("AX-7 ajan ayarları kaydedilemedi.");
+        throw new InvalidOperationException(agentName + " ajan ayarları kaydedilemedi.");
     }
 
     private static bool ValidateKaelArea(int agentType)
