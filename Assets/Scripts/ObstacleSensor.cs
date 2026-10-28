@@ -2,6 +2,7 @@ using UnityEngine;
 
 public interface IObstacleSensor
 {
+    string ObstacleName { get; }
     bool Scan(Vector3 direction, float distanceToNextCorner);
 }
 
@@ -15,6 +16,8 @@ public sealed class ObstacleSensor : MonoBehaviour, IObstacleSensor
     [SerializeField] private float obstacleDistance;
     [SerializeField] private float obstacleAngle;
     [SerializeField] private string obstacleName;
+
+    public string ObstacleName => obstacleName;
 
     private readonly RaycastHit[] hits = new RaycastHit[32];
     private Vector3 lastDirection;

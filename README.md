@@ -5,7 +5,7 @@
 - Eminenur Kazan
 - Zülal Şahin
 
-**Rapor güncelleme tarihi:** 21 Ekim 2026
+**Rapor güncelleme tarihi:** 28 Ekim 2026
 
 ## Proje Hakkında
 
@@ -32,7 +32,7 @@ Bu raporda AX-7'nin fiziksel kapı ve takip görevleri, ana sahneye bağlanan Ka
 
 `Assets/Scenes/EscapeScene.unity` içinde giriş koridoru, kilitli fiziksel kapı, alçak bakım yolu, kontrol paneli, astronot ve AX-7 bulunmaktadır. Astronotun hareketi, kamerası ve çarpışması çalışmaktadır. AX-7 komutla bakım yolundan panele gitmekte, paneli kullanmakta ve kapıyı açmaktadır.
 
-Ana sahnede panel alanının devamına Kael güvenlik alanı, geçici Kael kapsülü ve kapalı biyometrik kapı taslağı eklenmiştir. Astronotun bu alana ulaşması manuel olarak doğrulanmıştır. Kael konuşması bu kapsüle bağlandı; gerçek model kararıyla biyometrik kapının açıldığı doğrulandı. Konuşma kuralına uyum sapması ayrıca kaydedildi. Biyometrik kapının arkasında `HavaKilidi` grubu altında yan duvarlar, atmosfer kontrol paneli ve gemiye geçiş kapağının blok taslağı da oluşturulmuştur. Atmosfer panelinin E etkileşimi, süreli tamamlanması, uzaklaşınca iptali ve tek seferlik tamamlanma kaydı oyuncuyla test edildi. Gemiye geçiş kapağında henüz çalışma mekanizması yoktur. Mevcut blok modeller oynanış prototipidir; uzay gemisi görünümüne yönelik görsel çalışma daha sonra yapılacaktır.
+Ana sahnede panel alanının devamına Kael güvenlik alanı, geçici Kael kapsülü ve kapalı biyometrik kapı taslağı eklenmiştir. Astronotun bu alana ulaşması manuel olarak doğrulanmıştır. Kael konuşması bu kapsüle bağlandı; gerçek model kararıyla biyometrik kapının açıldığı doğrulandı. Konuşma kuralına uyum sapması ayrıca kaydedildi. Biyometrik kapının arkasında `HavaKilidi` grubu altında yan duvarlar, atmosfer kontrol paneli ve gemiye geçiş kapağının blok taslağı da oluşturulmuştur. Atmosfer panelinin E etkileşimi, süreli tamamlanması, uzaklaşınca iptali ve tek seferlik tamamlanma kaydı oyuncuyla test edildi. Gemiye geçiş kapağı için atmosfer/Kael ön koşullu E etkileşimi ve aynı sahnede küçük kokpit eklendi; oyuncu giriş testini doğruladı. Kapağı içeriden kapatma, acil ayrılma ve kaçış ekranı henüz uygulanmadı. Mevcut blok modeller oynanış prototipidir; uzay gemisi görünümüne yönelik görsel çalışma daha sonra yapılacaktır.
 
 ## AX-7 Görevini Çalıştırma
 
@@ -124,7 +124,7 @@ Diyagram, bağlantıları doğru kurulmuş oyunun görev akışını gösterir. 
 
 ## Gerçek Yol Bulma ve Raycast Algısı
 
-`AX7NavigationSetup` yalnızca editörde NavMesh hazırlamak ve rota bağlantısını kontrol etmek için kullanılan araçtır. Üst menüdeki **Uzay Oyunu > AX-7 NavMesh Hazırla** komutuyla çalıştırılır. Hazırlık sırasında karakter gövdeleri sabit çevre engeli olarak hesaba katılmaz. Kayıtlı NavMesh verisi `Assets/Navigation/AX7NavMesh.asset` dosyasındadır. Hesaplama hacmi Z ekseninde -15 ile +15 arasını kapsar. Kael alanı sahnede mevcutsa hazırlık aracı, panelden bu alandaki iki kontrol noktasına kesintisiz rota bulunmasını da doğrular. Bu editör kontrolü, AX-7’nin Kael alanına fiilen yürütüldüğü bir test değildir. Geometri değişikliğinden sonra yalnızca Reload yeterli değildir; NavMesh hazırlama menüsü yeniden çalıştırılmalıdır.
+`AX7NavigationSetup` yalnızca editörde NavMesh hazırlamak ve rota bağlantısını kontrol etmek için kullanılan araçtır. Üst menüdeki **Uzay Oyunu > AX-7 NavMesh Hazırla** komutuyla çalıştırılır. Hazırlık sırasında karakter gövdeleri sabit çevre engeli olarak hesaba katılmaz. Kayıtlı NavMesh verisi `Assets/Navigation/AX7NavMesh.asset` dosyasındadır. AX-7 hazırlama aracının hesaplama hacmi gemi alanı için Z ekseninde -15 ile +25 arasına genişletildi; yeni kapsam için NavMesh yeniden hazırlanmalıdır. Kael alanı sahnede mevcutsa hazırlık aracı, panelden bu alandaki iki kontrol noktasına kesintisiz rota bulunmasını da doğrular. Bu editör kontrolü, AX-7’nin Kael alanına fiilen yürütüldüğü bir test değildir. Geometri değişikliğinden sonra yalnızca Reload yeterli değildir; NavMesh hazırlama menüsü yeniden çalıştırılmalıdır.
 
 Oyun sırasında `NavMeshMovement`, hedefe tam rota bulunmasını kontrol eder ve `NavMeshAgent` ile hareket eder. Hazırlık aracındaki sabit kontrol noktaları doğrulama içindir; robot bu noktalarda önceden yazılmış hareketlerle yürütülmez.
 
@@ -181,6 +181,9 @@ Aşağıdaki kayıtlar Unity editöründe birlikte yürütülen ve oyuncu taraf�
 | T18 | Geçici düğmeyle kapı açıldıktan sonra Kael ile hava kilidine gitme, önceki odaya dönme ve yeniden hava kilidine girme. | Kael her iki yönde de oyuncuyu takip etti; AX-7 takibi de sürdürdü. |
 | T19 | Kael hava kilidinde değilken atmosfer panelini kullanma. | Panel Kael'in gelmesini bekledi; işlem başlamadı. |
 | T20 | Kael içerideyken atmosfer işlemini tamamlayıp uzaklaşma. | Kael etkisizleşip yerde kaldı; konuşma ipucu kayboldu, oyuncuyu takip etmedi. |
+| T21 | Kael etkisizleşmeden gemi kapağı yanında etkileşim denemesi. | Kapak kilitli kaldı. |
+| T22 | Atmosfer işlemi sonrasında gemi kapağını E ile açıp kokpite yürüme. | Kapak açıldı ve oyuncu kendi gemisine giriş mesajını gördü. |
+| T23 | Kael etkisizleştikten sonra AX-7'nin gemi dışındaki bekleme noktasına gitmesi; kalıcı engel düzeltmesi sonrasında tekrar. | Robot hedefe ulaştı, vedalaşma mesajı göründü; oyuncu sonucu başarılı doğruladı. |
 
 Başlangıç koordinatları canlı `NavMeshAgent` tarafından değiştirilmiş olan önceki deneme, doğrulanmış alternatif başlangıç sonucu olarak sayılmamıştır. Başarılı varış konumu, başlangıç konumu yerine kullanılmamıştır.
 
@@ -206,7 +209,7 @@ Başlangıç koordinatları canlı `NavMeshAgent` tarafından değiştirilmiş o
 - Bakım yolunun tavanı hareketi izleyebilmek için görünmezdir; collider'ı etkindir. Yeniden göstermek için `BakimYoluTavan` nesnesinin Mesh Renderer bileşeni açılır.
 - Görev sonrası temel takip, mesafede durma ve uzaklaşınca devam etme oyuncuyla test edildi. Takipteki engel ve rota kaybı senaryoları ayrıca doğrulanacaktır.
 - Panelden Kael alanına NavMesh bağlantısı ve oyuncuyu takip ederek bu alana fiilî geçiş doğrulandı.
-- Kael konuşma arayüzü ana sahneye bağlandı; açılıp kapanması ve eksik sunucu adresi davranışı test edildi. Yerel Gemma ile konuşma ve biyometrik kapı olayı test edildi; modelin oyuncu parmak izi koşulu uydurması nedeniyle karar kurallarının uygunluğu henüz doğrulanmadı. Atmosfer paneli etkileşimi, işlem iptali ve tek seferlik tamamlanma kaydı test edildi. Kael'in atmosfer olayına etkisizleşme tepkisi Play modunda test edildi; dışarıdayken bekleme, içeride etkisizleşme, konuşmanın kapanması ve yerde kalması doğrulandı. Gemi geçiş kapağı ve kaçış sonu henüz tamamlanmamıştır.
+- Kael konuşma arayüzü ana sahneye bağlandı; açılıp kapanması ve eksik sunucu adresi davranışı test edildi. Yerel Gemma ile konuşma ve biyometrik kapı olayı test edildi; modelin oyuncu parmak izi koşulu uydurması nedeniyle karar kurallarının uygunluğu henüz doğrulanmadı. Atmosfer paneli etkileşimi, işlem iptali ve tek seferlik tamamlanma kaydı test edildi. Kael'in atmosfer olayına etkisizleşme tepkisi Play modunda test edildi; dışarıdayken bekleme, içeride etkisizleşme, konuşmanın kapanması ve yerde kalması doğrulandı. Gemiye giriş adımı Play modunda doğrulandı; kapağı içeriden kapatma ve kaçış sonu henüz tamamlanmamıştır.
 - Kael'in yerel model seçiminin gerekçesi, sistem promptu, istek/yanıt sequence diyagramı, hata yönetimi ve en az beş gerçek model diyalog testi ayrıca belgelenecektir.
 - Uygulamanın tamamının OOP incelemesi, görsel düzenlemeler ve teslim build'i henüz tamamlanmamıştır.
 
@@ -300,9 +303,7 @@ tekrarlamaz. Yeni oyun/Play başlangıcında işlem sıfırlanır.
 Durumlar: `Locked → Ready → Processing → Completed`; işlem iptali
 koşullara göre `Ready` veya `Locked` durumuna döner.
 
-Panelin olayı artık Kael'in atmosfer tepkisine bağlandı. Etkisizleşme
-bağlantısı için yeni Play testi bekleniyor; gemi kapağı ve kaçış finali
-henüz uygulanmadı.
+Panelin Kael atmosfer tepkisine bağlantısı T19 ve T20 ile test edildi. Gemiye giriş mekanizması oyuncuyla Play modunda doğrulandı. Kapağın içeriden kapatılması ve kaçış finali henüz uygulanmadı.
 21 Ekim 2026 tarihinde oyuncuyla doğrulanan çalışma zamanı sonuçları:
 
 - Panelin yanında E ile işlem başlatıldı ve tamamlandı.
@@ -429,3 +430,142 @@ Ayrıca bekleyen kontroller:
 - Yeni Play'de başlangıç durumuna dönüş.
 
 Bu sonuçlar görsel ve mekanik etkisizleşmeyi doğrular; gerçek Kael konuşma kararının yeni promptla uygunluğunu doğrulamaz.
+
+
+## Kendi Gemisine Giriş
+
+28 Ekim 2026: Aynı `EscapeScene` içinde, hava kilidinin devamına `KendiGemisi`
+grubu eklendi. Giriş Z=13'teki mevcut `GemiGirisKapagi` nesnesidir; kokpit
+Z=13–20 aralığındadır. Ortak zemin -15 ile +21 arasını kapsayacak şekilde
+uzatıldı. Yan/arka duvarlar ve geçici kumanda konsolu blok modellerdir.
+
+`ShipAccessController`, `IShipAccess` üzerinden erişim durumunu sunar.
+Atmosfer panelinin `Completed` ve Kael'in `IsIncapacitated` olması zorunludur.
+Kael henüz düşerken veya işlem tamamlanmadan kapak açılamaz. Yetkili oyuncu
+kapak açıklığındaki alanda ve yatay en fazla 1,8 birim yakında E'ye basar.
+`ShipAccessInput` yalnızca tuş okur; HUD yönlendirmeyi gösterir. Fiziksel
+hareket mevcut `DoorController` / `IOpenableDoor` üzerinden gerçekleşir.
+Kapak collider ile birlikte yukarı açılır; görev sürerken ek E yok sayılır.
+Kapak tamamen açıldıktan sonra oyuncunun CharacterController sınırlarının
+tamamı iç alana girdiğinde `Boarded` olur. Dışarı dönülürse `Open` durumuna
+geri döner; yalnızca eşikten başını uzatmak gemiye giriş sayılmaz.
+
+```mermaid
+stateDiagram-v2
+    [*] --> Locked
+    Locked --> Ready: Atmosfer tamamlandı ve Kael etkisiz
+    Ready --> Opening: Yetkili oyuncu yakından E komutu verdi
+    Opening --> Open: Kapak tamamen açıldı
+    Opening --> Failed: Kapak kullanılamıyor veya zaman aşımı
+    Open --> Boarded: Oyuncunun gövdesi kokpit içinde
+    Boarded --> Open: Oyuncu kokpitten çıktı
+```
+
+**Hazırlık:** Play'i durdurup güncel EscapeScene dosyasını yeniden açın.
+`Uzay Oyunu > AX-7 NavMesh Hazırla` menüsünü çalıştırın. AX-7 hacmi
+kokpite genişletildi; gemi kapağı da dinamik NavMesh engeli olarak hazırlanır.
+Kael haritası önceki güvenlik/hava kilidi alanını korur. AX-7'nin oyuncunun gemisine gelmemesi kararlaştırıldı; aşağıdaki vedalaşma
+bağlantısı ve kokpit NavMesh sınırı için yeniden hazırlama zorunludur.
+
+28 Ekim 2026 tarihinde oyuncu aşağıdaki giriş adımlarını başarılı doğruladı:
+
+- Kael etkisizleşmeden kapak kilitli kaldı.
+- Atmosfer/Kael işleminden sonra E ile kapak açıldı.
+- Oyuncu kokpite yürüdü ve "Kendi gemine girdin" mesajını gördü.
+
+Ayrıca bekleyen giriş kontrolleri:
+
+- Kapak açılırken tekrar E'nin açılışı yeniden başlatmaması.
+- Eşikte kısmi girişin içeride sayılmaması ve geri çıkınca durumun geri alınması.
+- AX-7'nin vedalaşma noktasına varışı aşağıdaki yeni davranış testinde doğrulandı; kokpit sınırı ve geri dönüş ek kontrolleri sürmektedir.
+
+Kapağı içeriden kapatma, acil ayrılma ve başarı ekranı sonraki geliştirme
+adımıdır. Bu kayıt gerçek Kael promptunun karar doğruluğu için yeni bir test değildir.
+
+
+## AX-7'nin Gemi Dışında Vedalaşması
+
+AX-7, oyuncunun kendi robotu değildir; kaçırıldığı gemide ona yardım eder.
+Oyuncuyla kendi gemisine gelmez. `AX7Farewell`, fiziksel kapı görevi başarılı
+ve Kael etkisiz olduğunda `AX7FollowPlayer` bileşenini devre dışı bırakarak
+ortak hareket motorunun kontrolünü devralır. Takip ve vedalaşma aynı anda
+motora hedef göndermez. İlk fiziksel kapı görevinin başarı durumu korunur.
+
+Hedef `HavaKilidi/AX7BeklemeNoktasi` nesnesidir: dünya konumu
+X=2; Y=0,025; Z=11,6. Bu nokta kapının sağındadır ve oyuncunun geçişini
+kapatmaz. Hedef konumunu sahnede tanımlamak hareketi taklit etmez:
+`INavigationMotor.TryMoveTo` mevcut `NavMeshMovement` üzerinden gerçek
+`CalculatePath` / `SetPath` çağrılarını kullanır. Sabit bir yürüyüş dizisi,
+ışınlama veya `Transform` konumunu elle değiştirerek varış oluşturma yoktur.
+Raycast engel algılarsa robot rotasını koruyarak duraklar; engel kalkınca
+devam eder. Rota bulunamazsa veya ilerleme başarısız olursa bulunduğu yerde
+bekler ve 1 saniyelik aralıklarla yeniden gerçek rota dener. Başarı taklit edilmez.
+
+Robotun gerçek varışı `NavigationStatus.Arrived` ile doğrulandıktan sonra
+motor durdurulur ve HUD'daki ayrı bildirim panelinde şu görev mesajı kalır:
+"AX-7: Ben burada kalacağım. Sen gemine geç." Oyuncu uzaklaşsa veya geri
+dönse de aynı Play oturumunda takip yeniden başlamaz. Bu AX-7 görev metnidir;
+Kael'in gerçek yerel LLM konuşmasının yerine geçmez.
+
+`KendiGemisi` üzerindeki `NavMeshModifierVolume`, kokpitin içini Not Walkable
+olarak işaretler. Oyuncu CharacterController ile geçebilir; AX-7 kokpite rota
+üretemez. Bu bölgede mavi NavMesh olmaması bilinçli tasarımdır. NavMesh hazırlama
+aracı hacmi yeniden kurar, bekleme noktasında zemin bulunduğunu ve kokpitin
+ortasının AX-7 haritasında olmadığını kontrol eder. Bu editör kontrolü gerçek
+robot yürüyüşünün Play testi yerine geçmez.
+
+```mermaid
+stateDiagram-v2
+    [*] --> WaitingForEscape
+    WaitingForEscape --> MovingToWaitingPoint: Kapı görevi başarılı ve Kael etkisiz, tam rota var
+    WaitingForEscape --> WaitingForRoute: Rota bulunamadı
+    MovingToWaitingPoint --> WaitingForObstacle: Raycast engel algıladı
+    WaitingForObstacle --> MovingToWaitingPoint: Engel kalktı
+    MovingToWaitingPoint --> WaitingForRoute: Hareket veya rota başarısız
+    WaitingForObstacle --> WaitingForRoute: Hareket sürdürülemiyor
+    WaitingForRoute --> MovingToWaitingPoint: Yeniden hesaplanan tam rota var
+    MovingToWaitingPoint --> WaitingAtExit: Gerçek varış doğrulandı
+```
+
+**Hazırlık:** Play dışında EscapeScene'i yeniden açıp
+`Uzay Oyunu > AX-7 NavMesh Hazırla` çalıştırılmalıdır.
+
+28 Ekim 2026 tarihinde oyuncu, engel düzeltmesinden sonra vedalaşma
+adımının sorunsuz çalıştığını doğruladı. Console'da bekleme noktasına hareket
+ve ardından "AX-7: Ben burada kalacağım. Sen gemine geç." kaydı görüldü;
+ekran görüntüsü varış mesajını ve bekleyen robotu gösterdi. Aynı oturumun
+kaydında gemi kapağının açılması ve oyuncunun kokpite girişi de mevcut.
+
+Ayrıca bekleyen vedalaşma kontrolleri:
+
+- Oyuncu gemiye girip hava kilidine birkaç kez dönünce takibin başlamaması.
+- Robotun önü oyuncu tarafından kapatılıp açıldığında bekleyip devam etmesi.
+- Farklı Kael/AX-7 konumları ve bulunamayan rota için tekrar denemeler.
+- Sayısal başarı oranı ve süre ölçümleri.
+
+
+### Vedalaşmada Kalıcı Engel İçin Yeniden Rota
+
+İlk vedalaşma denemesinde AX-7 engel bekleme durumunda kaldı. Oyuncu önünden
+çekilmesine rağmen durum değişmedi. O ilk kayıtta engelin adı yazılmadığı
+için algılanan nesne kesin olarak teşhis edilmedi; başarılı varış sayılmadı.
+
+Kod incelemesinde Kael'in düşen fiziksel gövdesinin NavMesh hesabına
+bildirilmediği görüldü. `KaelFallenObstacle`, gerçek etkisizleşme olayında
+gövdenin son collider sınırından bir carving engeli oluşturur. Ayaktayken
+kapalıdır; gövdenin fiziksel collider'ı korunur. Olaydan sonraki iki kare
+beklenerek ilk rota istenir. AX-7 engel beklerken saniyede en fazla bir kez
+güncel NavMesh ile yeniden rota hesaplar; yeni rota hâlâ engelliyse aynı
+karede duraklar. Oyuncuyu veya Kael'i sensörden dışlama, collider kapatma
+veya konumu elle değiştirme uygulanmadı.
+
+Sensör arayüzü algılanan nesnenin adını da sunar; vedalaşmada engel değişince
+adı Console'a bir kez yazılır. Bu yalnızca teşhis bilgisidir; Kael'in model
+yanıtı veya engelin kalktığına dair bir varsayım değildir.
+
+Düzeltmeden sonra oyuncu yeniden denedi ve sorunun kalmadığını doğruladı.
+Console, yerdeki gövde için engel oluşturulduğunu, AX-7'nin hedefe hareketini
+ve varışta vedalaşmasını kaydetti. İlk başarısız denemede algılanan nesnenin
+adı bulunmadığından ilk engelin kimliği sonradan kesinleştirilmiş sayılmadı.
+Oyuncunun ayrıca önünü kapatıp açtığı senaryo ve farklı başlangıç koşulları
+ayrı test olarak beklemektedir.

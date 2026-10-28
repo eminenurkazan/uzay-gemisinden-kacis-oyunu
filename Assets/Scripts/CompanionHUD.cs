@@ -11,10 +11,13 @@ public sealed class CompanionHUD : MonoBehaviour
     [SerializeField] private AtmospherePanelInput atmospherePanel;
     [SerializeField] private KaelFollowPlayer kaelFollower;
     [SerializeField] private KaelAtmosphereResponse kaelAtmosphere;
+    [SerializeField] private ShipAccessInput shipAccess;
+    [SerializeField] private AX7Farewell robotFarewell;
 
     private GameObject canvasObject;
     private TMP_Text objectiveText;
     private TMP_Text promptText;
+    private TMP_Text farewellText;
 
     private void Start()
     {
@@ -87,11 +90,15 @@ public sealed class CompanionHUD : MonoBehaviour
         if (kaelAtmosphere != null && kaelAtmosphere.isActiveAndEnabled
             && kaelAtmosphere.CurrentState != KaelAtmosphereState.Active)
             objective = kaelAtmosphere.StatusMessage;
+        if (shipAccess != null && shipAccess.HasObjective)
+            objective = shipAccess.StatusMessage;
         SetTextIfChanged(objectiveText, objective);
 
         string prompt;
         if (Cursor.lockState != CursorLockMode.Locked)
             prompt = "Devam etmek için oyun alanına tıkla.";
+        else if (shipAccess != null && shipAccess.CanShowPrompt)
+            prompt = shipAccess.Prompt;
         else if (atmospherePanel != null && atmospherePanel.CanShowPrompt)
             prompt = atmospherePanel.Prompt;
         else if (kaelInteraction != null && kaelInteraction.CanInteract)
@@ -105,6 +112,14 @@ public sealed class CompanionHUD : MonoBehaviour
         else
             prompt = "WASD: Yürü   |   Fare: Etrafa bak   |   Esc: Fareyi bırak";
         SetTextIfChanged(promptText, prompt);
+        bool showFarewell = robotFarewell != null && robotFarewell.isActiveAndEnabled
+            && robotFarewell.HasStarted;
+        if (farewellText != null)
+        {
+            farewellText.transform.parent.gameObject.SetActive(showFarewell);
+            if (showFarewell)
+                SetTextIfChanged(farewellText, robotFarewell.StatusMessage);
+        }
     }
 
     private void CreateCanvas()
@@ -123,6 +138,9 @@ public sealed class CompanionHUD : MonoBehaviour
 
         objectiveText = CreatePanel("GorevBilgisi", true, 150f, 28f);
         promptText = CreatePanel("KomutIpucu", false, 82f, 30f);
+        farewellText = CreatePanel("AX7Vedalasma", false, 82f, 26f);
+        farewellText.transform.parent.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, 120f);
+        farewellText.transform.parent.gameObject.SetActive(false);
     }
 
     private TMP_Text CreatePanel(string name, bool atTop, float height, float fontSize)

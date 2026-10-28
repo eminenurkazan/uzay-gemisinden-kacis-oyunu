@@ -32,6 +32,7 @@ public static class AX7NavigationSetup
         }
 
         int agentType = ConfigureAgentType("AX-7", 0.35f, 0.8f);
+        ConfigurePlayerShipBoundary();
         // Hareketli karakter gövdeleri zemindeki sabit engeller olarak pişirilmez.
         IgnoreCharacter(robot);
         IgnoreCharacter(player);
@@ -40,6 +41,10 @@ public static class AX7NavigationSetup
             IgnoreCharacter(kael);
         ConfigureDoor(FindRoot("FizikselKapi"));
         ConfigureDoor(FindRoot("BiyometrikKapi"));
+        var airlock = FindRoot("HavaKilidi");
+        var shipHatch = airlock != null ? airlock.transform.Find("GemiGirisKapagi") : null;
+        if (shipHatch != null)
+            ConfigureDoor(shipHatch.gameObject);
 
         GameObject surfaceObject = FindRoot("AX7Navigation");
         if (surfaceObject == null)
@@ -53,8 +58,8 @@ public static class AX7NavigationSetup
         Undo.RecordObject(surface, "AX-7 NavMesh ayarlarını düzenle");
         surface.agentTypeID = agentType;
         surface.collectObjects = CollectObjects.Volume;
-        surface.center = new Vector3(1.5f, 1f, 0f);
-        surface.size = new Vector3(10f, 4f, 30f);
+        surface.center = new Vector3(1.5f, 1f, 5f);
+        surface.size = new Vector3(10f, 4f, 40f);
         surface.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
         surface.layerMask = ~0;
         surface.overrideVoxelSize = true;
@@ -69,6 +74,7 @@ public static class AX7NavigationSetup
         EditorSceneManager.MarkSceneDirty(scene);
         AssetDatabase.SaveAssets();
         bool routeValid = ValidateRoute(agentType);
+        bool farewellValid = ValidateFarewellArea(agentType);
         bool hasKaelArea = FindRoot("Kael") != null;
         bool kaelRouteValid = !hasKaelArea || ValidateKaelArea(agentType);
         Selection.activeGameObject = surfaceObject;
@@ -78,13 +84,56 @@ public static class AX7NavigationSetup
             Debug.LogError("NavMesh hesaplandı ancak sahne kaydedilemedi.");
             return;
         }
-        if (routeValid && kaelRouteValid && kaelNavigationValid)
+        if (routeValid && kaelRouteValid && kaelNavigationValid && farewellValid)
         {
             string message = "AX-7 NavMesh hazır: bakım yolu üzerinden panele tam rota bulundu.";
             if (hasKaelArea)
                 message += " Panelden Kael alanına kesintisiz rota da doğrulandı.";
             Debug.Log(message, surface);
         }
+    }
+
+    private static void ConfigurePlayerShipBoundary()
+    {
+        GameObject ship = FindRoot("KendiGemisi");
+        if (ship == null)
+            return;
+        var volume = ship.GetComponent<NavMeshModifierVolume>();
+        if (volume == null)
+            volume = Undo.AddComponent<NavMeshModifierVolume>(ship);
+        Undo.RecordObject(volume, "Oyuncunun gemisini ajanların gezinme alanından çıkar");
+        volume.center = new Vector3(0f, 1f, 0f);
+        volume.size = new Vector3(5.5f, 4f, 6.5f);
+        volume.area = NavMesh.GetAreaFromName("Not Walkable");
+        volume.enabled = true;
+        var serialized = new SerializedObject(volume);
+        var agents = serialized.FindProperty("m_AffectedAgents");
+        agents.arraySize = 1;
+        agents.GetArrayElementAtIndex(0).intValue = -1;
+        serialized.ApplyModifiedProperties();
+        EditorUtility.SetDirty(volume);
+    }
+
+    private static bool ValidateFarewellArea(int agentType)
+    {
+        GameObject ship = FindRoot("KendiGemisi");
+        if (ship == null)
+            return true;
+        var airlock = FindRoot("HavaKilidi");
+        var point = airlock != null ? airlock.transform.Find("AX7BeklemeNoktasi") : null;
+        var filter = new NavMeshQueryFilter { agentTypeID = agentType, areaMask = NavMesh.AllAreas };
+        if (point == null || !NavMesh.SamplePosition(point.position, out _, 0.2f, filter))
+        {
+            Debug.LogError("AX-7 vedalaşma noktasında yürünebilir alan bulunamadı.");
+            return false;
+        }
+        if (NavMesh.SamplePosition(ship.transform.position, out _, 0.2f, filter))
+        {
+            Debug.LogError("Oyuncunun gemisi AX-7 için hâlâ yürünebilir; NavMesh sınırını kontrol et.");
+            return false;
+        }
+        Debug.Log("AX-7 vedalaşma noktası yürünebilir; oyuncunun gemisi ajan gezinmesine kapalı.");
+        return true;
     }
 
     private static bool BuildAndSaveSurface(NavMeshSurface surface, string dataPath)
