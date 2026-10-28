@@ -13,6 +13,7 @@ public sealed class CompanionHUD : MonoBehaviour
     [SerializeField] private KaelAtmosphereResponse kaelAtmosphere;
     [SerializeField] private ShipAccessInput shipAccess;
     [SerializeField] private AX7Farewell robotFarewell;
+    [SerializeField] private ShipDepartureInput departureInput;
 
     private GameObject canvasObject;
     private TMP_Text objectiveText;
@@ -92,11 +93,17 @@ public sealed class CompanionHUD : MonoBehaviour
             objective = kaelAtmosphere.StatusMessage;
         if (shipAccess != null && shipAccess.HasObjective)
             objective = shipAccess.StatusMessage;
+        if (departureInput != null && departureInput.HasObjective)
+            objective = departureInput.StatusMessage;
         SetTextIfChanged(objectiveText, objective);
 
         string prompt;
-        if (Cursor.lockState != CursorLockMode.Locked)
+        if (departureInput != null && departureInput.IsRunning)
+            prompt = "Acil ayrılma sürüyor; işlemin tamamlanmasını bekle.";
+        else if (Cursor.lockState != CursorLockMode.Locked)
             prompt = "Devam etmek için oyun alanına tıkla.";
+        else if (departureInput != null && departureInput.CanShowPrompt)
+            prompt = departureInput.Prompt;
         else if (shipAccess != null && shipAccess.CanShowPrompt)
             prompt = shipAccess.Prompt;
         else if (atmospherePanel != null && atmospherePanel.CanShowPrompt)

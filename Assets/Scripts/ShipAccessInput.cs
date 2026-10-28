@@ -17,8 +17,19 @@ public sealed class ShipAccessInput : MonoBehaviour
         && access != null && playerController != null && playerController.isActiveAndEnabled
         && (kaelInteraction == null || !kaelInteraction.IsDialogueOpen)
         && access.IsInInteractionArea(transform);
-    public string Prompt => CanShowPrompt && access.CanOpenHatch(transform)
-        ? "E — Gemi kapağını aç" : StatusMessage;
+    public string Prompt
+    {
+        get
+        {
+            if (!CanShowPrompt)
+                return string.Empty;
+            if (access.CanOpenHatch(transform))
+                return "E — Gemi kapağını aç";
+            if (access.CanCloseHatch(transform))
+                return "E — Gemi kapağını kapat";
+            return StatusMessage;
+        }
+    }
 
     private void Awake()
     {
@@ -36,6 +47,11 @@ public sealed class ShipAccessInput : MonoBehaviour
             return;
         var keyboard = Keyboard.current;
         if (keyboard != null && keyboard.eKey.wasPressedThisFrame)
-            access.TryOpenHatch(transform);
+        {
+            if (access.CanOpenHatch(transform))
+                access.TryOpenHatch(transform);
+            else if (access.CanCloseHatch(transform))
+                access.TryCloseHatch(transform);
+        }
     }
 }

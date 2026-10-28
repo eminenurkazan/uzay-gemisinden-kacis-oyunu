@@ -32,7 +32,7 @@ Bu raporda AX-7'nin fiziksel kapı ve takip görevleri, ana sahneye bağlanan Ka
 
 `Assets/Scenes/EscapeScene.unity` içinde giriş koridoru, kilitli fiziksel kapı, alçak bakım yolu, kontrol paneli, astronot ve AX-7 bulunmaktadır. Astronotun hareketi, kamerası ve çarpışması çalışmaktadır. AX-7 komutla bakım yolundan panele gitmekte, paneli kullanmakta ve kapıyı açmaktadır.
 
-Ana sahnede panel alanının devamına Kael güvenlik alanı, geçici Kael kapsülü ve kapalı biyometrik kapı taslağı eklenmiştir. Astronotun bu alana ulaşması manuel olarak doğrulanmıştır. Kael konuşması bu kapsüle bağlandı; gerçek model kararıyla biyometrik kapının açıldığı doğrulandı. Konuşma kuralına uyum sapması ayrıca kaydedildi. Biyometrik kapının arkasında `HavaKilidi` grubu altında yan duvarlar, atmosfer kontrol paneli ve gemiye geçiş kapağının blok taslağı da oluşturulmuştur. Atmosfer panelinin E etkileşimi, süreli tamamlanması, uzaklaşınca iptali ve tek seferlik tamamlanma kaydı oyuncuyla test edildi. Gemiye geçiş kapağı için atmosfer/Kael ön koşullu E etkileşimi ve aynı sahnede küçük kokpit eklendi; oyuncu giriş testini doğruladı. Kapağı içeriden kapatma, acil ayrılma ve kaçış ekranı henüz uygulanmadı. Mevcut blok modeller oynanış prototipidir; uzay gemisi görünümüne yönelik görsel çalışma daha sonra yapılacaktır.
+Ana sahnede panel alanının devamına Kael güvenlik alanı, geçici Kael kapsülü ve kapalı biyometrik kapı taslağı eklenmiştir. Astronotun bu alana ulaşması manuel olarak doğrulanmıştır. Kael konuşması bu kapsüle bağlandı; gerçek model kararıyla biyometrik kapının açıldığı doğrulandı. Konuşma kuralına uyum sapması ayrıca kaydedildi. Biyometrik kapının arkasında `HavaKilidi` grubu altında yan duvarlar, atmosfer kontrol paneli ve gemiye geçiş kapağının blok taslağı da oluşturulmuştur. Atmosfer panelinin E etkileşimi, süreli tamamlanması, uzaklaşınca iptali ve tek seferlik tamamlanma kaydı oyuncuyla test edildi. Gemiye geçiş kapağı için atmosfer/Kael ön koşullu E etkileşimi ve aynı sahnede küçük kokpit eklendi; oyuncu giriş testini doğruladı. Kapağı içeriden kapatma oyuncuyla doğrulandı. Geri sayımlı acil ayrılma ve başarı ekranı oyuncuyla Play modunda doğrulandı. Mevcut blok modeller oynanış prototipidir; uzay gemisi görünümüne yönelik görsel çalışma daha sonra yapılacaktır.
 
 ## AX-7 Görevini Çalıştırma
 
@@ -184,6 +184,10 @@ Aşağıdaki kayıtlar Unity editöründe birlikte yürütülen ve oyuncu taraf�
 | T21 | Kael etkisizleşmeden gemi kapağı yanında etkileşim denemesi. | Kapak kilitli kaldı. |
 | T22 | Atmosfer işlemi sonrasında gemi kapağını E ile açıp kokpite yürüme. | Kapak açıldı ve oyuncu kendi gemisine giriş mesajını gördü. |
 | T23 | Kael etkisizleştikten sonra AX-7'nin gemi dışındaki bekleme noktasına gitmesi; kalıcı engel düzeltmesi sonrasında tekrar. | Robot hedefe ulaştı, vedalaşma mesajı göründü; oyuncu sonucu başarılı doğruladı. |
+| T24 | İç panelden kapanışı başlatıp gemi girişine geri yürüme. | Kapak güvenlik için yeniden açıldı; oyuncu testi başarılı doğruladı. |
+| T25 | Yeniden içeriden kapatma, kapalı kapaktan geçme ve E ile yeniden açma denemesi. | Kapak tamamen kapandı; geçiş ve E ile yeniden açılış engellendi. |
+| T26 | Kapak açık/kapalı durumlarında konsoldan acil ayrılmayı deneme. | Açık kapakta başlamadı; kapalı kapakta geri sayım ve kararma sonrası başarı ekranı geldi. Oyuncu testi başarılı doğruladı. |
+| T27 | Geri sayımda tekrar E ve başarı ekranında kontrol denemesi. | Geri sayım yeniden başlamadı; finalde hareket ve etkileşim kapalı kaldı. |
 
 Başlangıç koordinatları canlı `NavMeshAgent` tarafından değiştirilmiş olan önceki deneme, doğrulanmış alternatif başlangıç sonucu olarak sayılmamıştır. Başarılı varış konumu, başlangıç konumu yerine kullanılmamıştır.
 
@@ -209,7 +213,7 @@ Başlangıç koordinatları canlı `NavMeshAgent` tarafından değiştirilmiş o
 - Bakım yolunun tavanı hareketi izleyebilmek için görünmezdir; collider'ı etkindir. Yeniden göstermek için `BakimYoluTavan` nesnesinin Mesh Renderer bileşeni açılır.
 - Görev sonrası temel takip, mesafede durma ve uzaklaşınca devam etme oyuncuyla test edildi. Takipteki engel ve rota kaybı senaryoları ayrıca doğrulanacaktır.
 - Panelden Kael alanına NavMesh bağlantısı ve oyuncuyu takip ederek bu alana fiilî geçiş doğrulandı.
-- Kael konuşma arayüzü ana sahneye bağlandı; açılıp kapanması ve eksik sunucu adresi davranışı test edildi. Yerel Gemma ile konuşma ve biyometrik kapı olayı test edildi; modelin oyuncu parmak izi koşulu uydurması nedeniyle karar kurallarının uygunluğu henüz doğrulanmadı. Atmosfer paneli etkileşimi, işlem iptali ve tek seferlik tamamlanma kaydı test edildi. Kael'in atmosfer olayına etkisizleşme tepkisi Play modunda test edildi; dışarıdayken bekleme, içeride etkisizleşme, konuşmanın kapanması ve yerde kalması doğrulandı. Gemiye giriş adımı Play modunda doğrulandı; kapağı içeriden kapatma ve kaçış sonu henüz tamamlanmamıştır.
+- Kael konuşma arayüzü ana sahneye bağlandı; açılıp kapanması ve eksik sunucu adresi davranışı test edildi. Yerel Gemma ile konuşma ve biyometrik kapı olayı test edildi; modelin oyuncu parmak izi koşulu uydurması nedeniyle karar kurallarının uygunluğu henüz doğrulanmadı. Atmosfer paneli etkileşimi, işlem iptali ve tek seferlik tamamlanma kaydı test edildi. Kael'in atmosfer olayına etkisizleşme tepkisi Play modunda test edildi; dışarıdayken bekleme, içeride etkisizleşme, konuşmanın kapanması ve yerde kalması doğrulandı. Gemiye giriş adımı Play modunda doğrulandı; kapağı içeriden kapatma doğrulandı; geri sayımlı kaçış finali oyuncuyla Play modunda doğrulandı.
 - Kael'in yerel model seçiminin gerekçesi, sistem promptu, istek/yanıt sequence diyagramı, hata yönetimi ve en az beş gerçek model diyalog testi ayrıca belgelenecektir.
 - Uygulamanın tamamının OOP incelemesi, görsel düzenlemeler ve teslim build'i henüz tamamlanmamıştır.
 
@@ -303,7 +307,7 @@ tekrarlamaz. Yeni oyun/Play başlangıcında işlem sıfırlanır.
 Durumlar: `Locked → Ready → Processing → Completed`; işlem iptali
 koşullara göre `Ready` veya `Locked` durumuna döner.
 
-Panelin Kael atmosfer tepkisine bağlantısı T19 ve T20 ile test edildi. Gemiye giriş mekanizması oyuncuyla Play modunda doğrulandı. Kapağın içeriden kapatılması ve kaçış finali henüz uygulanmadı.
+Panelin Kael atmosfer tepkisine bağlantısı T19 ve T20 ile test edildi. Gemiye giriş mekanizması oyuncuyla Play modunda doğrulandı. Kapağın içeriden kapatılması doğrulandı. Acil ayrılma ve kaçış finali oyuncuyla Play modunda doğrulandı.
 21 Ekim 2026 tarihinde oyuncuyla doğrulanan çalışma zamanı sonuçları:
 
 - Panelin yanında E ile işlem başlatıldı ve tamamlandı.
@@ -459,6 +463,11 @@ stateDiagram-v2
     Opening --> Failed: Kapak kullanılamıyor veya zaman aşımı
     Open --> Boarded: Oyuncunun gövdesi kokpit içinde
     Boarded --> Open: Oyuncu kokpitten çıktı
+    Boarded --> Closing: İç panelde E, oyuncu içeride ve açıklık boş
+    Closing --> Sealed: Kapak tamamen kapandı
+    Closing --> Reopening: Oyuncu çıktı, engel var veya zaman aşımı
+    Reopening --> Boarded: Kapak tamamen açıldı ve oyuncu içeride
+    Reopening --> Open: Kapak tamamen açıldı ve oyuncu dışarıda
 ```
 
 **Hazırlık:** Play'i durdurup güncel EscapeScene dosyasını yeniden açın.
@@ -479,8 +488,7 @@ Ayrıca bekleyen giriş kontrolleri:
 - Eşikte kısmi girişin içeride sayılmaması ve geri çıkınca durumun geri alınması.
 - AX-7'nin vedalaşma noktasına varışı aşağıdaki yeni davranış testinde doğrulandı; kokpit sınırı ve geri dönüş ek kontrolleri sürmektedir.
 
-Kapağı içeriden kapatma, acil ayrılma ve başarı ekranı sonraki geliştirme
-adımıdır. Bu kayıt gerçek Kael promptunun karar doğruluğu için yeni bir test değildir.
+Kapağı içeriden kapatma doğrulandı. Acil ayrılma ve başarı ekranı oyuncuyla Play modunda doğrulandı. Bu kayıt gerçek Kael promptunun karar doğruluğu için yeni bir test değildir.
 
 
 ## AX-7'nin Gemi Dışında Vedalaşması
@@ -569,3 +577,97 @@ ve varışta vedalaşmasını kaydetti. İlk başarısız denemede algılanan ne
 adı bulunmadığından ilk engelin kimliği sonradan kesinleştirilmiş sayılmadı.
 Oyuncunun ayrıca önünü kapatıp açtığı senaryo ve farklı başlangıç koşulları
 ayrı test olarak beklemektedir.
+
+
+## Gemi Kapağını İçeriden Kapatma
+
+28 Ekim 2026: `KendiGemisi/GemiKapakPaneli`, girişin içeride sol duvarına
+eklendi (dünya X=-2,5; Y=0,9; Z=14,9). Oyuncu tamamen kokpit içinde ve
+bu panelden yatay en fazla 1,8 birim uzaktayken E ile kapağı kapatabilir.
+Başlangıçtaki atmosfer/Kael ön koşulları korunur. Kapanırken ek E yok sayılır.
+`IsSealed`, yalnızca fiziksel kapak tamamen kapalı ve bağlantılar geçerliyken
+true olur. Sonraki acil ayrılma bileşeni bu durumu ön koşul olarak kullanır.
+
+`IClosableDoor`, kapının kapanış sözleşmesidir. `DoorController`, mevcut
+açılma hareketini koruyarak `Closing` durumunu ekler. Önceki kapılar yine
+yalnızca `IOpenableDoor` üzerinden açılır; onlara kapanış komutu verilmez.
+`DoorwaySensor` / `IDoorwaySensor`, sabit çerçevede `OverlapBoxNonAlloc`
+ile kapı açıklığını kontrol eder. Kapağın kendi collider'ı ve trigger'lar
+dışlanır; zemin/yan duvarlar tarama hacminin dışında tutulur. Sensör yoksa,
+devre dışıysa veya açıklıkta bir collider varsa kapanışa izin verilmez.
+
+Kapanış sırasında açıklığa engel girerse fiziksel kapak yeniden açılmaya
+geçer. Oyuncu tamamen içeride olma koşulunu kaybederse `ShipAccessController`
+de yeniden açılmasını ister. `Reopening` tamamlanınca tekrar iç panelden
+kapatılabilir. `Sealed` durumunda E kapağı yeniden açmaz. Collider korunur;
+oyuncu kapalı kapaktan geçemez. Gemiye giriş ve vedalaşma testlerinden sonra
+aşağıdaki kapanış testi de oyuncuyla doğrulandı.
+
+28 Ekim 2026 tarihinde oyuncu verilen kapanış testini başarılı doğruladı:
+
+- İç panelde E ile kapanış başladı; geri çıkmaya çalışınca kapak yeniden açıldı.
+- Yeniden iç panelden kapatınca tamamen kapalı mesajı geldi.
+- Kapalı kapaktan geçilemedi ve E ile yeniden açılmadı.
+
+Ayrıca bekleyen kapanış kontrolleri:
+
+- Oyuncu dışarıda/eşikteyken kapatma komutunun yalıtılmış testi.
+- Açıklığa oyuncu dışında başka bir collider sokulması.
+- Güvenlik sensörü devre dışıyken kapanışın reddedilmesi.
+- Açılma/kapanma zaman aşımı ve eksik bağlantı dalları.
+
+
+## Acil Ayrılma ve Başarılı Kaçış Ekranı
+
+28 Ekim 2026: Kokpitin önündeki mevcut `GemiKumandaKonsolu`, acil ayrılma
+etkileşimi için kullanılır. `ShipDepartureInput` yalnızca E girdisini okur;
+`ShipDepartureController` / `IShipDeparture` kaçış sırasını yönetir;
+`EscapeEndingView` geri sayım sırasında kontrolleri kilitler, kararmayı ve
+başarı ekranını gösterir. Kael'in Ollama karar kaynağı değiştirilmemiştir.
+
+Yetkili oyuncu tamamen kendi gemisinde, konsoldan yatay en fazla 1,8 birim
+uzakta ve giriş kapağı fiziksel olarak kapalı olmalıdır. `IShipAccess.IsSealed`
+atmosfer/Kael ön koşullarını da içerir. Kapak açıkken konsola gitmek finali
+başlatmaz. E ile 3 saniyelik geri sayım başlar; tekrar E süreyi sıfırlamaz.
+Ardından 0,8 saniyelik siyaha kararma ve "BAŞARIYLA KAÇTIN" ekranı gelir.
+Tamamlanma kaydı yalnızca bir kez oluşur; aynı oturumda tekrar başlatılmaz.
+
+Geri sayım ve kararma boyunca içeride olma ve kapalı kapak koşulları
+korunmalıdır. Kaybolursa işlem iptal edilir; arayüz yakaladığı kontrolleri
+önceki etkinlik durumlarıyla geri verir. Karar bileşeninin devre dışı kalması
+da sürmekteki işlemi iptal eder. Başarı ekranında hareket/etkileşim kapalı
+kalır, eski görev HUD'si gizlenir ve fare serbesttir. Global `Time.timeScale`
+değiştirilmez; oyun sonu ayrı `Completed` durumudur. Ayrılma bir geri sayım
+ve ekran geçişidir; fiziksel uzay uçuşu veya gemi animasyonu uygulanmadı.
+
+```mermaid
+stateDiagram-v2
+    [*] --> Locked
+    Locked --> Ready: Oyuncu gemide ve kapak tamamen kapalı
+    Ready --> Locked: Gerekli koşul kayboldu
+    Ready --> Countdown: Konsol yanında yetkili E komutu
+    Countdown --> Fading: Üç saniye tamamlandı
+    Countdown --> Locked: Gemi veya kapak koşulu kayboldu
+    Fading --> Locked: Gemi veya kapak koşulu kayboldu
+    Fading --> Completed: Kararma tamamlandı
+    Completed --> [*]
+```
+
+28 Ekim 2026 tarihinde oyuncu verilen final testini başarılı doğruladı:
+
+- Kapak açıkken konsolda ayrılma başlamadı.
+- Kapak kapalıyken E ile 3–2–1 sayımı, kararma ve başarı ekranı geldi.
+- Tekrar E geri sayımı yeniden başlatmadı; final ekranında hareket ve etkileşim kapalı kaldı.
+- Ekran görüntüsü başarı ekranını doğruladı. Kullanıcının isteğiyle alttaki
+  "AX-7 diğer gemide kaldı" satırı kaldırıldı; başlık ve ayrılma sonucu korundu.
+
+Ayrıca bekleyen final kontrolleri:
+
+- Geri sayım/kararmada kapak bileşeni devre dışı kalırsa başarının oluşmaması
+  ve kontrolün geri verilmesi (arıza testi yalnızca Play sırasında).
+- Gerçek Kael konuşmasıyla, geçici kapı düğmesi olmadan baştan sona oynama.
+- Farklı pencere boyutlarında son ekranın görsel kontrolü.
+
+Son teslim build'i, başlangıç sahnesi ayarı, görsel düzenlemeler ve sayısal
+ajan/LLM raporunun tamamlanması ayrıca beklemektedir. Bu mekanik final testi,
+Kael'in güncel doğal dil kararlarının tüm senaryolarda doğru olduğu anlamına gelmez.

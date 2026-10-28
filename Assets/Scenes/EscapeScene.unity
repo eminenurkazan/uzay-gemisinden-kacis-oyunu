@@ -490,6 +490,7 @@ GameObject:
   - component: {fileID: 108000002}
   - component: {fileID: 108000003}
   - component: {fileID: 109000004}
+  - component: {fileID: 112000001}
   m_Layer: 0
   m_Name: KendiGemisi
   m_TagString: Untagged
@@ -514,6 +515,7 @@ Transform:
   - {fileID: 108000025}
   - {fileID: 108000035}
   - {fileID: 108000045}
+  - {fileID: 111000015}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &108000003
@@ -533,6 +535,7 @@ MonoBehaviour:
   hatchController: {fileID: 108000005}
   authorizedPlayer: {fileID: 910000035}
   playerBody: {fileID: 910000032}
+  closingPanel: {fileID: 111000015}
   interactionAreaCenter: {x: 0, y: 1.5, z: -3.5}
   interactionAreaSize: {x: 2.4, y: 3, z: 3.6}
   cabinAreaCenter: {x: 0, y: 1.5, z: 0.5}
@@ -571,6 +574,7 @@ MonoBehaviour:
   openingHeight: 3.2
   openingSpeed: 2.5
   currentState: 0
+  closingSafetySensor: {fileID: 111000001}
 --- !u!114 &108000006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1140,6 +1144,225 @@ MonoBehaviour:
   atmosphereResponse: {fileID: 107000001}
   bodyCollider: {fileID: 980000052}
   clearancePadding: 0.08
+--- !u!114 &111000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990000051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b70f9deb1aa45bd8748ab83e12220a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorwaySensor
+  frameOrigin: {fileID: 990000002}
+  ignoredDoorRoot: {fileID: 990000055}
+  localCenter: {x: 0, y: 1.5, z: 2.5}
+  localSize: {x: 2.3, y: 2.8, z: 1}
+  blockingLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  blockingObjectName: 
+--- !u!1 &111000011
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 111000015}
+  - component: {fileID: 111000014}
+  - component: {fileID: 111000013}
+  - component: {fileID: 111000012}
+  m_Layer: 0
+  m_Name: GemiKapakPaneli
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &111000012
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 111000011}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &111000013
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 111000011}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &111000014
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 111000011}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &111000015
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 111000011}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.5, y: 0.9, z: -1.6}
+  m_LocalScale: {x: 0.3, y: 1.5, z: 0.7}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 108000002}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &112000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 108000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c511daaf6914a11b2a2630ec12f0b79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShipDepartureController
+  shipAccess: {fileID: 108000003}
+  authorizedPlayer: {fileID: 910000035}
+  departureConsole: {fileID: 108000045}
+  interactionRange: 1.8
+  countdownDuration: 3
+  fadeDuration: 0.8
+  currentState: 0
+  lastMessage: 
+--- !u!114 &112000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910000031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6273bf7e4df049d4827aeeeb732799e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShipDepartureInput
+  departureController: {fileID: 112000001}
+  playerController: {fileID: 910000036}
+  kaelInteraction: {fileID: 1010000002}
+--- !u!1 &112000003
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 112000004}
+  - component: {fileID: 112000005}
+  m_Layer: 0
+  m_Name: KacisSonu
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &112000004
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112000003}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &112000005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112000003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 109489ae12084e1c95605a19383a2a9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EscapeEndingView
+  departureController: {fileID: 112000001}
+  gameplayControls:
+  - {fileID: 910000036}
+  - {fileID: 950000001}
+  - {fileID: 1010000002}
+  - {fileID: 1040000002}
+  - {fileID: 108000004}
+  companionHUD: {fileID: 950000002}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -1923,6 +2146,7 @@ GameObject:
   - component: {fileID: 1010000002}
   - component: {fileID: 1040000002}
   - component: {fileID: 108000004}
+  - component: {fileID: 112000002}
   m_Layer: 0
   m_Name: Astronot
   m_TagString: Player
@@ -3813,6 +4037,7 @@ MonoBehaviour:
   kaelAtmosphere: {fileID: 107000001}
   shipAccess: {fileID: 108000004}
   robotFarewell: {fileID: 109000003}
+  departureInput: {fileID: 112000002}
 --- !u!114 &960000001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3962,6 +4187,7 @@ MonoBehaviour:
   openingHeight: 3.2
   openingSpeed: 2.5
   currentState: 0
+  closingSafetySensor: {fileID: 0}
 --- !u!114 &970000002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5201,6 +5427,7 @@ GameObject:
   - component: {fileID: 108000005}
   - component: {fileID: 108000006}
   - component: {fileID: 108000007}
+  - component: {fileID: 111000001}
   m_Layer: 0
   m_Name: GemiGirisKapagi
   m_TagString: Untagged
@@ -5429,6 +5656,7 @@ MonoBehaviour:
   openingHeight: 3.2
   openingSpeed: 2.5
   currentState: 0
+  closingSafetySensor: {fileID: 0}
 --- !u!114 &1000000002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8051,3 +8279,4 @@ SceneRoots:
   - {fileID: 1020000053}
   - {fileID: 1979131081}
   - {fileID: 108000002}
+  - {fileID: 112000004}
