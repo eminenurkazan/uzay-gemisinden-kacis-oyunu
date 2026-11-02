@@ -17,7 +17,7 @@ public sealed class AtmosphereControlPanel : MonoBehaviour, IAtmosphereControl
 
     public AtmosphereControlState CurrentState => currentState;
     public string StatusMessage => currentState == AtmosphereControlState.Processing
-        ? "Atmosfer kontrolü sürüyor… %" + Mathf.FloorToInt(100f * Mathf.Clamp01(elapsed / activationDuration))
+        ? "Atmosfer düzenlemesi sürüyor… %" + Mathf.FloorToInt(100f * Mathf.Clamp01(elapsed / activationDuration))
             + "\nGiysinin bağımsız oksijen sistemi seni koruyor."
         : lastMessage;
     public event Action AtmosphereControlCompleted;
@@ -35,8 +35,8 @@ public sealed class AtmosphereControlPanel : MonoBehaviour, IAtmosphereControl
         && target != null && target.CanBeAffected && target.IsFullyInsideAirlock;
     private bool AccessGranted => DoorAccessGranted && TargetReady;
     private string LockedReason => !DoorAccessGranted
-        ? "Önce biyometrik kapının açılması gerekiyor."
-        : "Atmosfer kontrolü için Kael'in tamamen hava kilidine girmesini bekle.";
+        ? "Önce hava kilidine geçiş kapısının açılması gerekiyor."
+        : "Atmosfer düzenlemesi için Kael'in tamamen hava kilidine girmesini bekle.";
 
     private void Awake()
     {
@@ -45,7 +45,7 @@ public sealed class AtmosphereControlPanel : MonoBehaviour, IAtmosphereControl
         currentState = AtmosphereControlState.Locked;
         elapsed = 0f;
         completionRaised = false;
-        lastMessage = "Önce biyometrik kapının açılması gerekiyor.";
+        lastMessage = "Önce hava kilidine geçiş kapısının açılması gerekiyor.";
         if (biometricDoor == null || gate == null || target == null || authorizedPlayer == null || airlockOrigin == null)
         {
             Debug.LogError("Atmosfer panelinin kapı, Kael, oyuncu veya hava kilidi bağlantısı eksik.", this);
@@ -94,7 +94,7 @@ public sealed class AtmosphereControlPanel : MonoBehaviour, IAtmosphereControl
             return false;
         elapsed = 0f;
         currentState = AtmosphereControlState.Processing;
-        lastMessage = "Atmosfer kontrolü başlatıldı.";
+        lastMessage = "Atmosfer düzenlemesi başlatıldı.";
         Debug.Log(lastMessage, this);
         return true;
     }
@@ -116,8 +116,8 @@ public sealed class AtmosphereControlPanel : MonoBehaviour, IAtmosphereControl
                 // Olay dinleyicileri hata verse veya yeniden etkinleştirse bile ikinci kez yayınlanmaz.
                 completionRaised = true;
                 currentState = AtmosphereControlState.Completed;
-                lastMessage = "Atmosfer kontrolü tamamlandı.";
-                Debug.Log("Atmosfer kontrolü tamamlandı; Kael'i etkisizleştirme olayı bir kez yayımlandı.", this);
+                lastMessage = "Atmosfer düzenlemesi tamamlandı.";
+                Debug.Log("Atmosfer düzenlemesi tamamlandı; Kael'i etkisizleştirme olayı bir kez yayımlandı.", this);
                 AtmosphereControlCompleted?.Invoke();
             }
             return;
@@ -131,14 +131,14 @@ public sealed class AtmosphereControlPanel : MonoBehaviour, IAtmosphereControl
         }
         currentState = next;
         lastMessage = next == AtmosphereControlState.Ready
-            ? "Atmosfer kontrol paneli hazır." : LockedReason;
+            ? "Atmosfer Düzenleme Noktası hazır." : LockedReason;
     }
 
     private void CancelOperation()
     {
         elapsed = 0f;
         currentState = AccessGranted ? AtmosphereControlState.Ready : AtmosphereControlState.Locked;
-        lastMessage = "Panel işlemi iptal edildi; başlatmak için tekrar yaklaş.";
+        lastMessage = "Atmosfer düzenlemesi iptal edildi. Atmosfer Düzenleme Noktası'na tekrar yaklaş ve E ile yeniden başlat.";
         Debug.Log(lastMessage, this);
     }
 

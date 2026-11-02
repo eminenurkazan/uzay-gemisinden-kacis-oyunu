@@ -5,7 +5,7 @@
 - Eminenur Kazan
 - Zülal Şahin
 
-**Rapor güncelleme tarihi:** 28 Ekim 2026
+**Rapor güncelleme tarihi:** 2 Kasım 2026
 
 ## Proje Hakkında
 
@@ -32,7 +32,7 @@ Bu raporda AX-7'nin fiziksel kapı ve takip görevleri, ana sahneye bağlanan Ka
 
 `Assets/Scenes/EscapeScene.unity` içinde giriş koridoru, kilitli fiziksel kapı, alçak bakım yolu, kontrol paneli, astronot ve AX-7 bulunmaktadır. Astronotun hareketi, kamerası ve çarpışması çalışmaktadır. AX-7 komutla bakım yolundan panele gitmekte, paneli kullanmakta ve kapıyı açmaktadır.
 
-Ana sahnede panel alanının devamına Kael güvenlik alanı, geçici Kael kapsülü ve kapalı biyometrik kapı taslağı eklenmiştir. Astronotun bu alana ulaşması manuel olarak doğrulanmıştır. Kael konuşması bu kapsüle bağlandı; gerçek model kararıyla biyometrik kapının açıldığı doğrulandı. Konuşma kuralına uyum sapması ayrıca kaydedildi. Biyometrik kapının arkasında `HavaKilidi` grubu altında yan duvarlar, atmosfer kontrol paneli ve gemiye geçiş kapağının blok taslağı da oluşturulmuştur. Atmosfer panelinin E etkileşimi, süreli tamamlanması, uzaklaşınca iptali ve tek seferlik tamamlanma kaydı oyuncuyla test edildi. Gemiye geçiş kapağı için atmosfer/Kael ön koşullu E etkileşimi ve aynı sahnede küçük kokpit eklendi; oyuncu giriş testini doğruladı. Kapağı içeriden kapatma oyuncuyla doğrulandı. Geri sayımlı acil ayrılma ve başarı ekranı oyuncuyla Play modunda doğrulandı. Mevcut blok modeller oynanış prototipidir; uzay gemisi görünümüne yönelik görsel çalışma daha sonra yapılacaktır.
+Ana sahnede panel alanının devamına Kael güvenlik alanı, geçici Kael kapsülü ve kapalı biyometrik kapı taslağı eklenmiştir. Astronotun bu alana ulaşması manuel olarak doğrulanmıştır. Kael konuşması bu kapsüle bağlandı; gerçek model kararıyla biyometrik kapının açıldığı doğrulandı. Konuşma kuralına uyum sapması ayrıca kaydedildi. Biyometrik kapının arkasında `HavaKilidi` grubu altında yan duvarlar, atmosfer kontrol paneli ve gemiye geçiş kapağının blok taslağı da oluşturulmuştur. Atmosfer panelinin E etkileşimi, süreli tamamlanması, uzaklaşınca iptali ve tek seferlik tamamlanma kaydı oyuncuyla test edildi. Gemiye geçiş kapağı için atmosfer/Kael ön koşullu E etkileşimi ve aynı sahnede küçük kokpit eklendi; oyuncu giriş testini doğruladı. Kapağı içeriden kapatma oyuncuyla doğrulandı. Geri sayımlı acil ayrılma ve başarı ekranı oyuncuyla Play modunda doğrulandı. Oynanış bloklarının üzerine endüstriyel bilim kurgu malzemeleri, ışıklar ve yönlendirmeler eklendi; renk ve ortam görünümü kullanıcı tarafından Play modunda incelendi. Karakterler henüz blok modellerdir.
 
 ## AX-7 Görevini Çalıştırma
 
@@ -210,7 +210,7 @@ Başlangıç koordinatları canlı `NavMeshAgent` tarafından değiştirilmiş o
 
 ## Sınırlılıklar ve Sonraki Çalışmalar
 
-- Bakım yolunun tavanı hareketi izleyebilmek için görünmezdir; collider'ı etkindir. Yeniden göstermek için `BakimYoluTavan` nesnesinin Mesh Renderer bileşeni açılır.
+- Bakım yolunun daha önce test için gizlenmiş tavan görseli, görsel düzenleme aşamasında yeniden gösterildi; collider aynı kaldı. Kuş bakışı düzenleme için Scene görünürlüğü kullanılabilir.
 - Görev sonrası temel takip, mesafede durma ve uzaklaşınca devam etme oyuncuyla test edildi. Takipteki engel ve rota kaybı senaryoları ayrıca doğrulanacaktır.
 - Panelden Kael alanına NavMesh bağlantısı ve oyuncuyu takip ederek bu alana fiilî geçiş doğrulandı.
 - Kael konuşma arayüzü ana sahneye bağlandı; açılıp kapanması ve eksik sunucu adresi davranışı test edildi. Yerel Gemma ile konuşma ve biyometrik kapı olayı test edildi; modelin oyuncu parmak izi koşulu uydurması nedeniyle karar kurallarının uygunluğu henüz doğrulanmadı. Atmosfer paneli etkileşimi, işlem iptali ve tek seferlik tamamlanma kaydı test edildi. Kael'in atmosfer olayına etkisizleşme tepkisi Play modunda test edildi; dışarıdayken bekleme, içeride etkisizleşme, konuşmanın kapanması ve yerde kalması doğrulandı. Gemiye giriş adımı Play modunda doğrulandı; kapağı içeriden kapatma doğrulandı; geri sayımlı kaçış finali oyuncuyla Play modunda doğrulandı.
@@ -671,3 +671,63 @@ Ayrıca bekleyen final kontrolleri:
 Son teslim build'i, başlangıç sahnesi ayarı, görsel düzenlemeler ve sayısal
 ajan/LLM raporunun tamamlanması ayrıca beklemektedir. Bu mekanik final testi,
 Kael'in güncel doğal dil kararlarının tüm senaryolarda doğru olduğu anlamına gelmez.
+
+
+## Endüstriyel Bilim Kurgu Görsel Düzenlemesi
+
+30 Ekim 2026: Oyuncu koyu metal, mavi/beyaz ışıklar ve sarı uyarı şeritleri
+tarzını seçti. `Assets/Art/Materials/Industrial` altında ortak URP Lit/Unlit
+malzemeler oluşturuldu. Zemin panel çizgileri, duvar dikmeleri, tavan ışık
+şeritleri, kapı uyarıları ve kontrol ekranları eklendi. Ortak dolgu ışığı ve
+altı gölgesiz yerel ışık kullanıldı; yeni ışıklarda gölge haritası yoktur.
+Gündüz gökyüzü yerine koyu kamera arka planı ve kapalı tavan görselleri vardır.
+
+Sabit görseller `GemiGorselleri` grubundadır; tavanlar `Tavanlar` altındadır.
+Üç hareketli kapağın yüzey süsleri kendi transformlarına bağlıdır ve kapakla
+birlikte hareket eder. `WorldSign`, Play başlangıcında yalnızca etiket metni
+oluşturur; collider, sensör veya oyun kararı eklemez. Kael portre arayüzü,
+karakter gövdeleri ve tüm mekanik bileşenlerin bağlantıları korunmuştur.
+
+Kurulum denetimi, mevcut Collider, CharacterController, NavMeshAgent ve
+NavMeshObstacle kayıtlarının değişmediğini ve yeni görsellerin collider
+içermediğini doğrular. Kullanılan NavMesh yüzeyleri Physics Colliders ile
+hazırlandığı için bu saf görsel parçalar gezinme geometrisine eklenmez.
+Bu kontrol yeni görünüm altında yapılan bir Play testi yerine geçmez.
+
+Unity'nin render hattıyla dört gerçek kamera önizlemesi oluşturuldu ve
+incelendi. Malzemeler pembe hata shader'ı olmadan çizildi; atmosfer ve acil
+ayrılma etiketleri okunur bulundu. Önizleme, Play'e girmeden ve sahne
+kaydedilmeden alındı; geçici doğrulama aracı sonrasında kaldırıldı. Kamera
+konumları yalnızca görüntü doğrulaması içindir, ajan hareketi değildir.
+
+![Giriş koridoru görsel önizlemesi](Docs/Images/Industrial/giris.png)
+
+![Atmosfer paneli görsel önizlemesi](Docs/Images/Industrial/atmosfer.png)
+
+![Kokpit görsel önizlemesi](Docs/Images/Industrial/kokpit.png)
+
+Kullanıcı renk ve ortam görünümünü Play modunda inceledi. Yeni görünümle baştan sona tekrar kontrol edilecekler:
+
+- Karanlıkta zemin, kapı ve karakterlerin seçilebilmesi; pembe/missing shader olmaması.
+- Atmosfer, kapak ve acil ayrılma etiketlerinin okunması ve doğru yöne bakması.
+- Kapı süslerinin kapakla beraber hareket etmesi; geçişi görsel olarak kapatmaması.
+- AX-7 görevi ve vedalaşma, Kael etkisizleşmesi ve kaçış finalinin çalışması.
+- Laptopta hareketin akıcı kalması; bu aşamada FPS ölçümü yapılmadı.
+
+Kuş bakışı incelemede Scene'in göz simgesiyle `GemiGorselleri/Tavanlar`
+gizlenebilir; GameObject etkinliğini kapatmak oyun görünümünü de değiştirir.
+Karakter model/animasyon çalışması bu çevre düzenlemesinin parçası değildir.
+
+Çevre levhaları (2 Kasım): Bölüm numaraları yerine kapı ve panel işlevlerini
+anlatan adlar kullanıldı; güvenlik odasındaki ikinci levha ve altlığı kaldırıldı.
+Levha yükseklikleri küçültüldü, uzun metinlerin alanları yeniden ayarlandı.
+Biyometrik kapı açıldıktan sonraki görev yönlendirmesi:
+"Kael'i etkisiz bırakmak için onun solunumunu kes."
+Yukarıdaki kamera önizlemeleri ilk görsel sürüme aittir. Bu levha düzeltmelerinin
+girişteki güncel levha kullanıcı ekran görüntüsünde görüldü; diğer levhaların son okunurluk kontrolü bekliyor.
+
+Oyuncuya gösterilen görev ve E tuşu mesajları yeni levha adlarıyla eşleştirildi.
+Başlangıç yönlendirmesi kullanıcı tarafından verilen metinle güncellendi.
+Mesaj düzenlemesinde yalnızca metin sabitleri değiştirildi; etkileşim koşulları
+ve görev sırası aynı kaldı. Çevre levhaları ve mesajlar için C# derleme kontrolü
+başarılıdır. Bu kontrol tam oynanış veya FPS testi yerine geçmez.

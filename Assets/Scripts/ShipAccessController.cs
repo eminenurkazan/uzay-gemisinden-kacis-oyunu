@@ -24,16 +24,16 @@ public sealed class ShipAccessController : MonoBehaviour, IShipAccess
         && HatchAvailable && hatch.IsClosed;
     public string StatusMessage => currentState switch
     {
-        ShipAccessState.Locked => "Gemi kapağı kilitli. Önce atmosfer paneliyle Kael'i etkisiz hale getir.",
-        ShipAccessState.Ready => "Kael etkisiz hale geldi.\nHava kilidinin sonundaki gemi kapağına yaklaş ve E ile aç.",
-        ShipAccessState.Opening => "Gemi kapağı açılıyor…",
-        ShipAccessState.Open => "Gemi kapağı açık.\nAçıklıktan geçerek kendi gemine gir.",
+        ShipAccessState.Locked => "Gemi transfer kapısı kilitli. Önce Atmosfer Düzenleme Noktası'nı kullanarak Kael'i etkisiz hale getir.",
+        ShipAccessState.Ready => "Kael etkisiz hale geldi.\nHava kilidinin sonundaki Gemi Transfer Kapısı’na yaklaş ve E ile aç.",
+        ShipAccessState.Opening => "Gemi transfer kapısı açılıyor…",
+        ShipAccessState.Open => "Gemi transfer kapısı açık.\nKapıdan geçerek kendi gemine gir.",
         ShipAccessState.Boarded => hatch != null && !hatch.CanCloseSafely
-            ? "Kendi gemindesin.\nKapağı kapatmak için açıklıktaki engelin çekilmesini bekle."
-            : "Kendi gemine girdin.\nGirişin solundaki iç kapak paneline yaklaş.",
-        ShipAccessState.Closing => "Gemi kapağı kapanıyor…\nGeminin içinde kal.",
-        ShipAccessState.Reopening => "Kapak güvenlik için yeniden açılıyor.\nTamamen içerideyken panelden tekrar kapatabilirsin.",
-        ShipAccessState.Sealed => "Geminin giriş kapağı kapandı.\nKokpitin önündeki acil ayrılma konsoluna ilerle.",
+            ? "Kendi gemindesin.\nGemi transfer kapısını kapatmak için kapı açıklığındaki engelin çekilmesini bekle."
+            : "Kendi gemine girdin.\nGirişin solundaki Kapı Kilit Kontrol paneline yaklaş.",
+        ShipAccessState.Closing => "Gemi transfer kapısı kapanıyor…\nGeminin içinde kal.",
+        ShipAccessState.Reopening => "Gemi transfer kapısı güvenlik için yeniden açılıyor.\nTamamen içerideyken Kapı Kilit Kontrol panelinden tekrar kapatabilirsin.",
+        ShipAccessState.Sealed => "Gemi transfer kapısı kapandı.\nKokpitin önündeki Acil Ayrılma konsoluna ilerle.",
         ShipAccessState.Failed => failureReason,
         _ => string.Empty
     };
@@ -103,7 +103,7 @@ public sealed class ShipAccessController : MonoBehaviour, IShipAccess
             return false;
         if (!hatch.TryOpen(out string reason))
         {
-            Fail("Gemi kapağı açılamadı: " + reason);
+            Fail("Gemi transfer kapısı açılamadı: " + reason);
             return false;
         }
         openingRequested = true;
@@ -151,7 +151,7 @@ public sealed class ShipAccessController : MonoBehaviour, IShipAccess
         if (currentState == ShipAccessState.Sealed)
         {
             if (!hatch.IsClosed)
-                Fail("Gemi kapağının kapalı durumu korunamadı.");
+                Fail("Gemi transfer kapısının kapalı durumu korunamadı.");
             return;
         }
         if (currentState == ShipAccessState.Closing)
@@ -167,15 +167,15 @@ public sealed class ShipAccessController : MonoBehaviour, IShipAccess
                 Debug.Log("Geminin giriş kapağı tamamen kapandı; kapalı durum doğrulandı.", this);
             }
             else if (!hatch.IsClosing)
-                Reopen("Kapak güvenlik nedeniyle kapanmayı durdurdu.");
+                Reopen("Gemi transfer kapısı güvenlik nedeniyle kapanmayı durdurdu.");
             else if (Time.time - movementStarted >= openingTimeout)
-                Reopen("Kapak kapanışı zaman aşımına uğradı.");
+                Reopen("Gemi transfer kapısının kapanışı zaman aşımına uğradı.");
             return;
         }
         if (!hatch.IsOpen)
         {
             if (Time.time - movementStarted >= openingTimeout)
-                Fail("Gemi kapağı ayrılan sürede tamamen açılamadı.");
+                Fail("Gemi transfer kapısı ayrılan sürede tamamen açılamadı.");
             return;
         }
 
@@ -194,7 +194,7 @@ public sealed class ShipAccessController : MonoBehaviour, IShipAccess
     {
         if (!hatch.TryOpen(out string failure))
         {
-            Fail("Kapak güvenli biçimde yeniden açılamadı: " + failure);
+            Fail("Gemi transfer kapısı güvenli biçimde yeniden açılamadı: " + failure);
             return;
         }
         currentState = ShipAccessState.Reopening;

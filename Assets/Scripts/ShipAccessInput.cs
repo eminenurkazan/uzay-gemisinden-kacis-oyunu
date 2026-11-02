@@ -24,9 +24,9 @@ public sealed class ShipAccessInput : MonoBehaviour
             if (!CanShowPrompt)
                 return string.Empty;
             if (access.CanOpenHatch(transform))
-                return "E — Gemi kapağını aç";
+                return "E — Gemi transfer kapısını aç";
             if (access.CanCloseHatch(transform))
-                return "E — Gemi kapağını kapat";
+                return "E — Gemi transfer kapısını kapat";
             return StatusMessage;
         }
     }

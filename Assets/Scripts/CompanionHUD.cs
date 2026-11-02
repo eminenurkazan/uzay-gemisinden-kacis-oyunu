@@ -47,33 +47,37 @@ public sealed class CompanionHUD : MonoBehaviour
         switch (companion.CurrentState)
         {
             case AX7State.MovingToPanel:
-                objective = "AX-7 kontrol paneline gidiyor…\nBakım geçidini kullanarak kapının arkasına ulaşacak.";
+                objective = "AX-7 kapı kilit kontrol paneline gidiyor…\nKapı Kontrol Geçidi'ni kullanarak kapının arkasına ulaşacak.";
                 break;
             case AX7State.WaitingForObstacle:
                 objective = "AX-7 önünde engel algıladı; yolun açılmasını bekliyor.\nEngel kalkınca rotasına devam edecek.";
                 break;
             case AX7State.AtPanel:
-                objective = "AX-7 kontrol paneline ulaştı.";
+                objective = "AX-7 kapı kilit kontrol paneline ulaştı.";
                 break;
             case AX7State.InteractingWithPanel:
-                objective = "AX-7 kontrol panelini kullanıyor…\nKapının açılmasını bekle.";
+                objective = "AX-7 kapı kilit kontrol panelini kullanıyor…\nGüvenlik odası giriş kapısının açılmasını bekle.";
                 break;
             case AX7State.Succeeded:
-                objective = "İlk kapı açıldı. Kael’in güvenlik alanına ilerle.\nKael’e yaklaşınca E ile konuşabilirsin.";
+                bool showFollowerStatus = true;
+                objective = "Güvenlik odası giriş kapısı açıldı. Kael'in bulunduğu odaya ilerle.\nKael'e yaklaşınca E ile konuşabilirsin.";
                 if (kaelInteraction != null && kaelInteraction.BiometricDoor != null)
                 {
                     var gate = kaelInteraction.BiometricDoor;
                     if (gate.CurrentState == BiometricDoorState.Open)
-                        objective = "Biyometrik kapı açıldı.\nHava kilidindeki atmosfer paneline ilerle.";
+                    {
+                        objective = "Kael'i etkisiz bırakmak için onun solunumunu kes.";
+                        showFollowerStatus = false;
+                    }
                     else if (gate.CurrentState == BiometricDoorState.Opening)
-                        objective = "Kael geçiş izni verdi.\nBiyometrik kapı açılıyor.";
+                        objective = "Kael geçiş izni verdi.\nHava kilidine geçiş kapısı açılıyor.";
                     else if (gate.CurrentState == BiometricDoorState.Failed)
                         objective = gate.LastMessage;
                 }
-                if (kaelFollower != null && kaelFollower.isActiveAndEnabled
+                if (showFollowerStatus && kaelFollower != null && kaelFollower.isActiveAndEnabled
                     && !string.IsNullOrEmpty(kaelFollower.StatusMessage))
                     objective += "\n" + kaelFollower.StatusMessage;
-                else if (followPlayer != null && followPlayer.isActiveAndEnabled
+                else if (showFollowerStatus && followPlayer != null && followPlayer.isActiveAndEnabled
                     && !string.IsNullOrEmpty(followPlayer.StatusMessage))
                     objective += "\n" + followPlayer.StatusMessage;
                 break;
@@ -81,7 +85,7 @@ public sealed class CompanionHUD : MonoBehaviour
                 objective = "AX-7 görevi tamamlayamadı.\n" + companion.FailureReason;
                 break;
             default:
-                objective = "Kapı kilitli. AX-7 bakım geçidinden kontrol paneline ulaşabilir.\nKomut vermek için AX-7’ye yaklaş.";
+                objective = "Kapı kilitli. AX-7 Kontrol Geçidinden kapı kilit kontrol paneline ulaşabilir.\nKomut vermek için AX-7'ye yaklaş.";
                 break;
         }
         if (atmospherePanel != null && atmospherePanel.isActiveAndEnabled
@@ -112,8 +116,8 @@ public sealed class CompanionHUD : MonoBehaviour
             prompt = "E — Kael ile konuş";
         else if (commandInput.CanIssueCommand)
             prompt = companion.CurrentState == AX7State.Failed
-                ? "E — AX-7’ye yeniden panele gitme komutu ver"
-                : "E — AX-7’yi kontrol paneline gönder";
+                ? "E — AX-7'yi yeniden kapı kilit kontrol paneline gönder"
+                : "E — AX-7'yi kapı kilit kontrol paneline gönder";
         else if (companion.CurrentState == AX7State.Waiting || companion.CurrentState == AX7State.Failed)
             prompt = "Komut vermek için AX-7’ye yaklaş.";
         else

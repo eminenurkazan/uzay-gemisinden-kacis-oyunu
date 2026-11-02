@@ -18,12 +18,12 @@ public sealed class ShipDepartureController : MonoBehaviour, IShipDeparture
         : currentState == ShipDepartureState.Fading ? Mathf.Clamp01(elapsed / fadeDuration) : 0f;
     public string StatusMessage => currentState switch
     {
-        ShipDepartureState.Ready => "Giriş kapağı kapalı.\nAcil ayrılma için kokpitin önündeki kumanda konsoluna yaklaş.",
+        ShipDepartureState.Ready => "Gemi transfer kapısı kapalı.\nKokpitin önündeki Acil Ayrılma konsoluna yaklaş.",
         ShipDepartureState.Countdown => "Acil ayrılma başlatıldı.\n" + Mathf.CeilToInt(Mathf.Max(0f, countdownDuration - elapsed)),
         ShipDepartureState.Fading => "Gemin diğer gemiden ayrılıyor…",
         ShipDepartureState.Completed => "Başarıyla kaçtın.",
         _ => string.IsNullOrEmpty(lastMessage)
-            ? "Acil ayrılma için önce gemiye girip giriş kapağını kapat." : lastMessage
+            ? "Acil ayrılma için önce gemine gir ve Kapı Kilit Kontrol panelinden gemi transfer kapısını kapat." : lastMessage
     };
     public event Action<ShipDepartureState> StateChanged;
 

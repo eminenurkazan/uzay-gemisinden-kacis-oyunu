@@ -18,7 +18,7 @@ public sealed class AtmospherePanelInput : MonoBehaviour
         && (kaelInteraction == null || !kaelInteraction.IsDialogueOpen)
         && panel.IsInInteractionArea(transform);
     public string Prompt => CanShowPrompt && panel.CanActivate(transform)
-        ? "E — Atmosfer kontrolünü başlat" : StatusMessage;
+        ? "E — Atmosfer düzenlemesini başlat" : StatusMessage;
 
     private void Awake()
     {
