@@ -1,0 +1,16 @@
+{
+  "AX7_dimensions_xyz_m": [
+    0.592,
+    0.7,
+    0.54
+  ],
+  "AX7_triangles": 2160,
+  "Kael_triangles": 4287,
+  "renderers_per_character": 5,
+  "shared_materials": 1,
+  "palette_pixels": [
+    128,
+    8
+  ],
+  "physics_and_original_gameplay_components_unchanged": true
+}

@@ -32,7 +32,7 @@ Bu raporda AX-7'nin fiziksel kapı ve takip görevleri, ana sahneye bağlanan Ka
 
 `Assets/Scenes/EscapeScene.unity` içinde giriş koridoru, kilitli fiziksel kapı, alçak bakım yolu, kontrol paneli, astronot ve AX-7 bulunmaktadır. Astronotun hareketi, kamerası ve çarpışması çalışmaktadır. AX-7 komutla bakım yolundan panele gitmekte, paneli kullanmakta ve kapıyı açmaktadır.
 
-Ana sahnede panel alanının devamına Kael güvenlik alanı, geçici Kael kapsülü ve kapalı biyometrik kapı taslağı eklenmiştir. Astronotun bu alana ulaşması manuel olarak doğrulanmıştır. Kael konuşması bu kapsüle bağlandı; gerçek model kararıyla biyometrik kapının açıldığı doğrulandı. Konuşma kuralına uyum sapması ayrıca kaydedildi. Biyometrik kapının arkasında `HavaKilidi` grubu altında yan duvarlar, atmosfer kontrol paneli ve gemiye geçiş kapağının blok taslağı da oluşturulmuştur. Atmosfer panelinin E etkileşimi, süreli tamamlanması, uzaklaşınca iptali ve tek seferlik tamamlanma kaydı oyuncuyla test edildi. Gemiye geçiş kapağı için atmosfer/Kael ön koşullu E etkileşimi ve aynı sahnede küçük kokpit eklendi; oyuncu giriş testini doğruladı. Kapağı içeriden kapatma oyuncuyla doğrulandı. Geri sayımlı acil ayrılma ve başarı ekranı oyuncuyla Play modunda doğrulandı. Oynanış bloklarının üzerine endüstriyel bilim kurgu malzemeleri, ışıklar ve yönlendirmeler eklendi; renk ve ortam görünümü kullanıcı tarafından Play modunda incelendi. Karakterler henüz blok modellerdir.
+Ana sahnede panel alanının devamına Kael güvenlik alanı, geçici Kael kapsülü ve kapalı biyometrik kapı taslağı eklenmiştir. Astronotun bu alana ulaşması manuel olarak doğrulanmıştır. Kael konuşması bu kapsüle bağlandı; gerçek model kararıyla biyometrik kapının açıldığı doğrulandı. Konuşma kuralına uyum sapması ayrıca kaydedildi. Biyometrik kapının arkasında `HavaKilidi` grubu altında yan duvarlar, atmosfer kontrol paneli ve gemiye geçiş kapağının blok taslağı da oluşturulmuştur. Atmosfer panelinin E etkileşimi, süreli tamamlanması, uzaklaşınca iptali ve tek seferlik tamamlanma kaydı oyuncuyla test edildi. Gemiye geçiş kapağı için atmosfer/Kael ön koşullu E etkileşimi ve aynı sahnede küçük kokpit eklendi; oyuncu giriş testini doğruladı. Kapağı içeriden kapatma oyuncuyla doğrulandı. Geri sayımlı acil ayrılma ve başarı ekranı oyuncuyla Play modunda doğrulandı. Oynanış bloklarının üzerine endüstriyel bilim kurgu malzemeleri, ışıklar ve yönlendirmeler eklendi; renk ve ortam görünümü kullanıcı tarafından Play modunda incelendi. AX-7 ve Kael için hafif 3D gövdeler eklendi; yeni gövdelerle Play kontrolü bekliyor.
 
 ## AX-7 Görevini Çalıştırma
 
@@ -731,3 +731,9 @@ Başlangıç yönlendirmesi kullanıcı tarafından verilen metinle güncellendi
 Mesaj düzenlemesinde yalnızca metin sabitleri değiştirildi; etkileşim koşulları
 ve görev sırası aynı kaldı. Çevre levhaları ve mesajlar için C# derleme kontrolü
 başarılıdır. Bu kontrol tam oynanış veya FPS testi yerine geçmez.
+
+
+## Karakter Görselleri
+
+AX-7 için tekerlekli robot, Kael için portreden türetilen sade uzaylı gövdesi eklendi.
+Ölçüler, performans bütçesi ve bekleyen oyun içi kontroller: [Karakter gövdeleri](Docs/CharacterVisuals.md).
