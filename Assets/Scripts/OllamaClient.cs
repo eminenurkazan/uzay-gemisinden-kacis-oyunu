@@ -354,10 +354,11 @@ public class OllamaClient : MonoBehaviour, IKaelDecisionSource
 
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
-                ShowRequestError("Kael " + phase +
-                    " isteği tamamlanamadı. Sunucu bağlantısını kontrol et.");
-                Debug.LogWarning("Ollama bağlantı ayrıntısı: " +
-                    webRequest.error, this);
+                ShowRequestError(GetRequestErrorMessage(
+                    webRequest.result, webRequest.responseCode,
+                    webRequest.error, webRequest.downloadHandler.text));
+                Debug.LogWarning("Ollama " + phase + " isteği | HTTP " +
+                    webRequest.responseCode + " | " + webRequest.error, this);
                 yield break;
             }
 
@@ -373,6 +374,42 @@ public class OllamaClient : MonoBehaviour, IKaelDecisionSource
 
             onSuccess(response.message.content);
         }
+    }
+
+    // Yalnızca hata metnini seçer; konuşma durumunu veya kapı kararını değiştirmez.
+    private static string GetRequestErrorMessage(
+        UnityWebRequest.Result result, long statusCode, string error, string responseBody)
+    {
+        if (statusCode == 408 || statusCode == 504 ||
+            (!string.IsNullOrEmpty(error) &&
+             (error.IndexOf("timeout", StringComparison.OrdinalIgnoreCase) >= 0 ||
+              error.IndexOf("timed out", StringComparison.OrdinalIgnoreCase) >= 0)))
+            return "Kael zamanında yanıt veremedi. Lütfen yeniden dene.";
+
+        if (result == UnityWebRequest.Result.ConnectionError)
+            return "Kael sunucusuna bağlanılamadı. Ollama'nın açık olduğunu kontrol et.";
+
+        // Her 404 model hatası değildir; yanlış bir sunucu adresi de 404 dönebilir.
+        if (statusCode == 404)
+        {
+            string serverError = null;
+            try
+            {
+                var body = JObject.Parse(responseBody ?? "");
+                if (body["error"]?.Type == JTokenType.String)
+                    serverError = (string)body["error"];
+            }
+            catch (JsonException) { }
+
+            if (!string.IsNullOrEmpty(serverError) &&
+                serverError.IndexOf("model", StringComparison.OrdinalIgnoreCase) >= 0 &&
+                serverError.IndexOf("not found", StringComparison.OrdinalIgnoreCase) >= 0)
+                return "Seçilen yerel model bulunamadı. Model ayarını kontrol et.";
+
+            return "Kael sunucusunda istenen adres bulunamadı. Sunucu adresini kontrol et.";
+        }
+
+        return "Kael isteği tamamlanamadı. Lütfen yeniden dene.";
     }
 
     [ContextMenu("JSON Dogrulama Testlerini Calistir")]

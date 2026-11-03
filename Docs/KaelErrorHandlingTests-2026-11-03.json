@@ -1,0 +1,80 @@
+{
+  "date": "2026-11-03",
+  "error_message_cases": [
+    {
+      "case": "offline",
+      "message": "Kael sunucusuna bağlanılamadı. Ollama'nın açık olduğunu kontrol et.",
+      "passed": true
+    },
+    {
+      "case": "timeout",
+      "message": "Kael zamanında yanıt veremedi. Lütfen yeniden dene.",
+      "passed": true
+    },
+    {
+      "case": "timed_out",
+      "message": "Kael zamanında yanıt veremedi. Lütfen yeniden dene.",
+      "passed": true
+    },
+    {
+      "case": "http408",
+      "message": "Kael zamanında yanıt veremedi. Lütfen yeniden dene.",
+      "passed": true
+    },
+    {
+      "case": "http504",
+      "message": "Kael zamanında yanıt veremedi. Lütfen yeniden dene.",
+      "passed": true
+    },
+    {
+      "case": "missing_model",
+      "message": "Seçilen yerel model bulunamadı. Model ayarını kontrol et.",
+      "passed": true
+    },
+    {
+      "case": "wrong_endpoint",
+      "message": "Kael sunucusunda istenen adres bulunamadı. Sunucu adresini kontrol et.",
+      "passed": true
+    },
+    {
+      "case": "json_endpoint",
+      "message": "Kael sunucusunda istenen adres bulunamadı. Sunucu adresini kontrol et.",
+      "passed": true
+    },
+    {
+      "case": "bad_error_type",
+      "message": "Kael sunucusunda istenen adres bulunamadı. Sunucu adresini kontrol et.",
+      "passed": true
+    },
+    {
+      "case": "null_body",
+      "message": "Kael sunucusunda istenen adres bulunamadı. Sunucu adresini kontrol et.",
+      "passed": true
+    },
+    {
+      "case": "server_error",
+      "message": "Kael isteği tamamlanamadı. Lütfen yeniden dene.",
+      "passed": true
+    },
+    {
+      "case": "auth_error",
+      "message": "Kael isteği tamamlanamadı. Lütfen yeniden dene.",
+      "passed": true
+    }
+  ],
+  "protocol_checks": {
+    "passed": 54,
+    "failed": 0
+  },
+  "unity_library_compile": {
+    "errors": 0,
+    "existing_warnings": [
+      "CS0649"
+    ]
+  },
+  "manual_validation": {
+    "before_message_change": "Bağlantı kesintisi, eksik model ve zaman aşımı sonrası aynı Play oturumunda normal model yanıtına dönüldü. Kullanıcı bağlantı kesintisinde donma olmadığını bildirdi; zaman aşımı sonrası kapının kapalı kaldığını bildirdi.",
+    "after_message_change": "Üç ayrı yeni hata mesajı ve normal Kael görseline dönüş Unity ekran görüntüleriyle doğrulandı.",
+    "limits": "Yeni mesajlar sonrası toparlanma testleri yeniden tekrarlanmadı. Bozuk HTTP/model yanıtı ve ikinci aşama hataları canlı Unity testinde henüz tamamlanmadı."
+  }
+}
