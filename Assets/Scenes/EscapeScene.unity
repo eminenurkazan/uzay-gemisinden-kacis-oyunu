@@ -26364,7 +26364,7 @@ MonoBehaviour:
   kaelThinkingImage: {fileID: 1020000078}
   kaelIdleImage: {fileID: 1020000011}
   serverAddress: http://localhost:11434
-  modelName: gemma3:4b
+  modelName: qwen3:8b
   requestTimeoutSeconds: 120
   logOutgoingRequests: 0
 --- !u!208 &1000000004

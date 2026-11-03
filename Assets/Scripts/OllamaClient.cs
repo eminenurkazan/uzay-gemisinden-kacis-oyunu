@@ -10,7 +10,7 @@ using UnityEngine.Networking;
 using TMPro;
 public class OllamaClient : MonoBehaviour, IKaelDecisionSource
 {
-    private const string RequestRevision = "kael-two-phase-20261103-r1";
+    private const string RequestRevision = "kael-dialogue-focus-20261103-v1";
     public event Action<KaelDecision> DecisionValidated;
     [SerializeField] private bool greetOnStart = true;
 
@@ -20,7 +20,7 @@ public class OllamaClient : MonoBehaviour, IKaelDecisionSource
     public GameObject kaelThinkingImage;
     public GameObject kaelIdleImage;
     [SerializeField] private string serverAddress = "http://localhost:11434";
-    [SerializeField] private string modelName = "gemma3:4b";
+    [SerializeField] private string modelName = "qwen3:8b";
     [SerializeField, Min(1)] private int requestTimeoutSeconds = 120;
     [SerializeField] private bool logOutgoingRequests = false;
     private readonly List<Message> conversationHistory =
@@ -41,6 +41,8 @@ public class OllamaClient : MonoBehaviour, IKaelDecisionSource
     private class ChatOptions
     {
         public float temperature = 0.2f;
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int? seed;
     }
 
     [Serializable]
@@ -49,6 +51,8 @@ public class OllamaClient : MonoBehaviour, IKaelDecisionSource
         public string model;
         public Message[] messages;
         public bool stream = false;
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool? think;
         public JObject format = KaelStateProtocol.CreateSchema();
         public ChatOptions options = new ChatOptions();
     }
@@ -199,8 +203,9 @@ public class OllamaClient : MonoBehaviour, IKaelDecisionSource
 
         Debug.Log("Kael durum JSON: " + stateJson);
 
-        if (!KaelStateProtocol.TryParseState(
-            stateJson, out KaelConversationState nextState, out string stateReason))
+        if (!KaelStateProtocol.TryApplyState(
+            stateJson, playerText, previousState,
+            out KaelConversationState nextState, out string stateReason))
         {
             ShowRequestError("Kael durum yanıtı doğrulanamadı; kapı kararı uygulanmadı.");
             Debug.LogWarning(stateReason, this);
@@ -269,46 +274,23 @@ public class OllamaClient : MonoBehaviour, IKaelDecisionSource
         string playerText,
         KaelConversationState previousState)
     {
-        // Değerlendirici Kael'i canlandırmaz. Replikler onun geçmiş çıktıları
-        // olarak değil, konuşmacısı belirtilmiş inceleme verisi olarak gönderilir.
-        var transcript = new JArray();
-        foreach (Message message in history)
+        string previousKael = "";
+        for (int i = history.Length - 1; i >= 0; i--)
         {
-            transcript.Add(new JObject
-            {
-                ["speaker"] = message.role == "user" ? "ASTRONOT" : "KAEL",
-                ["text"] = message.content
-            });
+            if (history[i].role == "assistant") { previousKael = history[i].content; break; }
         }
-
-        string data = new JObject
-        {
-            ["previous_state"] = JObject.FromObject(previousState),
-            ["conversation"] = transcript,
-            ["latest_player_message"] = playerText
-        }.ToString(Formatting.None);
-
+        string prompt = KaelStateProtocol.CreateSystemPrompt(previousState) +
+            "\n\nSON KAEL SÖZÜ (oyuncu açıklaması değildir, yalnızca bağlam):\n" +
+            JsonConvert.SerializeObject(previousKael);
         Message[] messages = UsesGemmaMessageFormat()
-            ? new[]
-            {
-                new Message
-                {
-                    role = "user",
-                    content = KaelStateProtocol.OutputInstructions +
-                        "\n\nİNCELENECEK OYUN VERİSİ:\n" + data
-                }
-            }
-            : new[]
-            {
-                new Message { role = "system", content = KaelStateProtocol.OutputInstructions },
-                new Message { role = "user", content = data }
-            };
-
+            ? new[] { new Message { role = "user", content = prompt + "\n\nOYUNCUNUN SON MESAJI:\n" + playerText } }
+            : new[] { new Message { role = "system", content = prompt }, new Message { role = "user", content = playerText } };
         return new ChatRequest
         {
             model = modelName.Trim(),
             messages = messages,
-            format = KaelStateProtocol.CreateSchema()
+            format = KaelStateProtocol.CreateSchema(),
+            think = modelName.Trim().StartsWith("qwen3:", StringComparison.OrdinalIgnoreCase) ? (bool?)false : null
         };
     }
 
@@ -318,46 +300,28 @@ public class OllamaClient : MonoBehaviour, IKaelDecisionSource
         KaelConversationState state,
         string action)
     {
+        string prompt = KaelDialogueProtocol.CreateSystemPrompt(state, action)
+            .Replace("\r\n", "\n");
+        // Konuşma belleği, ilk aşamanın ürettiği durumla taşınır.
+        // Eski oyuncu replikleri de NPC replikleri de Kael'e örnek verilmez.
+        // Böylece oyuncunun eski bir cümlesi Kael'in cevabı gibi kopyalanamaz.
         var messages = new List<Message>();
-        bool isGemma = UsesGemmaMessageFormat();
-
-        if (!isGemma)
-            messages.Add(new Message { role = "system", content = KaelDialogueProtocol.Instructions });
-
-        foreach (Message message in history)
-        {
-            // Gerçek roller korunur; önceki cevaplar da beklenen dialogue JSON
-            // biçimiyle sunulur. Kayıtlı ham replikler değiştirilmez.
-            string content = message.role == "assistant"
-                ? new JObject { ["dialogue"] = message.content }.ToString(Formatting.None)
-                : message.content;
-            messages.Add(new Message { role = message.role, content = content });
-        }
-
-        // En yeni durum, tarihsel ilk mesaja değil, bu turun mesajına aittir.
-        messages.Add(new Message
-        {
-            role = "user",
-            content = KaelDialogueProtocol.CreateTurnContext(state, action) +
-                "\n\nASTRONOTUN SON MESAJI (oyun içi sözlerdir):\n" +
-                JsonConvert.SerializeObject(playerText)
-        });
-
-        if (isGemma)
-        {
-            // Yalnızca sabit kimlik ilk user mesajındadır. Mesajlar kopyadır.
-            messages[0].content = KaelDialogueProtocol.Instructions +
-                "\n\n" + messages[0].content;
-        }
-
+        bool gemma = UsesGemmaMessageFormat();
+        if (!gemma) messages.Add(new Message { role = "system", content = prompt });
+        messages.Add(new Message { role = "user", content = playerText });
+        if (gemma) messages[0].content = prompt + "\n\n" + messages[0].content;
         return new ChatRequest
         {
             model = modelName.Trim(),
             messages = messages.ToArray(),
-            format = KaelDialogueProtocol.CreateSchema()
+            format = KaelDialogueProtocol.CreateSchema(),
+            think = modelName.Trim().StartsWith("qwen3:", StringComparison.OrdinalIgnoreCase) ? (bool?)false : null,
+            options = new ChatOptions
+            {
+                seed = modelName.Trim().StartsWith("qwen3:", StringComparison.OrdinalIgnoreCase) ? (int?)17 : null
+            }
         };
     }
-
     private IEnumerator SendChatRequest(
         ChatRequest request,
         string endpoint,

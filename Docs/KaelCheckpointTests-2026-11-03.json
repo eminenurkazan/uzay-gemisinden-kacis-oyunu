@@ -1,0 +1,184 @@
+[
+  {
+    "scenario": "identity",
+    "player": "Sen kimsin?",
+    "expected_state": {
+      "sample_location": "UNKNOWN",
+      "delivery": "UNKNOWN"
+    },
+    "state_correct": true,
+    "action": "NONE",
+    "expected_action": "NONE",
+    "action_correct": true,
+    "dialogue": "Ben Kael, uzaylı muhafızım.",
+    "model_state_and_evidence": {
+      "evidence": {
+        "location_quote": "",
+        "delivery_quote": "",
+        "giver": "NONE",
+        "recipient": "NONE",
+        "commitment": "NONE"
+      },
+      "state": {
+        "sample_location": "UNKNOWN",
+        "delivery": "UNKNOWN"
+      }
+    }
+  },
+  {
+    "scenario": "persuasion",
+    "player": "Mars örnekleri benim gemimde",
+    "expected_state": {
+      "sample_location": "PLAYER_SHIP",
+      "delivery": "UNKNOWN"
+    },
+    "state_correct": true,
+    "action": "NONE",
+    "expected_action": "NONE",
+    "action_correct": true,
+    "dialogue": "Örnekleri sen getirme sözünü ver.",
+    "model_state_and_evidence": {
+      "evidence": {
+        "location_quote": "Mars örnekleri benim gemimde",
+        "delivery_quote": "",
+        "giver": "PLAYER",
+        "recipient": "KAEL",
+        "commitment": "PROMISE"
+      },
+      "state": {
+        "sample_location": "PLAYER_SHIP",
+        "delivery": "ACCEPTED"
+      }
+    }
+  },
+  {
+    "scenario": "persuasion",
+    "player": "Örnekleri sana getireceğim",
+    "expected_state": {
+      "sample_location": "PLAYER_SHIP",
+      "delivery": "ACCEPTED"
+    },
+    "state_correct": true,
+    "action": "OPEN_DOOR",
+    "expected_action": "OPEN_DOOR",
+    "action_correct": true,
+    "dialogue": "Kapıyı biyometrik yetkimle açıyorum.",
+    "model_state_and_evidence": {
+      "evidence": {
+        "location_quote": "",
+        "delivery_quote": "Örnekleri sana getireceğim",
+        "giver": "PLAYER",
+        "recipient": "KAEL",
+        "commitment": "PROMISE"
+      },
+      "state": {
+        "sample_location": "PLAYER_SHIP",
+        "delivery": "ACCEPTED"
+      }
+    }
+  },
+  {
+    "scenario": "refusal",
+    "player": "Mars örnekleri benim gemimde",
+    "expected_state": {
+      "sample_location": "PLAYER_SHIP",
+      "delivery": "UNKNOWN"
+    },
+    "state_correct": true,
+    "action": "NONE",
+    "expected_action": "NONE",
+    "action_correct": true,
+    "dialogue": "Örnekleri sen getirme sözünü ver.",
+    "model_state_and_evidence": {
+      "evidence": {
+        "location_quote": "Mars örnekleri benim gemimde",
+        "delivery_quote": "",
+        "giver": "PLAYER",
+        "recipient": "KAEL",
+        "commitment": "PROMISE"
+      },
+      "state": {
+        "sample_location": "PLAYER_SHIP",
+        "delivery": "ACCEPTED"
+      }
+    }
+  },
+  {
+    "scenario": "refusal",
+    "player": "Örnekleri sana vermeyeceğim",
+    "expected_state": {
+      "sample_location": "PLAYER_SHIP",
+      "delivery": "REFUSED"
+    },
+    "state_correct": true,
+    "action": "NONE",
+    "expected_action": "NONE",
+    "action_correct": true,
+    "dialogue": "Örnekleri getirme sözünü vermedin, geçişin henüz mümkün değil.",
+    "model_state_and_evidence": {
+      "evidence": {
+        "location_quote": "",
+        "delivery_quote": "Örnekleri sana vermeyeceğim",
+        "giver": "PLAYER",
+        "recipient": "KAEL",
+        "commitment": "REFUSAL"
+      },
+      "state": {
+        "sample_location": "PLAYER_SHIP",
+        "delivery": "REFUSED"
+      }
+    }
+  },
+  {
+    "scenario": "anger",
+    "player": "Beni burada tutmaya hakkın yok, sana çok kızgınım!",
+    "expected_state": {
+      "sample_location": "UNKNOWN",
+      "delivery": "UNKNOWN"
+    },
+    "state_correct": true,
+    "action": "NONE",
+    "expected_action": "NONE",
+    "action_correct": true,
+    "dialogue": "Astronot, teslim sözünü verirsen örnekleri alırım.",
+    "model_state_and_evidence": {
+      "evidence": {
+        "location_quote": "",
+        "delivery_quote": "",
+        "giver": "PLAYER",
+        "recipient": "KAEL",
+        "commitment": "NONE"
+      },
+      "state": {
+        "sample_location": "UNKNOWN",
+        "delivery": "UNKNOWN"
+      }
+    }
+  },
+  {
+    "scenario": "unrelated",
+    "player": "En sevdiğin müzik nedir?",
+    "expected_state": {
+      "sample_location": "UNKNOWN",
+      "delivery": "UNKNOWN"
+    },
+    "state_correct": true,
+    "action": "NONE",
+    "expected_action": "NONE",
+    "action_correct": true,
+    "dialogue": "Astronot, benim en sevdiğim müzik değil.",
+    "model_state_and_evidence": {
+      "evidence": {
+        "location_quote": "",
+        "delivery_quote": "",
+        "giver": "NONE",
+        "recipient": "NONE",
+        "commitment": "NONE"
+      },
+      "state": {
+        "sample_location": "UNKNOWN",
+        "delivery": "UNKNOWN"
+      }
+    }
+  }
+]

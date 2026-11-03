@@ -5,18 +5,77 @@
 - Eminenur Kazan
 - Zülal Şahin
 
-**Rapor güncelleme tarihi:** 2 Kasım 2026
+**Rapor güncelleme tarihi:** 3 Kasım 2026
+
+## Güncel çalışan Kael kontrol noktası — 3 Kasım 2026
+
+Bu bölüm güncel durumu anlatır; aşağıdaki tarihlenmiş eski geliştirme kayıtları tarihsel olarak korunmuştur. Güncel model **qwen3:8b**, sürüm **kael-dialogue-focus-20261103-v1**. Sahte/hazır NPC cevabı yoktur. İki yerel istek kullanılır: JSON durum/dayanak çıkarımı ve tek kısa konuşma üretimi. C# kapıyı yalnızca örneklerin oyuncunun insan gemisinde olması ve Kael'e getirme sözü birlikte tamamlanınca açar. Fiziksel teslimat kapıdan sonradır. Tek cümle/180 karakter ve sabit seed, yanıtın anlam doğruluğunu garanti etmez.
+
+[Ayrıntılı mimari, ister matrisi ve sınırlamalar](Docs/KaelTestedCheckpoint-2026-11-03.md) · [Gerçek sistem promptları/şemalar](Docs/KaelSystemPrompts-2026-11-03.md) · [Beş tür gerçek model testinin verisi](Docs/KaelCheckpointTests-2026-11-03.json)
+
+### LLM istek/yanıt akışı
+
+```mermaid
+sequenceDiagram
+    actor P as Oyuncu
+    participant U as Unity/OllamaClient
+    participant L as Yerel Ollama qwen3:8b
+    participant V as StateProtocol / DoorPolicy
+    participant D as BiometricDoorLink
+    P->>U: Serbest metin
+    U->>L: 1. istek: önceki durum + son oyuncu sözü + JSON şeması
+    L-->>U: evidence + state
+    U->>V: Biçim, alıntı ve veren/alıcı doğrulaması
+    alt İlk istek ve durum doğrulaması başarılı
+        V-->>U: Uygulanabilir durum + C# kapı kararı
+        U->>L: 2. istek: karakter, güncel durum, tek konuşma görevi
+        L-->>U: Tek kısa dialogue cümlesi veya hata
+        U->>U: JSON, uzunluk ve tek cümle doğrulaması
+        alt İkinci istek ve konuşma doğrulaması başarılı
+            U->>U: Durumu ve oyuncu/NPC çiftini birlikte kaydet
+            U-->>P: Gerçek model repliğini göster
+            U->>D: DecisionValidated: None veya OpenDoor
+            D->>D: AX-7 görevi ve fiziksel kapı kullanılabilirliği kontrolü
+        else İkinci istek veya konuşma geçersiz
+            U-->>P: Anlamlı hata bildirimi
+        end
+    else İlk istek veya durum geçersiz
+        U-->>P: Anlamlı hata bildirimi, ikinci istek gönderilmez
+    end
+    Note over U,D: Başarısız tur kaydedilmez, kapı kararı yayınlanmaz
+```
+
+### Beş tür yeni gerçek model denemesi
+
+| Tür | Oyuncu sözü | Gerçek model cevabı | Kapı kararı |
+|---|---|---|---|
+| identity | Sen kimsin? | Ben Kael, uzaylı muhafızım. | NONE |
+| persuasion | Mars örnekleri benim gemimde | Örnekleri sen getirme sözünü ver. | NONE |
+| persuasion | Örnekleri sana getireceğim | Kapıyı biyometrik yetkimle açıyorum. | OPEN_DOOR |
+| refusal | Mars örnekleri benim gemimde | Örnekleri sen getirme sözünü ver. | NONE |
+| refusal | Örnekleri sana vermeyeceğim | Örnekleri getirme sözünü vermedin, geçişin henüz mümkün değil. | NONE |
+| anger | Beni burada tutmaya hakkın yok, sana çok kızgınım! | Astronot, teslim sözünü verirsen örnekleri alırım. | NONE |
+| unrelated | En sevdiğin müzik nedir? | Astronot, benim en sevdiğim müzik değil. | NONE |
+
+Yedi adımın durum ve kapı sonucu 7/7 doğru; bu bir konuşma akıcılığı başarı oranı değildir. Özellikle alakasız müzik cevabı yetersizdir. Kullanıcı ayrıca Unity Play'de normal kapı açılışını, ret halinde kapalı kalmayı, araya kimlik sorusu girdiğinde takılmamayı ve ret sonrası fikrini değiştirince kapının açılmasını doğruladı.
+
+### Teslimden önce kalanlar
+
+- AX-7 için farklı başlangıç/engel koşullarında ölçülmüş tekrar, başarı oranı ve ortalama süre.
+- Dağıtılabilir Unity build'i, gerçek hata senaryolarının Play testi ve kaynak/rapor/build içeren tek teslim ZIP'i.
+- Güncel NPC/ajan test ekran görüntüleri; tüm uygulamanın OOP/SOLID değerlendirmesi.
+- Serbest/alakasız konuşmada akıcılık ve modelin durum değiştirme talimatını yanlış kabul etme sınırı. Bu çalışan kontrol noktası bütün olası girdiler için hatasız değildir.
 
 ## Proje Hakkında
 
-Astronotun gemisi, navigasyon arızası nedeniyle bir uzaylı gemisine yanlışlıkla kenetlenir. Oyuncunun amacı kendi gemisine dönerek kaçmaktır. Mars örnekleri astronotun kendi gemisindedir.
+Güncel Kael hikâyesinde insan astronot, uzaylı muhafız Kael tarafından kendi gemisinden kaçırılmıştır. Oyuncunun amacı kendi insan gemisine dönerek kaçmaktır. Mars örnekleri astronotun kendi gemisindedir; Kael başlangıçta yerini bilmez ve örnekleri kendi türünün araştırmaları için almak ister.
 
-Oyunda birbirinden ayrı iki yapay zekâ bileşeni planlanmıştır:
+Oyunda birbirinden ayrı iki yapay zekâ bileşeni bulunmaktadır:
 
 1. **AX-7:** Oyuncudan emir alan, bakım yolunu NavMesh ile kullanarak kontrol paneline ulaşan ve fiziksel kapıyı açan otonom yardımcı robot.
 2. **Kael:** Oyuncuyla serbest metin üzerinden konuşan ve yerel Ollama modelinin yapılandırılmış yanıtıyla biyometrik geçiş kararını veren güvenlik görevlisi.
 
-Bu raporda AX-7'nin fiziksel kapı ve takip görevleri, ana sahneye bağlanan Kael konuşması ve manuel testler belgelenmiştir. `AITestScene` bağımsız diyalog denemeleri için korunmuştur. Kael'in ayrıntılı LLM raporu henüz tamamlanmamıştır.
+Bu raporda AX-7'nin fiziksel kapı ve takip görevleri, ana sahneye bağlanan Kael konuşması ve manuel testler belgelenmiştir. `AITestScene` bağımsız diyalog denemeleri için korunmuştur. Güncel Kael mimarisi, gerçek testler ve ister kontrolü [3 Kasım kontrol noktası raporunda](Docs/KaelTestedCheckpoint-2026-11-03.md) yer alır; teslim için kalan eksikler açıkça belirtilmiştir.
 
 ## Kullanılan Teknolojiler
 
