@@ -2110,7 +2110,7 @@ MonoBehaviour:
   kaelDialogueText: {fileID: 1025491620}
   kaelStatusText: {fileID: 1231910915}
   kaelThinkingImage: {fileID: 1747185448}
-  kaelIdleImage: {fileID: 0}
+  kaelIdleImage: {fileID: 603378321}
   serverAddress: http://localhost:11434
   modelName: qwen3:8b
   requestTimeoutSeconds: 120
@@ -2350,7 +2350,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1747185449
 RectTransform:
   m_ObjectHideFlags: 0

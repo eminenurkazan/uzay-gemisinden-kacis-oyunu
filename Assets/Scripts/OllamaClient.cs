@@ -444,6 +444,7 @@ public class OllamaClient : MonoBehaviour, IKaelDecisionSource
 
     private void Start()
     {
+        SetRequestState(false);
         if (greetOnStart)
             SendMessageToAI("Merhaba! Bana Türkçe kısa bir selam ver.");
     }
