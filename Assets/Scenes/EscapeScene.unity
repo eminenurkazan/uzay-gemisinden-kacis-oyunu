@@ -26358,11 +26358,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OllamaClient
   greetOnStart: 0
+  dialogueView: {fileID: 1010000001}
   playerInput: {fileID: 1020000033}
-  kaelDialogueText: {fileID: 1020000043}
-  kaelStatusText: {fileID: 1020000061}
-  kaelThinkingImage: {fileID: 1020000078}
-  kaelIdleImage: {fileID: 1020000011}
   serverAddress: http://localhost:11434
   modelName: qwen3:8b
   requestTimeoutSeconds: 120
@@ -26417,6 +26414,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KaelDialogueView
   dialogueRoot: {fileID: 1020000082}
   client: {fileID: 1000000003}
+  kaelDialogueText: {fileID: 1020000043}
+  kaelStatusText: {fileID: 1020000061}
+  kaelThinkingImage: {fileID: 1020000078}
+  kaelIdleImage: {fileID: 1020000011}
 --- !u!114 &1010000002
 MonoBehaviour:
   m_ObjectHideFlags: 0

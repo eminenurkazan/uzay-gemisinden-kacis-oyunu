@@ -2086,6 +2086,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1295520137}
   - component: {fileID: 1295520136}
+  - component: {fileID: 1295520138}
   m_Layer: 0
   m_Name: AIManagement
   m_TagString: Untagged
@@ -2106,15 +2107,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OllamaClient
   greetOnStart: 0
+  dialogueView: {fileID: 1295520138}
   playerInput: {fileID: 984338032}
-  kaelDialogueText: {fileID: 1025491620}
-  kaelStatusText: {fileID: 1231910915}
-  kaelThinkingImage: {fileID: 1747185448}
-  kaelIdleImage: {fileID: 603378321}
   serverAddress: http://localhost:11434
   modelName: qwen3:8b
   requestTimeoutSeconds: 120
   logOutgoingRequests: 1
+--- !u!114 &1295520138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1295520135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83a6e8c84acb4a1095c91bf3aaeb73d3, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::KaelDialogueView
+  dialogueRoot: {fileID: 0}
+  client: {fileID: 1295520136}
+  kaelDialogueText: {fileID: 1025491620}
+  kaelStatusText: {fileID: 1231910915}
+  kaelThinkingImage: {fileID: 1747185448}
+  kaelIdleImage: {fileID: 603378321}
 --- !u!4 &1295520137
 Transform:
   m_ObjectHideFlags: 0

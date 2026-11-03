@@ -8,6 +8,10 @@ public sealed class KaelDialogueView : MonoBehaviour
 {
     [SerializeField] private GameObject dialogueRoot;
     [SerializeField] private OllamaClient client;
+    [SerializeField] private TMP_Text kaelDialogueText;
+    [SerializeField] private TMP_Text kaelStatusText;
+    [SerializeField] private GameObject kaelThinkingImage;
+    [SerializeField] private GameObject kaelIdleImage;
 
     public bool IsOpen => dialogueRoot != null && dialogueRoot.activeSelf;
     public event Action CloseRequested;
@@ -18,6 +22,34 @@ public sealed class KaelDialogueView : MonoBehaviour
     {
         if (dialogueRoot != null)
             dialogueRoot.SetActive(false);
+    }
+
+    // Konuşma ve hata metinleri aynı sunum yolunu kullanır.
+    public void ShowMessage(string message)
+    {
+        if (kaelDialogueText != null)
+        {
+            kaelDialogueText.richText = false;
+            kaelDialogueText.text = message;
+        }
+    }
+
+    public void SetBusy(bool isBusy)
+    {
+        if (kaelStatusText != null)
+        {
+            kaelStatusText.text = isBusy ? "Kael düşünüyor..." : "";
+        }
+
+        if (kaelThinkingImage != null)
+        {
+            kaelThinkingImage.SetActive(isBusy);
+        }
+
+        if (kaelIdleImage != null)
+        {
+            kaelIdleImage.SetActive(!isBusy);
+        }
     }
 
     public bool Show()
@@ -33,8 +65,8 @@ public sealed class KaelDialogueView : MonoBehaviour
             prepared = true;
         }
         dialogueRoot.SetActive(true);
-        if (client.kaelDialogueText != null && string.IsNullOrWhiteSpace(client.kaelDialogueText.text))
-            client.kaelDialogueText.text = "Kael ile konuşmak için mesajını aşağıya yaz.";
+        if (kaelDialogueText != null && string.IsNullOrWhiteSpace(kaelDialogueText.text))
+            kaelDialogueText.text = "Kael ile konuşmak için mesajını aşağıya yaz.";
         client.playerInput.Select();
         client.playerInput.ActivateInputField();
         return true;

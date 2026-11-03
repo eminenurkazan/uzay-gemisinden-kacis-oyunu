@@ -15,10 +15,7 @@ public class OllamaClient : MonoBehaviour, IKaelDecisionSource
     [SerializeField] private bool greetOnStart = true;
 
     public TMP_InputField playerInput;
-    public TMP_Text kaelDialogueText;
-    public TMP_Text kaelStatusText;
-    public GameObject kaelThinkingImage;
-    public GameObject kaelIdleImage;
+    [SerializeField] private KaelDialogueView dialogueView;
     [SerializeField] private string serverAddress = "http://localhost:11434";
     [SerializeField] private string modelName = "qwen3:8b";
     [SerializeField, Min(1)] private int requestTimeoutSeconds = 120;
@@ -91,11 +88,8 @@ public class OllamaClient : MonoBehaviour, IKaelDecisionSource
 
     private void ShowRequestError(string message)
     {
-        if (kaelDialogueText != null)
-        {
-            kaelDialogueText.richText = false;
-            kaelDialogueText.text = message;
-        }
+        if (dialogueView != null)
+            dialogueView.ShowMessage(message);
         Debug.LogWarning(message, this);
     }
 
@@ -117,20 +111,8 @@ public class OllamaClient : MonoBehaviour, IKaelDecisionSource
     {
         isRequestInProgress = isBusy;
 
-        if (kaelStatusText != null)
-        {
-            kaelStatusText.text = isBusy ? "Kael düşünüyor..." : "";
-        }
-
-        if (kaelThinkingImage != null)
-        {
-            kaelThinkingImage.SetActive(isBusy);
-        }
-
-        if (kaelIdleImage != null)
-        {
-            kaelIdleImage.SetActive(!isBusy);
-        }
+        if (dialogueView != null)
+            dialogueView.SetBusy(isBusy);
     }
     public void SendMessageToAI(string playerText)
     {
@@ -248,11 +230,8 @@ public class OllamaClient : MonoBehaviour, IKaelDecisionSource
             JsonConvert.SerializeObject(conversationState), this);
         Debug.Log("NPC: " + dialogue);
 
-        if (kaelDialogueText != null)
-        {
-            kaelDialogueText.richText = false;
-            kaelDialogueText.text = dialogue;
-        }
+        if (dialogueView != null)
+            dialogueView.ShowMessage(dialogue);
 
         Debug.Log("Oyun kodunun kapı kararı: " + action);
         var decision = action == "OPEN_DOOR"

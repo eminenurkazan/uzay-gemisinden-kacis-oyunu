@@ -1,0 +1,411 @@
+{
+  "request_snapshots_identical": 120,
+  "protocol_checks": 54,
+  "error_message_checks": 12,
+  "failed_turn_cases": 44,
+  "failed_turn_assertions": 756,
+  "source_hashes": {
+    "Assets/Scripts/OllamaClient.cs": "62ffa5986b161f0e78a7a4c6419b654779ff4cccd4d85c6be50ad59804a6e5ef",
+    "Assets/Scripts/KaelDialogueView.cs": "54331ee131add5fcd90de10481b8599c6b6e9025b3c434b3388f0badb11455d6",
+    "Assets/Scenes/AITestScene.unity": "0c70c707004d01aef081399e188c96b796c8f26e626987164ebcc932047e71b7",
+    "Assets/Scenes/EscapeScene.unity": "3ac494e1f68d80461cdf4372813af33fd1bcc2d1621a52e4811a60360465a275"
+  },
+  "unity_play": {
+    "scene": "AITestScene",
+    "identity": "Ben Kael, uzaylı muhafızım.",
+    "identity_action": "NONE",
+    "location_action": "NONE",
+    "promise_action": "OPEN_DOOR",
+    "promise_reply": "Anlaştık.",
+    "busy_text_and_portraits": "observed",
+    "missing_model_message": "observed",
+    "restored_model": "qwen3:8b",
+    "restored_timeout": 120,
+    "play_stopped": true
+  },
+  "limits": [
+    "EscapeScene konuşma aç/kapat ve fiziksel kapı bu turda oynanmadı; sahne bağlantıları denetlendi.",
+    "Unity organizasyon servisi bilgisi alınamadı mesajı görüldü; oyun kodunun derleme hatası değildir."
+  ],
+  "protocol_test_result": {
+    "passed": 54,
+    "failed": 0
+  },
+  "error_message_test_results": [
+    {
+      "case": "offline",
+      "message": "Kael sunucusuna bağlanılamadı. Ollama'nın açık olduğunu kontrol et.",
+      "passed": true
+    },
+    {
+      "case": "timeout",
+      "message": "Kael zamanında yanıt veremedi. Lütfen yeniden dene.",
+      "passed": true
+    },
+    {
+      "case": "timed_out",
+      "message": "Kael zamanında yanıt veremedi. Lütfen yeniden dene.",
+      "passed": true
+    },
+    {
+      "case": "http408",
+      "message": "Kael zamanında yanıt veremedi. Lütfen yeniden dene.",
+      "passed": true
+    },
+    {
+      "case": "http504",
+      "message": "Kael zamanında yanıt veremedi. Lütfen yeniden dene.",
+      "passed": true
+    },
+    {
+      "case": "missing_model",
+      "message": "Seçilen yerel model bulunamadı. Model ayarını kontrol et.",
+      "passed": true
+    },
+    {
+      "case": "wrong_endpoint",
+      "message": "Kael sunucusunda istenen adres bulunamadı. Sunucu adresini kontrol et.",
+      "passed": true
+    },
+    {
+      "case": "json_endpoint",
+      "message": "Kael sunucusunda istenen adres bulunamadı. Sunucu adresini kontrol et.",
+      "passed": true
+    },
+    {
+      "case": "bad_error_type",
+      "message": "Kael sunucusunda istenen adres bulunamadı. Sunucu adresini kontrol et.",
+      "passed": true
+    },
+    {
+      "case": "null_body",
+      "message": "Kael sunucusunda istenen adres bulunamadı. Sunucu adresini kontrol et.",
+      "passed": true
+    },
+    {
+      "case": "server_error",
+      "message": "Kael isteği tamamlanamadı. Lütfen yeniden dene.",
+      "passed": true
+    },
+    {
+      "case": "auth_error",
+      "message": "Kael isteği tamamlanamadı. Lütfen yeniden dene.",
+      "passed": true
+    }
+  ],
+  "atomic_turn_results": {
+    "cases_passed": 44,
+    "assertions_passed": 756,
+    "cases": [
+      {
+        "case": "no_state_response",
+        "prior_location_known": false,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "empty_state",
+        "prior_location_known": false,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "broken_state",
+        "prior_location_known": false,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "missing_evidence",
+        "prior_location_known": false,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "missing_state",
+        "prior_location_known": false,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "extra_action",
+        "prior_location_known": false,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "invalid_delivery",
+        "prior_location_known": false,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "duplicate_state",
+        "prior_location_known": false,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "trailing_object",
+        "prior_location_known": false,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "wrong_evidence_type",
+        "prior_location_known": false,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "no_dialogue_response",
+        "prior_location_known": false,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "empty_dialogue",
+        "prior_location_known": false,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "broken_dialogue",
+        "prior_location_known": false,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "missing_dialogue",
+        "prior_location_known": false,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "null_dialogue",
+        "prior_location_known": false,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "numeric_dialogue",
+        "prior_location_known": false,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "blank_dialogue",
+        "prior_location_known": false,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "extra_dialogue_action",
+        "prior_location_known": false,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "duplicate_dialogue",
+        "prior_location_known": false,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "trailing_dialogue",
+        "prior_location_known": false,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "multi_sentence",
+        "prior_location_known": false,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "over_limit",
+        "prior_location_known": false,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "no_state_response",
+        "prior_location_known": true,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "empty_state",
+        "prior_location_known": true,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "broken_state",
+        "prior_location_known": true,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "missing_evidence",
+        "prior_location_known": true,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "missing_state",
+        "prior_location_known": true,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "extra_action",
+        "prior_location_known": true,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "invalid_delivery",
+        "prior_location_known": true,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "duplicate_state",
+        "prior_location_known": true,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "trailing_object",
+        "prior_location_known": true,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "wrong_evidence_type",
+        "prior_location_known": true,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "no_dialogue_response",
+        "prior_location_known": true,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "empty_dialogue",
+        "prior_location_known": true,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "broken_dialogue",
+        "prior_location_known": true,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "missing_dialogue",
+        "prior_location_known": true,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "null_dialogue",
+        "prior_location_known": true,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "numeric_dialogue",
+        "prior_location_known": true,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "blank_dialogue",
+        "prior_location_known": true,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "extra_dialogue_action",
+        "prior_location_known": true,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "duplicate_dialogue",
+        "prior_location_known": true,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "trailing_dialogue",
+        "prior_location_known": true,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "multi_sentence",
+        "prior_location_known": true,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      },
+      {
+        "case": "over_limit",
+        "prior_location_known": true,
+        "passed": true,
+        "failure_decision_events": 0,
+        "retry_decision_events": 1
+      }
+    ]
+  },
+  "request_snapshot_sha256": "120ef162f8ea61689247428865fa97345c87316dfe6fa21e1b4a08551a4963f7"
+}
