@@ -5,13 +5,33 @@
 - Eminenur Kazan
 - Zülal Şahin
 
-**Rapor güncelleme tarihi:** 3 Kasım 2026
+**Rapor güncelleme tarihi:** 4 Kasım 2026
 
-## Güncel çalışan Kael kontrol noktası — 3 Kasım 2026
+## Güncel çalışan Kael kontrol noktası — 4 Kasım 2026
 
 Bu bölüm güncel durumu anlatır; aşağıdaki tarihlenmiş eski geliştirme kayıtları tarihsel olarak korunmuştur. Güncel model **qwen3:8b**, sürüm **kael-dialogue-focus-20261103-v1**. Sahte/hazır NPC cevabı yoktur. İki yerel istek kullanılır: JSON durum/dayanak çıkarımı ve tek kısa konuşma üretimi. C# kapıyı yalnızca örneklerin oyuncunun insan gemisinde olması ve Kael'e getirme sözü birlikte tamamlanınca açar. Fiziksel teslimat kapıdan sonradır. Tek cümle/180 karakter ve sabit seed, yanıtın anlam doğruluğunu garanti etmez.
 
 [Ayrıntılı mimari, ister matrisi ve sınırlamalar](Docs/KaelTestedCheckpoint-2026-11-03.md) · [Gerçek sistem promptları/şemalar](Docs/KaelSystemPrompts-2026-11-03.md) · [Beş tür gerçek model testinin verisi](Docs/KaelCheckpointTests-2026-11-03.json)
+
+### Güncel Kael arayüzü ve ana sahne testi — 4 Kasım 2026
+
+`EscapeScene` içinde normal ve düşünme portreleri büyütülüp lacivert panelin sol bölümüne hizalandı. Cevap/hata metni ve bekleme görsellerini `KaelDialogueView` yönetir. Mesaj kutusu uzun metni alt satıra kaydırır; Enter mesajı gönderir. Esc ile pencereyi kapatma ve E ile tekrar açma kullanıcı tarafından doğrulandı.
+
+**Büyük normal portre ve pencerenin açılışı:**
+
+![Kael konuşma penceresi — güncel büyük normal portre](Docs/Images/KaelUI-2026-11-04/opening.png)
+
+**İstek beklenirken büyük düşünme portresi:**
+
+![Kael düşünüyor — güncel büyük düşünme portresi](Docs/Images/KaelUI-2026-11-04/thinking.png)
+
+**Yanıt geldikten sonra normal portreye dönüş:**
+
+![Kael kimlik cevabı — güncel büyük normal portre](Docs/Images/KaelUI-2026-11-04/reply.png)
+
+Ana sahnede konum bilgisinden sonra teslim sözü istendi. Teslim sözü de verildiğinde biyometrik kapı açıldı; kullanıcı kapıdan geçtiğini bildirdi. Bağlantı kesintisi, bulunmayan model ve zaman aşımı için ayrı hata mesajları önceki Play testlerinde doğrulandı.
+
+[Dört güncel ekran, uzun mesaj ve kapı testi kanıtları](Docs/KaelUIPlayTests-2026-11-04.md) · [Manuel test kaydı](Docs/KaelUIPlayTests-2026-11-04.json) · [Hata yönetimi raporu](Docs/KaelErrorHandling-2026-11-03.md) · [Ekran sorumluluğu ayrımı](Docs/KaelViewSeparation-2026-11-03.md)
 
 ### LLM istek/yanıt akışı
 
@@ -45,7 +65,7 @@ sequenceDiagram
     Note over U,D: Başarısız tur kaydedilmez, kapı kararı yayınlanmaz
 ```
 
-### Beş tür yeni gerçek model denemesi
+### 3 Kasım 2026 tarihli beş tür gerçek model denemesi
 
 | Tür | Oyuncu sözü | Gerçek model cevabı | Kapı kararı |
 |---|---|---|---|
@@ -62,8 +82,8 @@ Yedi adımın durum ve kapı sonucu 7/7 doğru; bu bir konuşma akıcılığı b
 ### Teslimden önce kalanlar
 
 - AX-7 için farklı başlangıç/engel koşullarında ölçülmüş tekrar, başarı oranı ve ortalama süre.
-- Dağıtılabilir Unity build'i, gerçek hata senaryolarının Play testi ve kaynak/rapor/build içeren tek teslim ZIP'i.
-- Güncel NPC/ajan test ekran görüntüleri; tüm uygulamanın OOP/SOLID değerlendirmesi.
+- Dağıtılabilir Unity build'inde Kael testi ve kaynak/rapor/build içeren ortak teslim ZIP'i; bozuk/eksik model yanıtı için canlı ağ testi.
+- Kael'in güncel ekranları bu rapora eklendi. Tüm uygulamanın OOP/SOLID değerlendirmesi ve AX-7 test belgeleri ayrı kapsamda tamamlanmalı.
 - Serbest/alakasız konuşmada akıcılık ve modelin durum değiştirme talimatını yanlış kabul etme sınırı. Bu çalışan kontrol noktası bütün olası girdiler için hatasız değildir.
 
 ## Proje Hakkında

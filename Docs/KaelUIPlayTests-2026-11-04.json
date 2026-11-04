@@ -1,0 +1,85 @@
+{
+  "date": "2026-11-04",
+  "scene": "EscapeScene",
+  "method": "Kullanıcı manuel Play testi ve özgün ekran görüntüleri",
+  "current_large_portrait_images": [
+    {
+      "image": "Images/KaelUI-2026-11-04/opening.png",
+      "size": [
+        711,
+        462
+      ],
+      "sha256": "e5639f3842d759a49f03899b413bae10b581c4d691b71c89c2968e8f7fbaa12b",
+      "source": "Kullanıcının gerçek Unity Play ekran görüntüsü",
+      "current_large_portrait": true
+    },
+    {
+      "image": "Images/KaelUI-2026-11-04/message-input.png",
+      "size": [
+        727,
+        460
+      ],
+      "sha256": "12796906f90d42ee1fa6111c78da606da2956723ffc6ab826d369ad04737c5a8",
+      "source": "Kullanıcının gerçek Unity Play ekran görüntüsü",
+      "current_large_portrait": true
+    },
+    {
+      "image": "Images/KaelUI-2026-11-04/thinking.png",
+      "size": [
+        768,
+        463
+      ],
+      "sha256": "af4d89aa67a5bfbf11ca5a4d4330e809fad74728757a32d210498ae832990160",
+      "source": "Kullanıcının gerçek Unity Play ekran görüntüsü",
+      "current_large_portrait": true
+    },
+    {
+      "image": "Images/KaelUI-2026-11-04/reply.png",
+      "size": [
+        737,
+        446
+      ],
+      "sha256": "c4890c08aaa435940cca870ef6679afb245814cb30fb6d899eb61d26355b4b72",
+      "source": "Kullanıcının gerçek Unity Play ekran görüntüsü",
+      "current_large_portrait": true
+    }
+  ],
+  "additional_test_evidence": [
+    {
+      "image": "Images/KaelUI-2026-11-04/wrapped-message-test.png",
+      "size": [
+        792,
+        522
+      ],
+      "sha256": "433692300db31b84f9092a0a3c3462a531bab7a644a811110e7dea6265e035b4",
+      "source": "Kullanıcının gerçek Unity Play ekran görüntüsü",
+      "current_large_portrait": false
+    },
+    {
+      "image": "Images/KaelUI-2026-11-04/door-open-test.png",
+      "size": [
+        827,
+        492
+      ],
+      "sha256": "e089e9fbe3a964c029f69c6070f1e5ec650d4875223e9942014412d66328d567",
+      "source": "Kullanıcının gerçek Unity Play ekran görüntüsü",
+      "current_large_portrait": false
+    }
+  ],
+  "verified": [
+    "Konuşma penceresinin açılması",
+    "Enter ile gönderme",
+    "Düşünme ve normal portre geçişi",
+    "Esc ile kapatma ve E ile yeniden açma",
+    "Uzun mesajda satır kaydırma",
+    "Konum sonrası teslim sözü istenmesi",
+    "İki koşul sonrası gerçek biyometrik kapının açılması",
+    "Kullanıcının kapıdan yürüyerek geçtiğini bildirmesi"
+  ],
+  "limits": [
+    "Dağıtılabilir oyun sürümü testi yapılmadı",
+    "Tüm çözünürlük ve ekran oranları ölçülmedi",
+    "Modelin anlam doğruluğu garanti edilmez",
+    "İkinci aşama hatası canlı HTTP üzerinden bu testte tetiklenmedi"
+  ]
+}

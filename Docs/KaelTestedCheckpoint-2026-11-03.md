@@ -1,5 +1,7 @@
 # Çalışan Kael sürümü ve ister kontrolü — 3 Kasım 2026
 
+> **4 Kasım 2026 güncellemesi:** Ana sahnede portreler, Enter ile gönderme, Esc/E ile kapatma/yeniden açma, uzun mesajda satır kaydırma ve gerçek kapıdan geçiş kullanıcı tarafından doğrulandı. Büyük portrelerin güncel ekranları ve kapsamı [yeni ana sahne raporunda](KaelUIPlayTests-2026-11-04.md) yer alır. Aşağıdaki tarihlenmiş kayıtlar kendi test sürümünü anlatır.
+
 Bu kontrol noktası kullanıcının Unity Play testlerinde kabul ettiği sürümdür. Bu güncellemede oyun koduna yeni davranış eklenmedi. İki Kael kaynağı ve iki sahnedeki model seçimi mevcut çalışan halleriyle kaydedilir. AX-7 kodu değiştirilmez.
 
 ## Mimari ve model seçimi

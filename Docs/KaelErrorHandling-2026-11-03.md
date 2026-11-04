@@ -1,5 +1,7 @@
 # Kael hata yönetimi — 3 Kasım 2026
 
+> **4 Kasım 2026 güncellemesi:** Ana sahnede portreler, Enter ile gönderme, Esc/E ile kapatma/yeniden açma, uzun mesajda satır kaydırma ve gerçek kapıdan geçiş kullanıcı tarafından doğrulandı. Büyük portrelerin güncel ekranları ve kapsamı [yeni ana sahne raporunda](KaelUIPlayTests-2026-11-04.md) yer alır. Aşağıdaki tarihlenmiş kayıtlar kendi test sürümünü anlatır.
+
 Bağlantı kesintisi, bulunmayan model ve zaman aşımı daha önce aynı genel mesajı gösteriyordu. `OllamaClient` artık hatanın nedenine göre açıklama gösterir.
 
 | Durum | Oyuncuya gösterilen mesaj |
@@ -22,6 +24,8 @@ Model hatası yalnızca HTTP 404 ve JSON `error` alanında `model` / `not found`
 [Otomatik test sonuçları ve manuel doğrulama kapsamı](KaelErrorHandlingTests-2026-11-03.json)
 
 ## Unity ekranları
+
+Bu üç hata görüntüsü 3 Kasım testlerine aittir ve portre büyütülmeden önce alınmıştır. Güncel portre düzeni yukarıda bağlantısı verilen 4 Kasım raporunda gösterilir.
 
 ### Bulunmayan model
 

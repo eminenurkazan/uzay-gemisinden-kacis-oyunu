@@ -1,5 +1,7 @@
 # Kael ekran sorumluluğunu ayırma — 3 Kasım 2026
 
+> **4 Kasım 2026 güncellemesi:** Ana sahnede portreler, Enter ile gönderme, Esc/E ile kapatma/yeniden açma, uzun mesajda satır kaydırma ve gerçek kapıdan geçiş kullanıcı tarafından doğrulandı. Büyük portrelerin güncel ekranları ve kapsamı [yeni ana sahne raporunda](KaelUIPlayTests-2026-11-04.md) yer alır. Aşağıdaki tarihlenmiş kayıtlar kendi test sürümünü anlatır.
+
 Cevap/hata yazısı, bekleme yazısı ve iki portreyi yönetme işi mevcut KaelDialogueView bileşenine taşındı. OllamaClient.ShowRequestError ve başarılı cevap sunumu ShowMessage metodunu, SetRequestState ise SetBusy metodunu çağırıyor. İstek bayrağı OllamaClient içinde kaldı. Mesaj girişi ve düğme bağlantısı korundu.
 
 İki script ve iki sahne güncellendi. EscapeScene mevcut view bileşenine bağlandı. AITestScene için aynı view bileşeni eklendi; dialogueRoot boş bırakıldı, bu bağımsız test sahnesinde pencere kapatma/açma işlevi çağrılmaz. Dört UI alanının özgün nesne kimlikleri taşındı; yeni görüntü/metin nesnesi yaratılmadı. Sahnedeki mevcut kaydırma çubuğu değişikliği ve font önbelleği düzenlemesine dokunulmadı.
