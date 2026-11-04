@@ -339,6 +339,48 @@ stateDiagram-v2
 
 Bu manuel kayıtlar geliştirme sırasında alınan işlev gözlemleridir; sayısal tekrar ölçümleri yukarıdaki CSV tablosunda ayrı sunulur. Geçici turuncu biyometrik kapı test düğmesi **4 Kasım'da üretim sahnesinden kaldırıldı**; normal oynanışta kapı Kael'in doğrulanmış konuşma kararıyla açılır. Editör test girişi yalnız izole otomatik test düzeneğinde kullanıldı.
 
+## Güncel Windows sürümünde uçtan uca oynanış testi — 4 Kasım 2026
+
+Son NavMesh başlangıç düzeltmesini içeren, `4726718` kaynak sürümünden alınan `Builds/Windows-20261104-final/UzayGemisindenKacis.exe` normal oyun kontrolleriyle oynandı. Unity 6000.3.26f1 / Windows 64-bit derlemesi 4 Kasım 16:32:18–16:32:51 arasında yaklaşık 33 saniyede **Succeeded** sonucuyla tamamlandı. Kael için yerel Ollama / `qwen3:8b` kullanıldı.
+
+Bu kayıt, kullanıcının yürüttüğü **tek bir uçtan uca manuel oynanış oturumudur**. Kullanıcının sağladığı altı ekran görüntüsü ve aynı son derlemeye ait `Player.log` birlikte incelendi. Görseller kırpılmadan veya değiştirilmeden kopyalandı. Bu oturum AX-7'nin yukarıdaki bağımsız ölçüm tekrarlarına eklenmedi; toplam oynanış süresi, yanıt gecikmesi ve gerçek FPS ölçülmedi, genel başarı yüzdesi çıkarılmadı.
+
+| Aşama | Bu oturumda doğrulanan sonuç ve dayanak |
+| --- | --- |
+| AX-7 fiziksel engeli | İlk karede robotun Kapı Kontrol Geçidi'nden panele ilerlediği ve görev mesajı görülür. Kullanıcı ayrıca AX-7 tarafından açılan ilk fiziksel kapının sorunsuz açıldığını doğruladı; devamında Kael alanına ulaşıldı. İlk kare tek başına kapının tamamen açıldığı an değildir. |
+| Yalnızca örnek konumu | Kayıtta `sample_location=PLAYER_SHIP`, `delivery=UNKNOWN`, kapı kararı `NONE`; getirme sözü istenir ve biyometrik kapı kapalı kalır. |
+| Teslim sözü ve biyometrik kapı | Kayıtta teslim dayanağı “örnekleri sana vereceğim”, `delivery=ACCEPTED` ve `OPEN_DOOR` bulunur. Kael'in gerçek yanıtı “Kapıyı biyometrik yetkimle açıyorum.”; fiziksel kapının tamamen açıldığı kaydedilir ve hava kilidi geçidi görüntülenir. |
+| Atmosfer ve Kael | Kael hava kilidine kadar gelir. Atmosfer işleminin tamamlandığı, takip/konuşmanın durduğu ve Kael'in etkisizleştiği kaydedilir; yerdeki gövde ve tamamlanma mesajı görüntülenir. |
+| AX-7 vedalaşması ve gemiye giriş | AX-7 “Ben burada kalacağım. Sen gemine geç.” mesajını verir. Kayıtta gemi kapağının açılması ve oyuncunun tamamen kokpit içine girmesi doğrulanır. |
+| Kapağı kapatma ve acil ayrılma | Kayıtta içerideki panelle kapağın kapanması, tamamen kapalı durum ve 3 saniyelik geri sayımın başlaması bulunur. Bu ara adımlar için ayrı ekran görüntüsü alınmadı. |
+| Senaryonun tamamlanması | Kayıtta kaçışın başarıyla tamamlandığı, son görüntüde “BAŞARIYLA KAÇTIN” ve “Acil ayrılma tamamlandı. Kendi geminle güvenle uzaklaştın.” metinleri görülür. |
+
+**AX-7 görev sırasında panele ilerliyor:**
+
+![AX-7 Kapı Kontrol Geçidi üzerinden panele ilerlerken](Docs/Images/FinalPlaytest-2026-11-04/01-ax7-moving.png)
+
+**Gerçek Kael yanıtı ve geçiş izni:**
+
+![Kael biyometrik yetkisiyle kapıyı açtığını söylüyor](Docs/Images/FinalPlaytest-2026-11-04/02-kael-dialogue.png)
+
+**Açılmış hava kilidi geçidi; arkadaki gemi transfer kapısı henüz kapalı:**
+
+![Biyometrik kapı sonrası hava kilidi alanına açık geçiş](Docs/Images/FinalPlaytest-2026-11-04/03-airlock-open.png)
+
+**Atmosfer işlemi öncesi panel ve Kael'in hava kilidindeki konumu:**
+
+![Atmosfer Düzenleme Noktası ve henüz ayakta olan Kael](Docs/Images/FinalPlaytest-2026-11-04/04-atmosphere-panel.png)
+
+**Atmosfer tamamlandı; Kael etkisiz, AX-7 gemi dışında kalacağını bildiriyor:**
+
+![Kael yerde; atmosfer tamamlanma ve AX-7 vedalaşma mesajları](Docs/Images/FinalPlaytest-2026-11-04/05-kael-incapacitated.png)
+
+**Acil ayrılma sonrası başarı ekranı:**
+
+![Başarıyla kaçtın; oyuncu kendi gemisiyle güvenle uzaklaştı](Docs/Images/FinalPlaytest-2026-11-04/06-escape-success.png)
+
+Bu oturum normal akışın son Windows derlemesinde başarı ekranına kadar tamamlanabildiğini destekler. Alternatif girdiler, hata senaryoları ve farklı donanım için önceki testlerin kapsamını genişletmiş veya tüm olası hataları dışlamış sayılmaz.
+
 ## Görsel tasarım ve performans yaklaşımı
 
 Ortam koyu metal, mavi/beyaz ışıklar ve sarı uyarı şeritleriyle endüstriyel bilim kurgu tarzındadır. Ortak URP malzemeleri ve sade geometri kullanılır; ek görsel parçalar yeni oynanış collider'ları oluşturmaz. Tekerlekli AX-7 ve Kael için düşük poligonlu gövdeler vardır; `LightweightCharacterMotion` gerçek ajan hızından tekerlek/uzuv hareketi üretir, yol bulma hareketi oluşturmaz. [Karakter geometrisi ve bütçesi](Docs/CharacterVisuals.md).
@@ -359,6 +401,6 @@ AX-7'nin iki başlangıç ve iki engel koşulundaki **12 ana tekrarı** tamamlan
 
 Kael için beş tür gerçek diyalog, yapılandırılmış durum/kapı kararı, arayüz, hata mesajları ve Windows'ta kapıdan geçiş kayıtları mevcuttur. Modelin serbest/alakasız konuşmadaki akıcılığı sınırlıdır; sayısal kapı/durum doğruluğu dil kalitesiyle eşdeğer tutulmaz. LLM test bilgisayarıyla AX-7 ölçüm laptopu farklıdır; süreler ortak bir donanım ortalamasında birleştirilmez.
 
-**Bir sonraki ortak doğrulama:** Son NavMesh düzeltmesini içeren Windows build'inde gerçek Kael konuşmasından başarı ekranına kadar tek uçtan uca oyun oturumu yapılacak ve sonucu bu rapora eklenecektir. Bu rapor o henüz yapılmamış ortak oturumu tamamlanmış saymaz; yukarıdaki AX-7 ölçümleri ve işlev kontrolleri tamamlanmıştır.
+**Ortak uçtan uca doğrulama tamamlandı:** Son NavMesh düzeltmesini içeren Windows derlemesinde AX-7 görevi, gerçek Kael konuşması, atmosfer işlemi, gemiye giriş ve acil ayrılma sırası kullanıcı tarafından başarı ekranına kadar oynandı. Altı özgün ekran görüntüsü ve çalışma zamanı kaydı yukarıdaki güncel Windows oynanış testi bölümünde açık kapsamıyla belgelendi.
 
 Geliştirilebilecek alanlar; doğal konuşma akıcılığı, daha geniş girdi/arıza kapsamı, farklı donanımda FPS ölçümü ve final uçuş sunumudur. Git geçmişi ekip katkılarını ve anlamlı geliştirme adımlarını korur. Ayrıntılı ham kayıtlar ve tarihli teknik belgeler `Docs/` altında tutulur; bu README bütünleşik rapordur.
