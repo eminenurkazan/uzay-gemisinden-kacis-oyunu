@@ -350,7 +350,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 980000051}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: -334000983
   m_Radius: 0.5
   m_Speed: 2.5
@@ -24311,6 +24311,7 @@ GameObject:
   - component: {fileID: 930000005}
   - component: {fileID: 930000006}
   - component: {fileID: 940000001}
+  - component: {fileID: 141000001}
   - component: {fileID: 940000002}
   - component: {fileID: 940000003}
   - component: {fileID: 960000001}
@@ -24557,7 +24558,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 930000001}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: -1372625422
   m_Radius: 0.35
   m_Speed: 2
@@ -25488,6 +25489,7 @@ GameObject:
   - component: {fileID: 1000000003}
   - component: {fileID: 1010000001}
   - component: {fileID: 106000001}
+  - component: {fileID: 141000002}
   - component: {fileID: 106000002}
   - component: {fileID: 106000003}
   - component: {fileID: 106000006}
@@ -29039,6 +29041,32 @@ MonoBehaviour:
   sentenceFadeIn: 0.65
   sentenceFadeOut: 0.4
   gameRevealDuration: 0.9
+--- !u!114 &141000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0e0a4bf49c845c5bdd9289c2b6de852, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  placementTolerance: 0.15
+--- !u!114 &141000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980000051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0e0a4bf49c845c5bdd9289c2b6de852, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  placementTolerance: 0.15
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

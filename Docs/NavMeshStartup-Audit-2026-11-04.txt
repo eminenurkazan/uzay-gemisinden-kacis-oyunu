@@ -1,0 +1,19 @@
+Failed to create agent because there is no valid NavMesh
+Failed to create agent because there is no valid NavMesh
+Failed to create agent because it is not close enough to the NavMesh
+NAV_AUDIT_AGENT scene=OriginalBoth name=Kael type=-334000983 enabled=True onMesh=True
+NAV_AUDIT_AGENT scene=OriginalBoth name=AX-7 type=-1372625422 enabled=True onMesh=True
+NAV_AUDIT_RESULT scene=OriginalBoth errors=3 ready=2
+Failed to create agent because there is no valid NavMesh
+Failed to create agent because it is not close enough to the NavMesh
+NAV_AUDIT_AGENT scene=OnlyAX7 name=AX-7 type=-1372625422 enabled=True onMesh=True
+NAV_AUDIT_RESULT scene=OnlyAX7 errors=2 ready=1
+Failed to create agent because there is no valid NavMesh
+NAV_AUDIT_AGENT scene=OnlyKael name=Kael type=-334000983 enabled=True onMesh=True
+NAV_AUDIT_RESULT scene=OnlyKael errors=1 ready=1
+Kael: NavMesh başlangıcı doğrulandı. Tür=-334000983
+AX-7: NavMesh başlangıcı doğrulandı. Tür=-1372625422
+NAV_AUDIT_AGENT scene=FixedBoth name=Kael type=-334000983 enabled=True onMesh=True
+NAV_AUDIT_AGENT scene=FixedBoth name=AX-7 type=-1372625422 enabled=True onMesh=True
+NAV_AUDIT_RESULT scene=FixedBoth errors=0 ready=2
+NAV_AUDIT_FINISHED success=True
