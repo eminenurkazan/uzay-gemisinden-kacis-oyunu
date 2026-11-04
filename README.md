@@ -42,9 +42,19 @@ Kael'i çalıştıracak bilgisayarda Ollama açık ve `qwen3:8b` modeli kurulu o
 | F1 / F11 | Oyun seçenekleri menüsü / pencere ve tam ekran arasında geçiş |
 | Menü > Oyundan çık | Uygulamayı kapatma |
 
-Son doğrulanan yerel Windows çıktısı `Builds/Windows-20261104-final/UzayGemisindenKacis.exe` dosyasıdır. `Builds/` Git tarafından dışlanır; çalıştırılabilir dosya kaynak depoyla otomatik indirilmez. Proje Unity üzerinden EscapeScene başlangıç sahnesiyle yeniden derlenebilir.
+Son doğrulanan yerel Windows çıktısı `Builds/Windows-20261104-final/UzayGemisindenKacis.exe` dosyasıdır. `Builds/` Git tarafından dışlanır; hazır oyun aşağıdaki GitHub Releases bağlantısından ayrıca indirilir. Proje Unity üzerinden EscapeScene başlangıç sahnesiyle yeniden derlenebilir.
 
 `GameFrameRateLimit` hedef kare hızını 60 FPS ile sınırlar. Bu ayar her bilgisayarda gerçek 60 FPS elde edildiği veya ölçüldüğü anlamına gelmez. Windows dağıtımında EXE, `_Data`, `MonoBleedingEdge`, `UnityPlayer.dll` ve gerekli diğer build dosyaları birlikte tutulmalıdır. [Windows build ve menü testleri](Docs/KaelWindowsBuild-2026-11-04.md).
+
+## Hazır Windows sürümünü indirme
+
+**[Windows 64-bit oyunu indir — v1.0.0](https://github.com/eminenurkazan/uzay-gemisinden-kacis-oyunu/releases/download/v1.0.0/UzayGemisindenKacis-Windows-x64-v1.0.0.zip)** · [GitHub Releases sayfası](https://github.com/eminenurkazan/uzay-gemisinden-kacis-oyunu/releases/tag/v1.0.0) · [SHA-256 bütünlük dosyası](https://github.com/eminenurkazan/uzay-gemisinden-kacis-oyunu/releases/download/v1.0.0/SHA256SUMS.txt)
+
+1. ZIP dosyasını indirin ve **tamamını** bir klasöre çıkarın.
+2. Aynı bilgisayara [Ollama](https://ollama.com/download/windows) kurun; `ollama pull qwen3:8b` ile modeli indirin ve Ollama'yı açık tutun. Model indirme internet gerektirir; sonrasında Kael yerel sunucuyla çalışır.
+3. Çıkarılan klasördeki `UzayGemisindenKacis.exe` dosyasını çalıştırın. EXE'yi yanındaki `_Data`, `MonoBleedingEdge`, `D3D12` ve DLL dosyalarından ayırmayın. Paket içindeki `CALISTIRMA.txt` kurulum ve kontrolleri açıklar.
+
+Ollama ve model ağırlıkları ZIP'e dahil değildir. Donanım, modelin çalışabilirliğini ve yanıt süresini etkiler. Paket, bu raporda uçtan uca test edilen `4726718` kaynaklı 4 Kasım 2026 16:32 Windows derlemesidir; sürüm etiketi sonraki rapor güncellemelerini de içerir. Bu aralıkta oyun kodu değişmemiştir. Oyun paketi GitHub Releases varlığıdır; kaynak depo içine eklenmemiştir. `DoNotShip` hata ayıklama klasörü dağıtıma dahil edilmedi.
 
 ## OOP tasarımı ve sorumluluklar
 
