@@ -1,0 +1,5 @@
+scenario,trials,task_successes,expected_outcomes_met,mean_total_game_s,mean_total_wall_s,mean_obstacle_wait_game_s,git_commit
+A1,3,3,3,8.571,8.558,0.000,413c827900e0d21fbc3a92f8fdc853698c3d87e7
+A2,3,3,3,8.639,8.636,0.000,413c827900e0d21fbc3a92f8fdc853698c3d87e7
+B1,3,3,3,14.063,14.292,5.485,b6d1ab73e6e4f6381638829efe0d9bd542cd0edd
+B2,3,0,3,23.049,23.048,20.007,b6d1ab73e6e4f6381638829efe0d9bd542cd0edd

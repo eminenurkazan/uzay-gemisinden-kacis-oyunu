@@ -1,0 +1,14 @@
+trial_id,include_in_main_statistics,reason
+A1-01,1,Included; expected outcome and technical validity confirmed.
+A1-02,1,Included; expected outcome and technical validity confirmed.
+A1-03,1,Included; expected outcome and technical validity confirmed.
+A2-04,1,Included; expected outcome and technical validity confirmed.
+A2-05,1,Included; expected outcome and technical validity confirmed.
+A2-06,1,Included; expected outcome and technical validity confirmed.
+B1-07,0,Protocol deviation: obstacle removed after 3.051 s; approx 5 s intended. Raw technical validity retained.
+B1-08,1,Included; expected outcome and technical validity confirmed.
+B1-09,1,Included; expected outcome and technical validity confirmed.
+B1-10,1,Included; expected outcome and technical validity confirmed.
+B2-11,1,Included; expected outcome and technical validity confirmed.
+B2-12,1,Included; expected outcome and technical validity confirmed.
+B2-13,1,Included; expected outcome and technical validity confirmed.

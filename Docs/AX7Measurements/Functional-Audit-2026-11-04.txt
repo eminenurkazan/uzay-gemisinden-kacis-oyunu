@@ -1,0 +1,30 @@
+PASS AX-7 and Kael startup bound to typed NavMesh
+PASS No startup agent warnings/errors
+PASS Robot waits before command
+PASS Command eligible when player is nearby and robot idle
+PASS Busy task rejects input eligibility
+PASS Twenty repeated task calls do not restart or fail running task
+PASS Panel task reaches terminal state
+PASS Actual panel task opens physical door
+PASS Completed task is not reissued and door opens once
+PASS Follows player back to first room and stops nearby
+PASS Return route crosses open physical doorway rather than maintenance passage
+PASS Robot stays stopped near stationary player after settling
+PASS Following resumes when player moves away
+PASS Following stops again at near distance
+PASS Raycast obstacle pauses following
+PASS Blocked follower remains stopped after settling
+PASS Following resumes after obstacle removal
+PASS Robot reaches player in security room
+PASS Editor fixture opens biometric door after completed physical task
+PASS Kael follows into airlock with entire body inside
+PASS Actual atmosphere panel accepts authorized activation
+PASS Atmosphere event incapacitates Kael
+PASS Farewell takes control and disables following
+PASS AX-7 reaches farewell point with real NavMesh and fallen-body obstacle
+PASS Ship transfer hatch opens after real atmosphere prerequisites
+PASS Ship transfer hatch fully open
+PASS AX-7 stays outside while player is inside own ship
+PASS Own ship cabin excluded from AX-7 NavMesh
+PASS No runtime errors or native agent warnings during functional run
+FINAL PASS All functional checks completed

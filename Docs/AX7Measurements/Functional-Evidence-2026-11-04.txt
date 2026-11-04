@@ -1,0 +1,41 @@
+AX-7: NavMesh başlangıcı doğrulandı. Tür=-1372625422
+Kael: NavMesh başlangıcı doğrulandı. Tür=-334000983
+AX7_AUDIT PASS AX-7 and Kael startup bound to typed NavMesh
+AX7_AUDIT PASS No startup agent warnings/errors
+AX7_AUDIT PASS Robot waits before command
+AX7_AUDIT PASS Command eligible when player is nearby and robot idle
+AX7_AUDIT PASS Busy task rejects input eligibility
+AX7_AUDIT PASS Twenty repeated task calls do not restart or fail running task
+AX7_AUDIT PASS Panel task reaches terminal state
+AX7_AUDIT PASS Actual panel task opens physical door
+AX7_AUDIT PASS Completed task is not reissued and door opens once
+AX7_AUDIT_FIXTURE player=(0.00, 1.00, -8.00)
+AX7_AUDIT PASS Follows player back to first room and stops nearby
+AX7_AUDIT PASS Return route crosses open physical doorway rather than maintenance passage
+AX7_AUDIT_STOP delta=0 from=(0.25, 0.02, -6.71) to=(0.25, 0.02, -6.71) state=WaitingNearPlayer
+AX7_AUDIT PASS Robot stays stopped near stationary player after settling
+AX7_AUDIT_FIXTURE player=(0.00, 1.00, -11.00)
+AX7_AUDIT PASS Following resumes when player moves away
+AX7_AUDIT PASS Following stops again at near distance
+AX7_AUDIT_FIXTURE player=(0.00, 1.00, 1.00)
+AX7_AUDIT PASS Raycast obstacle pauses following
+AX7_AUDIT_BLOCKED delta=0 from=(0.08, 0.02, -9.67) to=(0.08, 0.02, -9.67) state=WaitingForObstacle
+AX7_AUDIT PASS Blocked follower remains stopped after settling
+AX7_AUDIT PASS Following resumes after obstacle removal
+AX7_AUDIT PASS Robot reaches player in security room
+AX7_AUDIT PASS Editor fixture opens biometric door after completed physical task
+AX7_AUDIT_FIXTURE player=(-1.00, 1.00, 10.80)
+AX7_AUDIT PASS Kael follows into airlock with entire body inside
+AX7_AUDIT PASS Actual atmosphere panel accepts authorized activation
+AX7_AUDIT PASS Atmosphere event incapacitates Kael
+AX7_AUDIT PASS Farewell takes control and disables following
+AX7_AUDIT PASS AX-7 reaches farewell point with real NavMesh and fallen-body obstacle
+AX7_AUDIT_FIXTURE player=(0.00, 1.00, 12.10)
+AX7_AUDIT PASS Ship transfer hatch opens after real atmosphere prerequisites
+AX7_AUDIT PASS Ship transfer hatch fully open
+AX7_AUDIT_FIXTURE player=(0.00, 1.00, 16.50)
+AX7_AUDIT_FAREWELL inside=True waiting=True followingEnabled=False delta=0
+AX7_AUDIT PASS AX-7 stays outside while player is inside own ship
+AX7_AUDIT PASS Own ship cabin excluded from AX-7 NavMesh
+AX7_AUDIT PASS No runtime errors or native agent warnings during functional run
+AX7_AUDIT_FINISHED True All functional checks completed
