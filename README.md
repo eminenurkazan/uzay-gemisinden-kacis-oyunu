@@ -79,6 +79,8 @@ sequenceDiagram
 
 Yedi adımın durum ve kapı sonucu 7/7 doğru; bu bir konuşma akıcılığı başarı oranı değildir. Özellikle alakasız müzik cevabı yetersizdir. Kullanıcı ayrıca Unity Play'de normal kapı açılışını, ret halinde kapalı kalmayı, araya kimlik sorusu girdiğinde takılmamayı ve ret sonrası fikrini değiştirince kapının açılmasını doğruladı.
 
+Windows 64-bit güncel oyun sürümü 60 FPS sınırıyla derlendi. Ayrı uygulamada Kael'in konum/teslim koşulları, fiziksel kapının açılması ve kullanıcı tarafından kapıdan geçiş doğrulandı. Arkadaşın güncellemeleri alındıktan sonra yeni derlemede kapıdan geçiş tekrar doğrulandı: [Windows sürümü ve test sonuçları](Docs/KaelWindowsBuild-2026-11-04.md).
+
 ### Teslimden önce kalanlar
 
 - AX-7 için farklı başlangıç/engel koşullarında ölçülmüş tekrar, başarı oranı ve ortalama süre.
@@ -816,3 +818,5 @@ başarılıdır. Bu kontrol tam oynanış veya FPS testi yerine geçmez.
 
 AX-7 için tekerlekli robot, Kael için portreden türetilen sade uzaylı gövdesi eklendi.
 Ölçüler, performans bütçesi ve bekleyen oyun içi kontroller: [Karakter gövdeleri](Docs/CharacterVisuals.md).
+
+Pencere/tam ekran ve uygulamadan çıkış seçenekleri eklendi. Menü: **F1**, ekran geçişi: **F11**. Son yerel çıktı `Builds/Windows-20261104-window-menu/`; derleme ve arayüz doğrulaması [Windows raporunda](Docs/KaelWindowsBuild-2026-11-04.md).

@@ -46,7 +46,7 @@ public sealed class KaelInteraction : MonoBehaviour
 
     private void Update()
     {
-        if (!Application.isFocused || restoring)
+        if (GameWindowMenu.IsOpen || !Application.isFocused || restoring)
             return;
         var keyboard = Keyboard.current;
         if (keyboard == null)

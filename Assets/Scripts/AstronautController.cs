@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
 
 [RequireComponent(typeof(CharacterController))]
@@ -37,7 +38,7 @@ public class AstronautController : MonoBehaviour
 
     private void Update()
     {
-        if (!Application.isFocused)
+        if (GameWindowMenu.IsOpen || !Application.isFocused)
             return;
 
         var keyboard = Keyboard.current;
@@ -46,7 +47,8 @@ public class AstronautController : MonoBehaviour
         if (keyboard != null && keyboard.escapeKey.wasPressedThisFrame)
             SetCursorLocked(false);
         else if (Cursor.lockState != CursorLockMode.Locked && mouse != null
-                 && mouse.leftButton.wasPressedThisFrame)
+                 && mouse.leftButton.wasPressedThisFrame
+                 && (EventSystem.current == null || !EventSystem.current.IsPointerOverGameObject()))
         {
             SetCursorLocked(true);
             return;

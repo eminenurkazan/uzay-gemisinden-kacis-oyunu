@@ -74,7 +74,7 @@ public sealed class EscapeIntroView : MonoBehaviour
 
     private void Update()
     {
-        if (finished || !Application.isFocused || !waitingForInput)
+        if (GameWindowMenu.IsOpen || finished || !Application.isFocused || !waitingForInput)
             return;
         if (hintText != null)
             hintText.color = new Color(0.8f, 0.84f, 0.88f, 0.72f + Mathf.Sin(Time.unscaledTime * 2f) * 0.1f);
