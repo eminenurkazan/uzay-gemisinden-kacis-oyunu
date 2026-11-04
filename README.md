@@ -2,7 +2,8 @@
 
 **Yazılım Geliştirme Laboratuvarı-I / Proje 1**
 **Ekip:** Eminenur Kazan, Zülal Şahin
-**Rapor güncellemesi:** 4 Kasım 2026
+**Rapor tarihi:** 4 Kasım 2026
+**Durum:** Son teslim raporu; ölçüm sonuçları ve güncel Windows sürümünün uçtan uca oynanış doğrulaması dahil.
 
 ## Amaç ve oyun senaryosu
 
@@ -38,7 +39,10 @@ Kael'i çalıştıracak bilgisayarda Ollama açık ve `qwen3:8b` modeli kurulu o
 | Enter | Kael konuşma alanında mesaj gönderme |
 | Esc | Diyaloğu kapatma / fareyi serbest bırakma |
 | Oyun alanına tıklama | Oyun kontrolünü geri alma |
-| F1 / F11 | Pencere menüsü / ekran modu geçişi |
+| F1 / F11 | Oyun seçenekleri menüsü / pencere ve tam ekran arasında geçiş |
+| Menü > Oyundan çık | Uygulamayı kapatma |
+
+Son doğrulanan yerel Windows çıktısı `Builds/Windows-20261104-final/UzayGemisindenKacis.exe` dosyasıdır. `Builds/` Git tarafından dışlanır; çalıştırılabilir dosya kaynak depoyla otomatik indirilmez. Proje Unity üzerinden EscapeScene başlangıç sahnesiyle yeniden derlenebilir.
 
 `GameFrameRateLimit` hedef kare hızını 60 FPS ile sınırlar. Bu ayar her bilgisayarda gerçek 60 FPS elde edildiği veya ölçüldüğü anlamına gelmez. Windows dağıtımında EXE, `_Data`, `MonoBleedingEdge`, `UnityPlayer.dll` ve gerekli diğer build dosyaları birlikte tutulmalıdır. [Windows build ve menü testleri](Docs/KaelWindowsBuild-2026-11-04.md).
 
@@ -62,8 +66,9 @@ Kael'i çalıştıracak bilgisayarda Ollama açık ve `qwen3:8b` modeli kurulu o
 | `ShipAccessController`, `IShipAccess` | Gemiye giriş, tamamen içeride olma ve kapatma ön koşulları |
 | `ShipDepartureController`, `IShipDeparture` | Acil ayrılma sırası ve tamamlanma durumu |
 | `EscapeIntroView`, `EscapeEndingView` | Giriş/son ekran ve kontrol kilidi |
+| `GameWindowMenu`, `GameFrameRateLimit` | Pencere/tam ekran ve çıkış seçenekleri; başlangıç kare hızı sınırı |
 
-Karar, hareket, algılama, etkileşim ve sunum tek bir GameManager içine toplanmamıştır. AX-7 motor/sensör/paneli arayüzler üzerinden kullanır; panel kapıyı sözleşmesi üzerinden açar. Inspector bağlantıları somut uygulamaları seçer. Oyun durumları dışarıya salt okunur özelliklerle açılır; Kael kararı ve atmosfer tamamlanması olaylarla iletilir. Bu ayrım soyutlama, kapsülleme ve sorumluluk ayrımını destekler. Unity bileşen bağlantıları ve `OllamaClient` içindeki oturum/HTTP koordinasyonu geliştirmeye açık alanlardır; bütün uygulama için kusursuz SOLID uygunluğu iddia edilmez. [Kael görünüm sorumluluğunun ayrılması](Docs/KaelViewSeparation-2026-11-03.md).
+Karar, hareket, algılama, etkileşim ve sunum tek bir GameManager içine toplanmamıştır. AX-7 motor/sensör/paneli arayüzler üzerinden kullanır; panel kapıyı sözleşmesi üzerinden açar. Inspector bağlantıları somut uygulamaları seçer. Oyun durumları dışarıya salt okunur özelliklerle açılır; Kael kararı ve atmosfer tamamlanması olaylarla iletilir. Bu ayrım soyutlama, kapsülleme ve sorumluluk ayrımını destekler. Unity Inspector bağlantıları bileşenlerin sahneye atanmasını sağlar; `OllamaClient` HTTP ve konuşma oturumunu koordine ederken görünüm işlemleri `KaelDialogueView` içinde tutulur. [Kael görünüm sorumluluğunun ayrılması](Docs/KaelViewSeparation-2026-11-03.md).
 
 ## AX-7: gerçek yol bulma, sensör ve karar mantığı
 
@@ -213,7 +218,31 @@ Aynı NavMesh verileriyle ayrı Windows tanı uygulamasında önceki yöntemde A
 
 Güncel model **qwen3:8b**, sürüm **kael-dialogue-focus-20261103-v1**. Sahte/hazır NPC cevabı yoktur. İki yerel istek kullanılır: JSON durum/dayanak çıkarımı ve tek kısa konuşma üretimi. C# kapıyı yalnızca örneklerin oyuncunun insan gemisinde olması ve Kael'e getirme sözü birlikte tamamlanınca açar. Fiziksel teslimat kapıdan sonradır. Tek cümle/180 karakter ve sabit seed, yanıtın anlam doğruluğunu garanti etmez.
 
-[Ayrıntılı mimari, ister matrisi ve sınırlamalar](Docs/KaelTestedCheckpoint-2026-11-03.md) · [Gerçek sistem promptları/şemalar](Docs/KaelSystemPrompts-2026-11-03.md) · [Beş tür gerçek model testinin verisi](Docs/KaelCheckpointTests-2026-11-03.json)
+[3 Kasım mimari kontrol noktası ve o sürümün sınırlamaları](Docs/KaelTestedCheckpoint-2026-11-03.md) · [Gerçek sistem promptları/şemalar](Docs/KaelSystemPrompts-2026-11-03.md) · [Beş tür gerçek model testinin verisi](Docs/KaelCheckpointTests-2026-11-03.json)
+
+### Model seçimi ve yapılandırılmış çıktı
+
+Qwen3 8B, test bilgisayarında yerel olarak çalıştırılabildiği ve önceki küçük model karşılaştırmaları ile manuel denemelerde konum/teslim durumu açısından tercih edilen tutarlılığı sağladığı için seçildi. Bu seçim tüm girdiler için doğruluk veya her donanımda aynı hız garantisi değildir. İki aşamada da `think=false` ve sıcaklık 0,2; konuşma üretiminde seed 17 kullanılır. Donanıma bağlı gecikme ölçümleri [Windows test raporunda](Docs/KaelWindowsBuild-2026-11-04.md) kendi sürüm ve kapsamıyla sunulur.
+
+Birinci aşamanın çıktı yapısının, oyuncu gemisini bildirip teslim sözü de verdiği durumu gösteren temsili örneği:
+
+```json
+{
+  "evidence": {
+    "location_quote": "Mars örnekleri benim gemimde",
+    "delivery_quote": "örnekleri sana vereceğim",
+    "giver": "PLAYER",
+    "recipient": "KAEL",
+    "commitment": "PROMISE"
+  },
+  "state": {
+    "sample_location": "PLAYER_SHIP",
+    "delivery": "ACCEPTED"
+  }
+}
+```
+
+Bu örnek gerçek bir test çıktısı iddiası taşımaz; alanların ilişkisini açıklar. Alıntılar son oyuncu mesajında doğrulanır. `sample_location` yalnız `UNKNOWN` veya `PLAYER_SHIP`; `delivery` yalnız `UNKNOWN`, `ACCEPTED` veya `REFUSED` olabilir. İkinci aşama `{"dialogue":"..."}` yapısında model repliği üretir. İki yanıt da geçerli olduğunda durum kaydedilir ve C# kapı politikası değerlendirilir. Tam sistem metinleri ve JSON şemaları yukarıdaki bağlantıda, gerçek örnekler aşağıdaki test tablosundadır.
 
 ### Güncel Kael arayüzü ve ana sahne testi — 4 Kasım 2026
 
@@ -281,7 +310,7 @@ sequenceDiagram
 
 Yedi adımın durum ve kapı sonucu 7/7 doğru; bu bir konuşma akıcılığı başarı oranı değildir. Özellikle alakasız müzik cevabı yetersizdir. Kullanıcı ayrıca Unity Play'de normal kapı açılışını, ret halinde kapalı kalmayı, araya kimlik sorusu girdiğinde takılmamayı ve ret sonrası fikrini değiştirince kapının açılmasını doğruladı.
 
-Windows 64-bit güncel oyun sürümü 60 FPS sınırıyla derlendi. Ayrı uygulamada Kael'in konum/teslim koşulları, fiziksel kapının açılması ve kullanıcı tarafından kapıdan geçiş doğrulandı. Arkadaşın güncellemeleri alındıktan sonra yeni derlemede kapıdan geçiş tekrar doğrulandı: [Windows sürümü ve test sonuçları](Docs/KaelWindowsBuild-2026-11-04.md).
+Windows 64-bit güncel oyun sürümü 60 FPS sınırıyla derlendi. Ayrı uygulamada Kael'in konum/teslim koşulları, fiziksel kapının açılması ve kullanıcı tarafından kapıdan geçiş doğrulandı. AX-7 ve NavMesh güncellemeleri birleştirildikten sonra yeni derlemede kapıdan geçiş tekrar doğrulandı: [Windows sürümü ve test sonuçları](Docs/KaelWindowsBuild-2026-11-04.md).
 
 ## Hata yönetimi ve kararlılık
 
@@ -343,11 +372,11 @@ Bu manuel kayıtlar geliştirme sırasında alınan işlev gözlemleridir; sayı
 
 Son NavMesh başlangıç düzeltmesini içeren, `4726718` kaynak sürümünden alınan `Builds/Windows-20261104-final/UzayGemisindenKacis.exe` normal oyun kontrolleriyle oynandı. Unity 6000.3.26f1 / Windows 64-bit derlemesi 4 Kasım 16:32:18–16:32:51 arasında yaklaşık 33 saniyede **Succeeded** sonucuyla tamamlandı. Kael için yerel Ollama / `qwen3:8b` kullanıldı.
 
-Bu kayıt, kullanıcının yürüttüğü **tek bir uçtan uca manuel oynanış oturumudur**. Kullanıcının sağladığı altı ekran görüntüsü ve aynı son derlemeye ait `Player.log` birlikte incelendi. Görseller kırpılmadan veya değiştirilmeden kopyalandı. Bu oturum AX-7'nin yukarıdaki bağımsız ölçüm tekrarlarına eklenmedi; toplam oynanış süresi, yanıt gecikmesi ve gerçek FPS ölçülmedi, genel başarı yüzdesi çıkarılmadı.
+Bu kayıt, ekip tarafından normal oyun kontrolleriyle yürütülen **tek bir uçtan uca manuel oynanış oturumudur**. Oturumdan alınan altı ekran görüntüsü ve aynı son derlemeye ait `Player.log` birlikte incelendi. Görseller kırpılmadan veya değiştirilmeden kopyalandı. Bu oturum AX-7'nin yukarıdaki bağımsız ölçüm tekrarlarına eklenmedi; toplam oynanış süresi, yanıt gecikmesi ve gerçek FPS ölçülmedi, genel başarı yüzdesi çıkarılmadı.
 
 | Aşama | Bu oturumda doğrulanan sonuç ve dayanak |
 | --- | --- |
-| AX-7 fiziksel engeli | İlk karede robotun Kapı Kontrol Geçidi'nden panele ilerlediği ve görev mesajı görülür. Kullanıcı ayrıca AX-7 tarafından açılan ilk fiziksel kapının sorunsuz açıldığını doğruladı; devamında Kael alanına ulaşıldı. İlk kare tek başına kapının tamamen açıldığı an değildir. |
+| AX-7 fiziksel engeli | İlk karede robotun Kapı Kontrol Geçidi'nden panele ilerlediği ve görev mesajı görülür. Testi yürüten ekip üyesi AX-7 tarafından açılan ilk fiziksel kapının sorunsuz açıldığını ayrıca doğruladı; devamında Kael alanına ulaşıldı. İlk kare tek başına kapının tamamen açıldığı an değildir. |
 | Yalnızca örnek konumu | Kayıtta `sample_location=PLAYER_SHIP`, `delivery=UNKNOWN`, kapı kararı `NONE`; getirme sözü istenir ve biyometrik kapı kapalı kalır. |
 | Teslim sözü ve biyometrik kapı | Kayıtta teslim dayanağı “örnekleri sana vereceğim”, `delivery=ACCEPTED` ve `OPEN_DOOR` bulunur. Kael'in gerçek yanıtı “Kapıyı biyometrik yetkimle açıyorum.”; fiziksel kapının tamamen açıldığı kaydedilir ve hava kilidi geçidi görüntülenir. |
 | Atmosfer ve Kael | Kael hava kilidine kadar gelir. Atmosfer işleminin tamamlandığı, takip/konuşmanın durduğu ve Kael'in etkisizleştiği kaydedilir; yerdeki gövde ve tamamlanma mesajı görüntülenir. |
@@ -401,6 +430,6 @@ AX-7'nin iki başlangıç ve iki engel koşulundaki **12 ana tekrarı** tamamlan
 
 Kael için beş tür gerçek diyalog, yapılandırılmış durum/kapı kararı, arayüz, hata mesajları ve Windows'ta kapıdan geçiş kayıtları mevcuttur. Modelin serbest/alakasız konuşmadaki akıcılığı sınırlıdır; sayısal kapı/durum doğruluğu dil kalitesiyle eşdeğer tutulmaz. LLM test bilgisayarıyla AX-7 ölçüm laptopu farklıdır; süreler ortak bir donanım ortalamasında birleştirilmez.
 
-**Ortak uçtan uca doğrulama tamamlandı:** Son NavMesh düzeltmesini içeren Windows derlemesinde AX-7 görevi, gerçek Kael konuşması, atmosfer işlemi, gemiye giriş ve acil ayrılma sırası kullanıcı tarafından başarı ekranına kadar oynandı. Altı özgün ekran görüntüsü ve çalışma zamanı kaydı yukarıdaki güncel Windows oynanış testi bölümünde açık kapsamıyla belgelendi.
+**Ortak uçtan uca doğrulama tamamlandı:** Son NavMesh düzeltmesini içeren Windows derlemesinde AX-7 görevi, gerçek Kael konuşması, atmosfer işlemi, gemiye giriş ve acil ayrılma sırası ekip tarafından normal kontrollerle başarı ekranına kadar oynandı. Altı özgün ekran görüntüsü ve çalışma zamanı kaydı yukarıdaki güncel Windows oynanış testi bölümünde açık kapsamıyla belgelendi.
 
-Geliştirilebilecek alanlar; doğal konuşma akıcılığı, daha geniş girdi/arıza kapsamı, farklı donanımda FPS ölçümü ve final uçuş sunumudur. Git geçmişi ekip katkılarını ve anlamlı geliştirme adımlarını korur. Ayrıntılı ham kayıtlar ve tarihli teknik belgeler `Docs/` altında tutulur; bu README bütünleşik rapordur.
+Çalışmanın sınırlılıkları; doğal konuşma akıcılığındaki sapmalar, test edilen girdi/arıza çeşitlerinin sınırlı olması, farklı donanımda FPS ölçümü bulunmaması ve finalin ekran geçişiyle sunulmasıdır. Gelecekteki çalışmalar bu alanlara odaklanabilir; bunlar bu raporda bekleyen test veya tamamlanmış iş olarak gösterilmez. Git geçmişi ekip katkılarını ve anlamlı geliştirme adımlarını korur. Ayrıntılı ham kayıtlar ve tarihli teknik belgeler `Docs/` altında tutulur; bu README bütünleşik rapordur.
