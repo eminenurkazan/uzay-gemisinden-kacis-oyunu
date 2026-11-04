@@ -26,6 +26,12 @@ public sealed class AX7Brain : MonoBehaviour
     public string FailureReason => failureReason;
     public event Action<AX7State> StateChanged;
 
+#if UNITY_EDITOR
+    // Read-only experiment hooks. Excluded from the player build.
+    public event Action MeasurementStarted;
+    public event Action<AX7State, string> MeasurementFinished;
+#endif
+
     private INavigationMotor motor;
     private IObstacleSensor sensor;
     private IInteractable interactable;
@@ -58,6 +64,9 @@ public sealed class AX7Brain : MonoBehaviour
         if (!isActiveAndEnabled || motor == null
             || (currentState != AX7State.Waiting && currentState != AX7State.Failed))
             return;
+#if UNITY_EDITOR
+        PublishMeasurementStarted();
+#endif
         if (panelTarget == null)
         {
             SetFailure("Panel hedefi artık mevcut değil.");
@@ -169,6 +178,9 @@ public sealed class AX7Brain : MonoBehaviour
         if (interactable.Status == InteractionStatus.Succeeded)
         {
             ChangeState(AX7State.Succeeded);
+#if UNITY_EDITOR
+            PublishMeasurementFinished(AX7State.Succeeded, string.Empty);
+#endif
             Debug.Log("AX-7: Paneli etkinleştirdim. Kapı açıldı; görev başarılı.", this);
         }
         else if (interactable.Status == InteractionStatus.Failed)
@@ -180,8 +192,25 @@ public sealed class AX7Brain : MonoBehaviour
         motor?.Stop();
         failureReason = reason;
         ChangeState(AX7State.Failed);
+#if UNITY_EDITOR
+        PublishMeasurementFinished(AX7State.Failed, reason);
+#endif
         Debug.LogWarning("AX-7: " + reason, this);
     }
+
+#if UNITY_EDITOR
+    private void PublishMeasurementStarted()
+    {
+        try { MeasurementStarted?.Invoke(); }
+        catch (Exception ex) { Debug.LogWarning("AX-7 ölçüm gözlemcisi başlatılamadı: " + ex.Message, this); }
+    }
+
+    private void PublishMeasurementFinished(AX7State state, string reason)
+    {
+        try { MeasurementFinished?.Invoke(state, reason); }
+        catch (Exception ex) { Debug.LogWarning("AX-7 ölçüm sonucu kaydedilemedi: " + ex.Message, this); }
+    }
+#endif
 
     private void ChangeState(AX7State next)
     {
