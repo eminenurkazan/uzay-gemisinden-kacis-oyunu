@@ -1364,6 +1364,7 @@ MonoBehaviour:
   - {fileID: 1040000002}
   - {fileID: 108000004}
   companionHUD: {fileID: 950000002}
+  backgroundTexture: {fileID: 2800000, guid: 062c9a1c1e044ffdb55b2b167befce70, type: 3}
 --- !u!1 &120000001
 GameObject:
   m_ObjectHideFlags: 0
@@ -24409,7 +24410,7 @@ Transform:
   m_GameObject: {fileID: 930000001}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.5, y: 0, z: -12}
+  m_LocalPosition: {x: 1.5, y: 0.025, z: -12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -28731,55 +28732,6 @@ MonoBehaviour:
   atmosphereControl: {fileID: 1040000001}
   kaelInteraction: {fileID: 1010000002}
   playerController: {fileID: 910000036}
---- !u!1 &1050000001
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1050000002}
-  - component: {fileID: 1050000003}
-  m_Layer: 0
-  m_Name: GeciciBiyometrikKapiTestDugmesi
-  m_TagString: EditorOnly
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1050000002
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1050000001}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 1.25, z: 7.62}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1050000003
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1050000001}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bea22b03dd3344fdbd71dcaa4f7e1929, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EditorDoorTestButton
-  doorLink: {fileID: 1000000002}
-  playerView: {fileID: 330585546}
-  playerController: {fileID: 910000036}
-  kaelInteraction: {fileID: 1010000002}
-  interactionRange: 3
 --- !u!114 &1268118135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29024,6 +28976,69 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &140000001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 140000002}
+  - component: {fileID: 140000003}
+  m_Layer: 0
+  m_Name: GirisHikayesi
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &140000002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140000001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &140000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b13ed773b6b3446ab857edf9a344d948, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameplayControls:
+  - {fileID: 910000036}
+  - {fileID: 950000001}
+  - {fileID: 1010000002}
+  - {fileID: 1040000002}
+  - {fileID: 108000004}
+  - {fileID: 112000002}
+  companionHUD: {fileID: 950000002}
+  backgroundTexture: {fileID: 2800000, guid: 062c9a1c1e044ffdb55b2b167befce70, type: 3}
+  sentences:
+  - "Mars’taki görevin tamamlanmıştı."
+  - "Topladığın araştırma örnekleri, kendi geminde güvenle saklanıyordu."
+  - "Dönüş yolculuğunda, Kael adlı bir uzaylı muhafız tarafından kaçırıldın."
+  - "Şimdi onun gemisindesin; kendi gemine ulaşan yol ise kilitli kapıların ardında."
+  - "Kael’in istediği tek şey, Mars’tan getirdiğin örnekler."
+  - "Özgürlüğüne kavuşmak için bir çıkış yolu bulmalısın."
+  sentenceFadeIn: 0.65
+  sentenceFadeOut: 0.4
+  gameRevealDuration: 0.9
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -29052,7 +29067,6 @@ SceneRoots:
   - {fileID: 930000005}
   - {fileID: 930000015}
   - {fileID: 1843400019}
-  - {fileID: 1050000002}
   - {fileID: 940000007}
   - {fileID: 960000015}
   - {fileID: 980000005}
@@ -29068,3 +29082,4 @@ SceneRoots:
   - {fileID: 108000002}
   - {fileID: 112000004}
   - {fileID: 120000002}
+  - {fileID: 140000002}

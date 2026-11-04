@@ -8,6 +8,7 @@ public sealed class EscapeEndingView : MonoBehaviour
     [SerializeField] private MonoBehaviour departureController;
     [SerializeField] private Behaviour[] gameplayControls;
     [SerializeField] private CompanionHUD companionHUD;
+    [SerializeField] private Texture2D backgroundTexture;
 
     private IShipDeparture departure;
     private GameObject canvasObject;
@@ -132,6 +133,7 @@ public sealed class EscapeEndingView : MonoBehaviour
         endingRoot = new GameObject("BasariliKacis", typeof(RectTransform));
         endingRoot.transform.SetParent(canvasObject.transform, false);
         Stretch(endingRoot.GetComponent<RectTransform>());
+        GalaxyScreenBackground.Create(endingRoot.transform, backgroundTexture);
         CreateText("Baslik", "BAŞARIYLA KAÇTIN", new Vector2(0.08f, 0.58f), new Vector2(0.92f, 0.76f), 64f);
         CreateText("Sonuc", "Acil ayrılma tamamlandı.\nKendi geminle güvenle uzaklaştın.",
             new Vector2(0.12f, 0.36f), new Vector2(0.88f, 0.56f), 34f);
